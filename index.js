@@ -1,9 +1,7 @@
-let meats = ["apple","banana","orange","coconut"];
+let fruits = ["apple","orange","banana"];
 
-meats.sort().reverse();
+let vegetables = ["carrots","cucumbers","peppers"];
 
-for(let meat of meats){
+let newfruits = [...fruits, ...vegetables, "eggs", "milk"];
 
-console.log(meat);
-
-}
+console.log(newfruits);
