@@ -1,7 +1,11 @@
-let fruits = ["apple","orange","banana"];
 
-let vegetables = ["carrots","cucumbers","peppers"];
 
-let newfruits = [...fruits, ...vegetables, "eggs", "milk"];
+function combineStrings(...strings){
 
-console.log(newfruits);
+return strings.join(" ");
+
+}
+
+const fullname = combineStrings("Mr","SpongeBob","SquarePants", "III");
+
+console.log(fullname);
