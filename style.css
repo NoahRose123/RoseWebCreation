@@ -1,55 +1,32 @@
-body{
-
-    font-family:Arial, Helvetica, sans-serif ;
-    
-    background-color:rgba(119, 136, 153, 0.192) ;
-    }
-    
-    h1{
-    color: rgba(0, 0, 128, 0.74);
-    }
-    
-    form{
-    background-color:white;
+#container{
+    font-family: Arial, sans-serif;
     text-align: center;
-    max-width: 350px;
-    margin:auto;
-    padding: 25px;
-    border-radius:10px;
-    box-shadow: 5px 5px 15px;
-    }
-    
-    #Textbox{
-    width: 50%; 
-    text-align: center;
-    font-size: 2em;
-    border: 2px solid rgba(0, 0, 0, 0.808);
-    border-radius: 8px;
-    margin-bottom: 15px;
-    }
-    
-    label{
-    font-size: 1.5em;
-    font-weight: bold;
-    }
-    
-    button{
-    margin-top: 15px;
-    background-color:rgba(255, 99, 71, 0.76) ;
-    font-size: 1.5em;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 5px;
-    color:white;
-    cursor: pointer;
-    }
-    
-    button:hover{
-        background-color:rgb(255, 99, 71);
-    }
-    
-    #result{
-    font-size: 1.75em;
+    font-size: 2rem;
     font-weight:bold;
-    }
-    
+}
+
+button{
+    font-size: 1.5rem;
+    padding: 10px 15px;
+    border-radius: 10px;
+    border: none;
+    background-color: darkblue;
+    color:white;
+    font-weight:bold;
+    cursor: pointer;
+}
+
+button:hover{
+    background-color:rgb(44, 44, 150) ;
+}
+
+button:active{
+    background-color:rgb(88, 88, 156) ;
+}
+
+input{
+    font-size: 2rem;
+    width:150px;
+text-align:center;
+font-weight:bold;
+}
