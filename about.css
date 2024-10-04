@@ -1,0 +1,270 @@
+@import url("https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,600;1,600&family=Press+Start+2P&display=swap");
+
+
+b{
+   color:#026b44;
+}
+
+.abt-hr{
+    height:10px;
+    border:none;
+}
+
+.about-main{
+    margin:0px;
+    padding:0px;
+    box-sizing:border-box;
+    font-family:'Jost',sans-serif;
+}
+
+.abt-section{
+    width:100%;
+    min-height:70vh;
+    background-color:#ddd;
+}
+
+.abt-container{
+    width:80%;
+    display:block;
+    margin:auto;
+    padding-top:100px;
+}
+
+.content-section{
+    float:left;
+    width:55%;
+}
+
+.abt-img-section{
+float:right;
+width:40%;
+}
+
+.abt-img-section img{
+    width:100%;
+    height:auto;
+    border:solid black;
+    box-shadow:pink black black;
+}
+
+.content-section .abt-title{
+    text-transform:uppercase;
+    font-size:28px;
+
+}
+
+
+.content-section .abt-content h3{
+    margin-top:20px;
+    color:#5d5d5d;
+    font-size:25px;
+}
+
+.content-section .abt-content p{
+    margin-top:30px;
+    font-size:24px;
+    line-height:1.5;
+}
+
+.content-section .abt-content .abt-btn{
+   margin-top:30px;
+}
+
+.content-section .abt-content .abt-btn a{
+ background-color:#038d5a;
+ padding:13px 40px;
+ text-decoration:none;
+ color:#fff;
+ font-size:25px;
+ letter-spacing: 1.5px;
+}
+
+.content-section .abt-content .abt-btn a:hover{
+    background-color:#03945fc9;
+    color:#fff;
+}
+
+
+.content-section .abt-social{
+    margin: 40px 40px;
+}
+
+
+.content-section .abt-social i{
+   font-size:35px;
+   padding:0px 10px;
+}
+
+.content-section .abt-social i:hover{
+    color:#3d3d3d;
+}
+
+
+@media screen and (max-width:768px){
+    
+    .abt-container{
+        width:80%;
+        display:block;
+        margin:auto;
+        padding-top:50px;
+    }
+
+
+    .content-section{
+        float:none;
+        width:100%;
+        display:block;
+        margin:auto;
+    }
+    
+    .abt-img-section{
+        float:none;
+        width:100%;
+        }
+
+        .abt-img-section img{
+            width:100%;
+            height:auto;
+            display:block;
+            margin:auto;
+        }
+
+    .content-section .abt-title{
+            text-align:center;
+            font-size:19px;
+    }
+
+
+    .content-section .abt-content .abt-btn{
+        text-align:center;
+     }
+
+     .content-section .abt-content .abt-btn a{
+        padding: 9px 30px;
+       }
+
+
+       .content-section .abt-social{
+        text-align:center;
+       }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.b2{
+    display:flex;
+    justify-content:end;
+    float:right;
+}
+
+
+ .about-main2{
+     margin:0px;
+     padding:0px;
+     box-sizing:border-box;
+     font-family:'Jost',sans-serif;
+     
+ }
+ 
+ .abt-section2{
+     width:100%;
+     min-height:70vh;
+     background-color:#ddd;
+ }
+ 
+ .abt-container2{
+     width:80%;
+     display:block;
+     margin:auto;
+     padding-top:100px;
+ }
+ 
+ .content-section2{
+     float:right;
+     width:55%;
+ }
+ 
+ .abt-img-section2{
+ float:right;
+ width:40%;
+margin-right:30px;
+ }
+ 
+ .abt-img-section2 img{
+     width:45%;
+     height:auto;
+     border:solid black;
+     row-gap:50px;
+     gap:1rem;
+    
+ }
+
+ #t-2{
+    margin-top:50px;
+ }
+ 
+ .content-section2 .abt-title2{
+     text-transform:uppercase;
+     font-size:28px;
+    display:flex;
+    justify-content: end;
+ }
+ 
+ 
+ .content-section2 .abt-content2 h3{
+     margin-top:20px;
+     color:#5d5d5d;
+     font-size:25px;
+     display:flex;
+     justify-content: end;
+ }
+ 
+ 
+ .content-section2 .abt-content2 .abt-btn2{
+    margin-top:30px;
+    display:flex;
+    justify-content: end;
+    width:100%;
+ }
+ 
+ .content-section2 .abt-content2 .abt-btn2 a{
+  background-color:#038d5a;
+  padding:13px 40px;
+  text-decoration:none;
+  color:#fff;
+  font-size:25px;
+  letter-spacing: 1.5px;
+
+ }
+ 
+ .content-section2 .abt-content2 .abt-btn2 a:hover{
+     background-color:#03945fc9;
+     color:#fff;
+ }
+ 
+ 
+ .content-section2 .abt-social2{
+     margin: 40px 40px;
+ }
+ 
+ 
+ .content-section .abt-social i{
+    font-size:35px;
+    padding:0px 10px;
+ }
+ 
+ .content-section .abt-social i:hover{
+     color:#3d3d3d;
+ }
+ 

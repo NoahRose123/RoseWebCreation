@@ -1,0 +1,170 @@
+@import url("https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,600;1,600&family=Press+Start+2P&display=swap");
+
+
+
+.package-ex{
+    padding:0;
+    margin:0;
+    padding-top:100px;
+    font-family:'Jost',sans-serif;
+    padding-left:20px;
+}
+
+.p-ex-h1{
+    display:flex;
+    justify-content:center;
+    text-decoration: underline black solid;
+    font-size:30px;
+    flex-wrap: wrap;
+}
+
+.p-ex-p{
+    display:flex;
+    justify-content:center;
+    padding-bottom:50px;
+    font-size:20px;
+    flex-wrap: wrap;
+}
+
+
+.packages-space{
+height: 60px;
+}
+
+
+.packages-main-main{
+    margin:0;
+    padding:0;
+    box-sizing: border-box;
+    outline: none;
+    font-family:'Jost',sans-serif;
+    height: 60px;
+}
+
+.package-main{
+width:100%;
+height:auto;
+}
+
+.packages-Pricing{
+    display:flex;
+    justify-content:center;
+    flex-wrap: wrap;
+    width:100%;
+    gap:4rem;
+    
+    
+}
+
+.packages-card{
+    margin-top:200px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    width:320px;
+    height:800px;
+    background-color:#fff;
+    border-radius:20px;
+    box-shadow: 0 5px 14px rgba(0,0,0,0.25), 0 5px 5px rgba(0,0,0,0.22);    
+    padding:2rem;
+    margin:1rem;
+    transition: all 0.2s ease-in;
+    margin-bottom: 60px;
+}
+
+
+.packages-card:hover{
+    transform:scale(1.1);
+}
+
+.card-header{
+    margin:1rem;
+    text-align:center;
+}
+
+.packages-card:hover .card-header h2{
+transform:scale(1.1);
+color:#2b3252;
+}
+
+.card-header{
+width:200px;
+display:block;
+margin:0, auto;
+font-size:23px;
+}
+
+.card-header h2{
+display:flex;
+justify-content: center;
+}
+
+.package-card-detail{
+width:100%;
+line-height:50px;
+}
+
+.package-card-detail p{
+    padding: 0.6rem 1.5rem;
+    font-size:1.2rem;
+    border-bottom:1px solid;
+}
+
+.fa-solid{
+color:green;
+}
+
+.fa-x{
+color:red;
+}
+
+.package-card-detail p:hover{
+    background-color:#ffffffb0 ;
+}
+
+.package-card-price{
+    display:flex;
+    align-items: flex-start;
+    margin:1rem;
+}
+
+.package-card-price p{
+    font-size:3.5rem;
+    font-weight:800;
+    margin-top:25px;
+}
+
+.package-card-price p sup,
+.package-card-price p sup{
+    font-size:1rem;  
+}
+
+.package-card-btn{
+    padding:0.6rem 3rem;
+    border: 2px solid white;
+    background-color: #7d87b8;
+    color:white;
+    font-weight: 600;
+    border-radius:30px;
+    cursor:pointer;
+    transition:all 50ms ease-in ;
+    font-size:1.4rem;
+    height:60px;
+    margin-top:15px;
+}
+
+.package-card-btn:hover{
+    background-color:  black;
+    font-family:'Jost',sans-serif;
+}
+
+#package-i{
+    color:#7d87b8;
+    font-size:80px;
+    margin-left:8px;
+}
+
+.package-card-detail p{
+font-size:23px;
+}
+

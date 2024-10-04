@@ -1,0 +1,199 @@
+@import url("https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,600;1,600&family=Press+Start+2P&display=swap");
+
+
+.contact-space{
+  height:10px;
+}
+
+.contact-page-main{
+    font-family:'Jost',sans-serif;
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+ 
+}
+
+.nav-options{
+  margin-top: 18px;
+}
+
+.contact-page{
+position:relative;
+min-height:90vh;
+padding:40px 100px;
+display:flex;
+justify-content: center;
+align-items: center;
+flex-direction:column;
+}
+
+.contact-page .contact-content{
+  max-width:800px;
+  text-align:center;
+}
+
+.contact-logo{
+display:flex;
+justify-content:center;
+background-image:url(rosew.png);
+background-size:cover;
+width:150px;
+height:150px;
+}
+
+.contact-page .contact-content p{
+  font-weight:300;
+  color:black;
+  font-size:30px;
+}
+
+.contact-tect p{
+  font-size:22px;
+}
+
+
+
+.contact-container{
+  width: 100%;
+  display:flex;
+  justify-content: center;
+  align-items:center;
+  margin-top:30px;
+  position:relative;
+}
+
+.contact-box{
+display:flex;
+justify-content:center;
+align-items:center;
+}
+
+.contact-container .contact-info{
+width:50%;
+display:flex;
+flex-direction:column;
+}
+
+.contact-container .contact-info .contact-box{
+  position:relative;
+  padding:20px 0;
+  display:flex;
+}
+
+.contact-container .contact-info .contact-box .contact-icon{
+  min-width:70px;
+  height:70px;
+  background-color:#fff;
+  display:flex;
+  justify-content: center;
+  align-items:center;
+  border-radius:40%;
+  font-size:30px;
+
+}
+
+.contact-container .contact-info .contact-box .contact-tect{
+  display:flex;
+  margin-left:20px;
+  font-size:16px;
+  color:black;
+  flex-direction:column;
+  font-weight:300;
+}
+
+.contact-container .contact-info .contact-box .contact-tect h3{
+  font-weight:500;
+  color:#0095ff;
+  font-size:27px;
+}
+
+.contact-form{
+  width:900px;
+  display:flex;
+  justify-content:center;
+  padding-top:35px;
+
+}
+
+.contact-form h2{
+  font-size:30px;
+  color:#333;
+  font-weight:500;
+}
+
+.contact-form .form-group{
+  position:relative;
+  width: 600px;
+  margin-top:10px;
+}
+
+.contact-form .form-group input,
+.contact-form .form-group textarea{
+  width:100%;
+  padding: 5px 5px 5px 5px;
+  font-size:16px;
+  margin:10px 0;
+  border:none;
+  border: 2px solid #333;
+  outline:none;
+  resize:none;
+}
+
+.contact-form .form-group span{
+  position:absolute;
+  left:0;
+  padding:5px 0;
+  font-size:18px;
+  margin:10px 0;
+  pointer-events:none;
+  transition:0.5s;
+  color:#666;
+}
+
+.contact-form .form-group input:focus ~ span,
+.contact-form .form-group input:valid ~ span,
+.contact-form .form-group textarea:focus ~ span,
+.contact-form .form-group textarea:valid ~ span{
+  color:#e91e63;
+  font-size:12px;
+  transform:translateY(-20px);
+}
+
+#c-b{
+width:125px;
+background-color:#04cc84;
+border-color:black;
+border:none;
+border-radius:1rem;
+}
+
+.contact-form .form-group input[type="submit"]{
+  width:100px;
+  background:#00bcd4;
+  color:#fff;
+  border:none;
+  cursor:pointer;
+  padding:10px;
+  font-size:18px;
+}
+
+@media (max-width:991px){
+
+.contact-page{
+  padding:50px;
+}
+
+.contact-container{
+  flex-direction:column;
+}
+
+.contact-container .contact-info{
+  margin-bottom:40px;
+}
+
+.contact-container .contact-info,
+.contact-form{
+  width:100%;
+}
+
+}

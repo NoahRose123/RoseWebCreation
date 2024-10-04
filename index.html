@@ -4,10 +4,141 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Noah's Webstie</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="css./reset.css">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <script src="index.js"></script>
+    <script type="text/javascript"
+        src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js">
+</script>
+<script type="text/javascript">
+   (function(){
+      emailjs.init({
+        publicKey: "Czs0cXQsp5B-Dbm8Y",
+      });
+   })();
+</script>
 </head>
 <body>
 
+
+
+<header class="header-main"> 
+
+
+      <img class="nav-logo" src="rosewebcreations-removebg-preview.png">
+
+<nav class="nav-options">
+   
+    <ul>
+    
+    <li ><a href="index.html">Home</a></li>
+   
+    <li ><a href="services.html">Packages</a></li>
+   
+    <li ><a href="About.Html">About</a></li>
+
+</ul>
+</nav>
+
+<a  href="ContactUs.html"><button class="main-btn">Hire Designer</button></a>
+
+</header>
+
+<div class="hero-main-main">
+
+<div class="hero-main">
+    
+    <section class="hero-home">
+
+<div class="hero-content">
+    <h1 class="mx-auto mb-4 p-0 heading-md md:heading-lg xl:heading-xl font-bold text-gray-900 [&amp;_a]:text-gray-900 [&amp;_a]:whitespace-nowrap [&amp;_a]:underline [&amp;_a]:decoration-2 [&amp;_a]:underline-offset-8 [&amp;_a:hover]:no-underline [&amp;_a:visited]:text-gray-900 [&amp;_a:focus]:outline-none [&amp;_a:focus]:outline-brand-blue [&amp;_sup]:text-xl [&amp;_sup]:leading-none [&amp;_sup]:align-super data-testid="hero-title style="max-width:500px">Hire the of Freelance Talent</h1>
+    <p class="mb-8 text-gray-700 text-base leading-3 xl:text-lg xl:leading-4">Toptal is an exclusive network of the top freelance software developers, designers, marketing experts, finance experts, product managers, and project managers in the world. Top companies hire Toptal freelancers for their most important projects.</p>
+    <a href="services.html" class="hero-btn">Get Started</a>
+    </div>
+
+
+    <div class="hero-image-main">
+    <div class="hero-img">
+        <img src="noahrosenobgnew.jpg">
+    </div>
+   </div>
+    </section>
+    </div>
+</div>
+    <hr class="hero-hr">
+<div class="under-hero-main">
+<div class="under-hero">
+
+<div class="under-hero-text">
+    <h2>Try Talent Before You Hire</h2>
+
+</div>
+
+<div class="under-hero-text-p"><p>We have a 98% trial-to-hire success rate.</p></div>
+
+<div class="hero-under-main">
+
+<div class="under-hero-section">
+<i class="fa-solid fa-clipboard-user" id="under-i"></i>
+    <div class="under-section-text">
+        <p>Up to two weeks to try talent and evaluate if they’re the right fit</p>
+    </div></div>
+
+    <div class="under-hero-section">
+<i class="fa-solid fa-folder-open" id="under-i"></i>
+        <div class="under-section-text">
+            <p>No obligation to pay or hire at the end of the two weeks</p>
+        </div></div>
+
+        <div class="under-hero-section">
+            <i class="fa-solid fa-arrow-right-arrow-left" id="under-i"></i>
+            <div class="under-section-text">
+                <p>Get an alternative candidate quickly if you’re not satisfied</p>
+            </div></div>
+        </div>
+
+</div>
+</div>
+
+
+<div class="contact-page-main">
+<section class="contact-page">
+    <div class="contact-logo"></div>
+<div class="contact-content">
+    <p>Let's connect you with Us.</p>
+</div>
+<div class="contact-container">
+    <div class="contact-info">
+
+
+    <div class="contact-form">
+        <form>
+            <h2>Send Message</h2>
+            <div class="form-group">
+                <h5 for="name">Name</h5>
+                <input type="text" class="form-control" id="name" placeholder="enter your name" required="required">
+      
+            </div>
+            <div class="form-group">
+                <h5 for="email">Email</h5>
+                <input type="email" class="form-control" id="email" placeholder="enter your email" required="required">
+            </div>
+            <div class="form-group">
+                <h5 for="email">Message</h5>
+                <textarea name="" required="required" id="message" rows="3" class="form-control" placeholder="Type Your Message..."></textarea>
+            </div>
+            <div class="form-group">
+                <button id="c-b"class="btn btn-primary" onclick="sendMail()">Submit</button>
+            </div>
+        </form>
+    </div>
+</div>
+</section>
+</div>
 
 <script src="index.js"> </script>
 </body> 

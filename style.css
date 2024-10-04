@@ -1,0 +1,68 @@
+@import url("https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,600;1,600&family=Press+Start+2P&display=swap");
+
+*{
+    box-sizing:border-box;  
+    margin:0;
+    padding:0;
+}
+
+.header-main li,a{
+    font-family:'Jost',sans-serif;
+    font-weight:500px;
+    font-size:17px;
+      text-decoration:none;
+}
+
+.header-main{
+    background-color:#d2d6e2;
+    display:flex;
+    justify-content: flex-end;
+    align-items:center;
+padding: 30px 10%;
+height:100px
+}
+
+.nav-logo{
+    cursor:pointer;
+    margin-right:auto;
+}
+
+.nav-options{
+    list-style: none;
+}
+  
+.nav-options li{
+    display:inline-block;
+    padding:0px 20px;
+}
+
+.nav-options li a{
+  transition: all 0.3s ease 0s;
+  color:#04cc84;
+}
+
+
+.nav-options li a:hover{
+    color:#00ffa2;
+    transition:ease 0.5s;
+  }
+  
+  .main-btn{
+    padding: 9px 25px;
+    background-color: #04cc84;
+    color:#fff;
+    border:none;
+    border-radius:50px;
+    cursor:pointer;
+    transition: all 0.3s ease 0s;
+    margin-left:20px;
+    font-family:'Jost',sans-serif;
+    font-size:20px;
+  }
+
+ .main-btn:hover{
+    background-color:#00ffa2;
+    font-family:'Jost',sans-serif;
+    transition:ease 0.5s;
+  }
+

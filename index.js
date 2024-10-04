@@ -1,49 +1,25 @@
-
-function generatePassword(legnth,includeLowercase,includeUppercase,includeNumbers,includeSymbols){
-     
- const lowercaseChars = "abcdefghijklmnopqrstuvwxyz";
- const uppercaseChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
- const numberChars = "0123456789";
- const symbolChars = "!@#$%^&*()+=";
-
-let allowedChars = "";
-let password = "";
-
-allowedChars += includeLowercase ? lowercaseChars : "";
-allowedChars += includeUppercase ? uppercaseChars : "";
-allowedChars += includeNumbers ? numberChars : "";
-allowedChars += includeSymbols ? symbolChars : "";
+function sendMail(){
+    var params = {
+        name: document.getElementById("name").value,
+        email: document.getElementById("email").value,
+        message: document.getElementById("message").value,
+    };
 
 
+const serviceID ="service_sjsyk68";
+const templateID ="template_kau3sto";
 
-if(legnth<= 0){
-return `(Password length must be at least 1)`;
+emailjs
+.send(serviceID,templateID, params)
+.then((res) =>{
+        document.getElementById("name").value ="";
+        document.getElementById("email").value ="";
+        document.getElementById("message").value ="";
+        console.log(res);
+        alert("Your Message Sent Sucessfully");
+    }
+)
+.catch((err) => console.log(err));
 }
 
-if(allowedChars.length === 0){
-return `(At least 1 set of character needs to be selected)`;
-}
-
-for(let i =0; i < length; i++){
-const randomIndex = Math.floor(Math.random() * allowedChars.length);
-password += allowedChars[randomIndex];
-}
-    return password;
-}
-
-const passwordLegnth = 12;
-const includeLowercase = false;
-const includeUppercase = true;
-const includeNumbers = true;
-const includeSymbols = true;
-
-const password = generatePassword(passwordLegnth, 
-                                  includeLowercase,
-                                  includeUppercase,
-                                  includeNumbers,
-                                  includeSymbols);
-
-        
-console.log(`Generated password: ${password}`);
-
-               
+sendMail(onclick);
