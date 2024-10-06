@@ -18,13 +18,12 @@
 }
 
 .contact-page{
-position:relative;
 min-height:90vh;
 padding:40px 100px;
 display:flex;
 justify-content: center;
 align-items: center;
-flex-direction:column;
+flex-direction:column;     
 }
 
 .contact-page .contact-content{
@@ -54,12 +53,10 @@ height:150px;
 
 
 .contact-container{
-  width: 100%;
+  width:auto;
   display:flex;
   justify-content: center;
-  align-items:center;
   margin-top:30px;
-  position:relative;
 }
 
 .contact-box{
@@ -68,16 +65,8 @@ justify-content:center;
 align-items:center;
 }
 
-.contact-container .contact-info{
-width:50%;
-display:flex;
-flex-direction:column;
-}
-
 .contact-container .contact-info .contact-box{
-  position:relative;
   padding:20px 0;
-  display:flex;
 }
 
 .contact-container .contact-info .contact-box .contact-icon{
@@ -93,11 +82,9 @@ flex-direction:column;
 }
 
 .contact-container .contact-info .contact-box .contact-tect{
-  display:flex;
   margin-left:20px;
   font-size:16px;
   color:black;
-  flex-direction:column;
   font-weight:300;
 }
 
@@ -108,7 +95,7 @@ flex-direction:column;
 }
 
 .contact-form{
-  width:900px;
+  width:auto;
   display:flex;
   justify-content:center;
   padding-top:35px;
@@ -122,8 +109,7 @@ flex-direction:column;
 }
 
 .contact-form .form-group{
-  position:relative;
-  width: 600px;
+  width:auto;
   margin-top:10px;
 }
 
@@ -140,7 +126,6 @@ flex-direction:column;
 }
 
 .contact-form .form-group span{
-  position:absolute;
   left:0;
   padding:5px 0;
   font-size:18px;
