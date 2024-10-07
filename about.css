@@ -160,7 +160,9 @@ width:40%;
 
 
 
-
+#runningabt{
+    margin-bottom:40px;
+}
 
 .b2{
     display:flex;
@@ -174,12 +176,11 @@ width:40%;
      padding:0px;
      box-sizing:border-box;
      font-family:'Jost',sans-serif;
-     
  }
  
  .abt-section2{
      width:100%;
-     min-height:70vh;
+     min-height:100vh;
      background-color:#ddd;
  }
  
@@ -198,7 +199,7 @@ width:40%;
  .abt-img-section2{
  float:right;
  width:40%;
-margin-right:30px;
+margin-left:50px;
  }
  
  .abt-img-section2 img{
@@ -207,7 +208,7 @@ margin-right:30px;
      border:solid black;
      row-gap:50px;
      gap:1rem;
-    
+    display:block;
  }
 
  #t-2{
