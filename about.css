@@ -197,14 +197,18 @@ width:40%;
  }
  
  .abt-img-section2{
- float:right;
+ float:left;
 margin-right:50px;
 width:auto;
 height:auto;
 display:grid;
 grid-template-columns: 200px 250px;
 margin:auto;
-gap:1rem;
+column-gap:1rem;
+
+
+
+display:block;
  }
  
  .abt-img-section2 img{
@@ -296,6 +300,8 @@ gap:1rem;
     .abt-img-section2{
         float:none;
         width:100%;
+        display:grid;
+grid-template-columns: 200px 250px;
         }
 
         .abt-img-section2 img{
