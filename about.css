@@ -3,6 +3,7 @@
 
 b{
    color:#026b44;
+   
 }
 
 .abt-hr{
@@ -68,15 +69,17 @@ width:40%;
 
 .content-section .abt-content .abt-btn{
    margin-top:30px;
+   font-size:30px;
 }
 
 .content-section .abt-content .abt-btn a{
  background-color:#038d5a;
- padding:13px 40px;
+
  text-decoration:none;
  color:#fff;
- font-size:25px;
+ font-size:30px;
  letter-spacing: 1.5px;
+ 
 }
 
 .content-section .abt-content .abt-btn a:hover{
@@ -153,20 +156,21 @@ width:40%;
 .abt-btn a{
     margin-top:30px;
     width:100%;
-    padding:20px;
+    text-align: center;
+    padding-top:14px;
     display:flex;
     justify-content: center;
+
+    
 }
 
 .abt-btn{
     background-color:#038d5a;
-    padding:13px 40px;
     text-decoration:none;
     color:#fff;
-    font-size:25px;
+    font-size:29px;
     letter-spacing: 1.5px;
-    height:50px;
-
+    height:70px;
 }
 
 .abt-btn:hover{
