@@ -161,6 +161,14 @@ line-height: 50px;;
   color:white;
  }
 
+ @media (max-width:471px){
+
+  .under-hero-text{
+    text-align: center;
+  }
+
+ }
+
  .under-hero-text h2{
   font-size:40px;
   margin-top:50px;
@@ -168,12 +176,12 @@ line-height: 50px;;
 
  
  .under-hero-text-p{
-  font-size:18px;
-  color:#fff;
+  font-size:20px;
+  color:white;
   display:flex;
   justify-content: center;
   margin-top:10px;
-  text-decoration: underline black solid;
+  text-decoration: underline black solid 3px;
  }
 
  .hero-under-main{
