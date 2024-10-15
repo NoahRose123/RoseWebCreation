@@ -26,29 +26,66 @@
 
 
 
-<header class="header-main"> 
-
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Noah's Website</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
     
+    <header class="header-main"> 
+        <!-- Text-based Logo with enhanced styling -->
+        <div class="nav-logo">
+            Rose Web Creations
+        </div>
     
-
-      <img class="nav-logo" src="rosewebcreations-removebg-preview.png">
-
-<nav class="nav-options">
-   
-    <ul>
+        <!-- Navigation Menu -->
+        <nav class="nav-options">
+            <ul class="nav-list">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="services.html">Packages</a></li>
+                <li><a href="about.html">About</a></li>
+            </ul>
+        </nav>
     
-    <li ><a href="index.html">Home</a></li>
-   
-    <li ><a href="services.html">Packages</a></li>
-   
-    <li ><a href="About.Html">About</a></li>
-
-</ul>
-</nav>
-
-<a  href="ContactUs.html"><button class="main-btn">Hire Designer</button></a>
-
-</header>
+        <!-- Hire Button -->
+        <a href="contact.html"><button class="main-btn" id="hireBtn">Hire Designer</button></a>
+    
+        <!-- Hamburger Menu for smaller screens -->
+        <div class="hamburger-menu" onclick="toggleMenu()">
+            <i class="fas fa-bars"></i>
+        </div>
+    </header>
+    
+    <!-- Dropdown Menu for Mobile -->
+    <div class="dropdown-menu" id="dropdownMenu">
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="services.html">Packages</a></li>
+            <li><a href="about.html">About</a></li>
+            <!-- Moving Hire Designer to dropdown if button is removed -->
+            <li><a href="contact.html">Hire Designer</a></li>
+        </ul>
+    </div>
+    
+    <script>
+        function toggleMenu() {
+            const menu = document.getElementById('dropdownMenu');
+            menu.classList.toggle('show');
+        }
+    
+        // Handle button visibility on small screens
+        window.addEventListener('resize', function() {
+            const hireBtn = document.getElementById('hireBtn');
+            if (window.innerWidth <= 768) {
+                hireBtn.style.display = 'none';
+            } else {
+                hireBtn.style.display = 'inline-block';
+            }
+        });
+    </script>
 
 <div class="hero-main-main">
 
