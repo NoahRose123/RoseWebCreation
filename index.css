@@ -59,6 +59,7 @@ html {
   color: #fff;
   text-decoration: none;
   transition: background-color 0.5s ease;
+  margin-top: 2rem; /* Adjusted to add space between the button and content */
 }
 
 .hero-btn:hover {
@@ -78,6 +79,7 @@ html {
   border-radius: 2rem;
   border: 5px solid #000;
   object-fit: cover;
+  margin-top: 3rem; /* Added margin to create space between the image and content */
 }
 
 /* DROPDOWN MENU (Darker Color) */
@@ -261,10 +263,12 @@ html {
   .hero-btn {
     font-size: 1.8rem;
     padding: 1rem 2rem;
+    margin-top: 2rem; /* Adjusted for space */
   }
 
   .hero-img img {
     height: 30rem;
+    margin-top: 3rem; /* Added margin */
   }
 
   .under-hero-text h2 {
@@ -306,10 +310,12 @@ html {
   .hero-btn {
     font-size: 1.6rem;
     padding: 1rem 1.5rem;
+    margin-top: 2rem; /* Adjusted for space */
   }
 
   .hero-img img {
     height: 20rem;
+    margin-top: 3rem; /* Added margin */
   }
 
   .under-hero-text h2 {
