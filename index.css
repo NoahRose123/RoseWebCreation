@@ -5,6 +5,7 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  word-wrap: break-word; /* Prevents text overflow for long words */
 }
 
 html {
@@ -14,8 +15,8 @@ html {
 
 /* HERO SECTION */
 .hero-main {
-  font-family: 'Jost', sans-serif;
-  background-color: #d2d6e2;
+  font-family: 'Jost', 'Arial', sans-serif; /* Added fallback font */
+  background-color: #fff;
   margin-top: 0;
   padding: 5rem 2rem;
 }
@@ -41,14 +42,16 @@ html {
   font-weight: 600;
   margin-bottom: 1rem;
   line-height: 1.2;
+  margin-right:10px;
 }
 
 .hero-content p {
   font-size: 2rem;
   color: #000;
   opacity: 0.7;
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem; /* Adjusted to create more space */
   line-height: 1.4;
+  margin-right:10px;
 }
 
 .hero-btn {
@@ -74,7 +77,7 @@ html {
 }
 
 .hero-img img {
-  height: auto;
+  height:500px;
   max-width: 100%;
   border-radius: 2rem;
   border: 5px solid #000;
@@ -111,7 +114,7 @@ html {
 
 /* UNDER-HERO SECTION */
 .under-hero {
-  background: linear-gradient(135deg, #d2d6e2 0%, #04cc84 100%);
+  background-color:#04cc84;
   padding: 5rem 2rem;
   display: flex;
   flex-direction: column;
@@ -142,7 +145,6 @@ html {
 
 .under-hero-section {
   background-color: #fff;
-  opacity: 0.9;
   border-radius: 1rem;
   text-align: center;
   padding: 2rem;
@@ -164,6 +166,11 @@ html {
   font-size: 4rem;
   margin-bottom: 1rem;
   color: #04cc84;
+}
+
+.hero-hr{
+  border:none;
+  background-color:#fff;
 }
 
 /* CONTACT SECTION (Wider Textboxes, Keep Image and Heading Sizes Intact) */
@@ -254,10 +261,12 @@ html {
 
   .hero-content h1 {
     font-size: 3.6rem;
+    line-height: 1.1; /* Improved text flow */
   }
 
   .hero-content p {
     font-size: 1.8rem;
+    margin-bottom: 2.5rem; /* More space between paragraph and button */
   }
 
   .hero-btn {
@@ -267,7 +276,7 @@ html {
   }
 
   .hero-img img {
-    height: 30rem;
+    
     margin-top: 3rem; /* Added margin */
   }
 
@@ -301,6 +310,7 @@ html {
 
   .hero-content h1 {
     font-size: 3rem;
+    line-height: 1.1; /* Adjust to avoid cramped text */
   }
 
   .hero-content p {
@@ -314,7 +324,7 @@ html {
   }
 
   .hero-img img {
-    height: 20rem;
+
     margin-top: 3rem; /* Added margin */
   }
 
@@ -348,3 +358,4 @@ html {
     width: 12rem;
   }
 }
+
