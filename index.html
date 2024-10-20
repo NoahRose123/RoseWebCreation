@@ -23,12 +23,11 @@
 
 <body>
     <header class="header-main">
-        <!-- Text-based Logo with enhanced styling -->
-      <!-- Text-based Logo -->
-<div class="nav-logo">
-    <span class="logo-circle">R</span> 
-    Rose Web Creations
-</div>
+        <!-- Text-based Logo -->
+        <div class="nav-logo">
+            <span class="logo-circle">R</span> 
+            Rose Web Creations
+        </div>
 
         <!-- Navigation Menu -->
         <nav class="nav-options">
@@ -61,7 +60,7 @@
     <script>
         function toggleMenu() {
             const menu = document.getElementById('dropdownMenu');
-            menu.classList.toggle('show');
+            menu.classList.toggle('show');  // Toggle the 'show' class to display/hide the menu
         }
 
         // Handle button visibility on small screens
@@ -71,6 +70,14 @@
                 hireBtn.style.display = 'none';
             } else {
                 hireBtn.style.display = 'inline-block';
+            }
+        });
+
+        // Ensure the button is hidden on page load for small screens
+        window.addEventListener('load', function () {
+            const hireBtn = document.getElementById('hireBtn');
+            if (window.innerWidth <= 768) {
+                hireBtn.style.display = 'none';
             }
         });
     </script>
