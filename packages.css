@@ -80,6 +80,8 @@ height:auto;
 .card-header{
     margin:1rem;
     text-align:center;
+    border:none;
+    background-color:#fff;
 }
 
 .packages-card:hover .card-header h2{
@@ -129,7 +131,7 @@ color:red;
 }
 
 .package-card-price p{
-    font-size:3.5rem;
+    font-size:5rem;
     font-weight:800;
     margin-top:25px;
 }
@@ -142,24 +144,26 @@ color:red;
 .package-card-btn{
     padding:0.6rem 3rem;
     border: 2px solid white;
-    background-color: #7d87b8;
+    background-color: #3A0A96;
     color:white;
     font-weight: 600;
     border-radius:30px;
     cursor:pointer;
     transition:all 50ms ease-in ;
-    font-size:1.4rem;
-    height:60px;
+    font-size:2rem;
+    height:70px;
     margin-top:15px;
 }
 
 .package-card-btn:hover{
-    background-color:  #474d6c57;
+    background-color:#fff;
+    border:solid 2px #3A0A96;
+    color:#3A0A96;
     font-family:'Jost',sans-serif;
 }
 
 #package-i{
-    color:#7d87b8;
+    color:#3A0A96;
     font-size:80px;
     margin-left:8px;
 }

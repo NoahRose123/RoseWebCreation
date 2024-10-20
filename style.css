@@ -8,39 +8,63 @@
     font-family: 'Jost', sans-serif;
 }
 
-/* Header and Navigation */
-.header-main {
-    background-color: #d2d6e2;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    padding: 30px 10%;
-    height: 100px;
-    position: relative;
+html, body {
+    font-size: 50%; /* Mobile first font size */
 }
 
-/* Text-based logo with enhanced styling */
+@media (min-width: 768px) {
+    html {
+        font-size: 62.5%; /* Larger font size for larger screens */
+    }
+}
+
+/* Header and Navigation */
+.header-main {
+    background-color: #3A0A96; /* Apply the new blue background */
+    display: flex;
+    justify-content: space-between; /* Space out logo and nav elements */
+    align-items: center; /* Vertically center elements */
+    padding: 20px 10%; /* Adjusted padding */
+    height: 100px;
+}
+
+/* Styling for the new logo */
 .nav-logo {
-    cursor: pointer;
-    margin-right: auto;
+    display: flex;
+    align-items: center; /* Aligns circle and text in a row */
     font-family: 'Jost', sans-serif;
-    font-size: 30px; /* Increased font size for visibility */
-    font-weight: 700; /* Bold font for emphasis */
-    color: #04cc84;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #fff; /* White text to complement the blue background */
     text-transform: uppercase;
     letter-spacing: 2px;
-    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); /* Light shadow to make it pop */
+    cursor: pointer;
+}
+
+.logo-circle {
+    background-color: #fff; /* White circle background */
+    color: #3A0A96; /* Blue text inside circle */
+    border-radius: 50%; /* Creates the circle shape */
+    width: 50px; /* Fixed size for the circle */
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    font-weight: bold;
+    margin-right: 10px; /* Spacing between the circle and the text */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
 }
 
 .nav-options {
-    list-style: none;
-    margin-top:5px;
-    text-align:center;
+    display: flex;
+    align-items: center; /* Vertically center nav links */
 }
 
-.nav-options .nav-list {
+.nav-list {
     display: flex;
-    gap: 20px;
+    list-style: none;
+    gap: 30px; /* Space between nav items */
 }
 
 .nav-options li {
@@ -48,44 +72,43 @@
 }
 
 .nav-options li a {
-    transition: all 0.3s ease 0s;
-    color: #04cc84;
-    font-size: 17px;
+    text-decoration: none;
+    color: #fff;
+    font-size: 1.8rem;
+    transition: color 0.3s ease;
+    padding: 0.5rem 0;
 }
 
 .nav-options li a:hover {
-    color: #00ffa2;
-    transition: ease 0.5s;
+    color: #d1c4f0; /* Lighter hover color */
 }
 
 /* Main Button */
 .main-btn {
-     /* Increased padding for better sizing */
-    background-color: #04cc84;
-    color: #fff;
+    background-color: #fff;
+    color: #3A0A96;
+    font-size: 1.8rem;
     border: none;
     border-radius: 50px;
+    padding: 0.8rem 1.5rem; /* Adjusted padding to match nav links */
+    margin-left: 30px; /* Space between button and last nav link */
     cursor: pointer;
-    transition: all 0.3s ease 0s;
-    margin-left: 20px;
-    font-size: 15px;
-    font-weight: 600;
-    text-transform: uppercase;
-    height:40px;
-    padding:10px;
-    margin-bottom:15px;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center; /* Vertically center text in button */
+    justify-content: center;
 }
 
 .main-btn:hover {
-    background-color: #00ffa2;
-    transition: ease 0.5s;
+    background-color: #542AB9; /* Darker blue on hover */
+    color: #fff;
 }
 
 /* Hamburger Menu for smaller screens */
 .hamburger-menu {
     display: none;
     font-size: 30px;
-    color: #04cc84;
+    color: #fff;
     cursor: pointer;
 }
 
@@ -95,7 +118,7 @@
     position: absolute;
     top: 100px;
     right: 10%;
-    background-color:rgb(0, 0, 0);
+    background-color: #3A0A96; /* Blue background for dropdown */
     width: 100%;
     text-align: right;
 }
@@ -111,11 +134,11 @@
 
 .dropdown-menu li a {
     font-size: 17px;
-    color: #04cc84;
+    color: #fff;
 }
 
 .dropdown-menu li a:hover {
-    color: #00ffa2;
+    color: #d1c4f0; /* Light purple hover effect */
 }
 
 /* Show dropdown on toggle */
@@ -139,3 +162,4 @@
         display: none;
     }
 }
+

@@ -5,17 +5,23 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  word-wrap: break-word; /* Prevents text overflow for long words */
+  word-wrap: break-word;
 }
 
-html {
-  font-size: 62.5%; /* Set a scalable base font size */
-  overflow-x: hidden;
+html, body {
+  font-size: 50%; /* Set a scalable base font size for mobile first */
+  overflow: hidden; /* Prevents scrolling */
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 62.5%; /* For larger screens */
+  }
 }
 
 /* HERO SECTION */
 .hero-main {
-  font-family: 'Jost', 'Arial', sans-serif; /* Added fallback font */
+  font-family: 'Jost', 'Arial', sans-serif;
   background-color: #fff;
   margin-top: 0;
   padding: 5rem 2rem;
@@ -34,6 +40,7 @@ html {
   max-width: 60%;
   padding-right: 2rem;
   text-align: left;
+  padding-left: 3rem; /* Added padding to move content away from the left */
 }
 
 .hero-content h1 {
@@ -41,32 +48,30 @@ html {
   color: #000;
   font-weight: 600;
   margin-bottom: 1rem;
-  line-height: 1.2;
-  margin-right:10px;
+  line-height: 1.3; /* Slight increase for readability */
 }
 
 .hero-content p {
   font-size: 2rem;
   color: #000;
   opacity: 0.7;
-  margin-bottom: 2.5rem; /* Adjusted to create more space */
-  line-height: 1.4;
-  margin-right:10px;
+  margin-bottom: 2.5rem;
+  line-height: 1.6; /* Increased for readability */
 }
 
 .hero-btn {
-  background-color: #04cc84;
+  background-color: #3A0A96; /* Replaced green with extracted purple color */
   font-size: 2rem;
   padding: 1rem 2rem;
   border-radius: 1rem;
   color: #fff;
   text-decoration: none;
   transition: background-color 0.5s ease;
-  margin-top: 2rem; /* Adjusted to add space between the button and content */
+  margin-top: 2rem;
 }
 
 .hero-btn:hover {
-  background-color: #00ffa2;
+  color: #fff; /* Slightly lighter purple on hover */
 }
 
 .hero-image-main {
@@ -77,21 +82,21 @@ html {
 }
 
 .hero-img img {
-  height:500px;
+  height: 400px;
   max-width: 100%;
   border-radius: 2rem;
   border: 5px solid #000;
   object-fit: cover;
-  margin-top: 3rem; /* Added margin to create space between the image and content */
+  margin-top: 3rem;
 }
 
 /* DROPDOWN MENU (Darker Color) */
 .dropdown-menu {
-  background-color: #333; /* Darker color */
+  background-color: #333;
   padding: 1rem;
   display: none;
-  position: absolute;
-  top: 5rem;
+  position: relative; /* Changed to relative positioning */
+  top: 0;
   width: 100%;
 }
 
@@ -101,216 +106,31 @@ html {
 }
 
 .dropdown-menu ul li a {
-  color: #fff; /* Light text color to contrast the dark background */
+  color: #fff;
   text-decoration: none;
   padding: 1rem 2rem;
   display: block;
 }
 
 .dropdown-menu ul li a:hover {
-  background-color: #04cc84; /* Highlight with green on hover */
-  color: #000; /* Dark text on hover */
-}
-
-/* UNDER-HERO SECTION */
-.under-hero {
-  background-color:#04cc84;
-  padding: 5rem 2rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  color: #fff;
-  text-align: center;
-}
-
-.under-hero-text h2 {
-  font-size: 3.6rem;
-  margin-bottom: 1rem;
-}
-
-.under-hero-text-p {
-  font-size: 1.8rem;
-  margin-top: 1rem;
-  text-decoration: underline;
-}
-
-.hero-under-main {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 2rem;
-  margin-top: 3rem;
-}
-
-.under-hero-section {
-  background-color: #fff;
-  border-radius: 1rem;
-  text-align: center;
-  padding: 2rem;
-  width: 30rem;
-  height: 25rem;
-  transition: transform 0.5s ease;
-}
-
-.under-hero-section:hover {
-  transform: scale(1.05);
-}
-
-.under-hero-section p {
-  font-size: 1.8rem;
+  background-color: #3A0A96; /* Replaced hover green with extracted purple */
   color: #000;
 }
 
-#under-i {
-  font-size: 4rem;
-  margin-bottom: 1rem;
-  color: #04cc84;
-}
-
-.hero-hr{
-  border:none;
-  background-color:#fff;
-}
-
-/* CONTACT SECTION (Wider Textboxes, Keep Image and Heading Sizes Intact) */
-.contact-page {
-  padding: 5rem 2rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background-color: #f9f9f9;
-  max-width: 100%;
-}
-
-.contact-logo {
-  background-image: url('rosew.png');
-  background-size: cover;
-  width: 15rem; /* Keeping original size */
-  height: 15rem; /* Keeping original size */
-  margin-bottom: 2rem;
-}
-
-.contact-page .contact-content {
-  max-width: 80rem; /* Keeping original width */
-  text-align: center;
-  margin-bottom: 4rem;
-}
-
-.contact-page .contact-content p {
-  font-size: 3rem;
-  color: #000;
-}
-
-.contact-form {
-  width: 100%;
-  max-width: 70rem; /* Increased width for textboxes */
-  margin-top: 2rem;
-}
-
-.contact-form h2 {
-  font-size: 3rem;
-  margin-bottom: 2rem;
-}
-
-.contact-form .form-group {
-  margin-bottom: 2rem;
-}
-
-.contact-form .form-group label {
-  display: block; /* Ensures label is above the input */
-  font-size: 1.8rem;
-  margin-bottom: 0.8rem;
-  color: #333;
-}
-
-.contact-form .form-group input,
-.contact-form .form-group textarea {
-  width: 100%;
-  padding: 1.5rem; /* Larger padding */
-  font-size: 1.8rem; /* Increased font size */
-  border: 2px solid #333;
-  border-radius: 0.5rem;
-}
-
-#c-b {
-  width: 18rem; /* Larger button */
-  background-color: #04cc84;
-  border: none;
-  border-radius: 1rem;
-  padding: 1.2rem;
-  font-size: 1.8rem;
-  cursor: pointer;
-  color: white;
-}
-
-/* RESPONSIVE MEDIA QUERIES */
-
-/* Tablet Screens */
+/* Mobile Screens */
 @media (max-width: 768px) {
   .hero-content {
     max-width: 100%;
     text-align: center;
-    padding-right: 0;
-  }
-
-  .hero-home {
-    flex-direction: column;
-  }
-
-  .hero-content h1 {
-    font-size: 3.6rem;
-    line-height: 1.1; /* Improved text flow */
-  }
-
-  .hero-content p {
-    font-size: 1.8rem;
-    margin-bottom: 2.5rem; /* More space between paragraph and button */
-  }
-
-  .hero-btn {
-    font-size: 1.8rem;
-    padding: 1rem 2rem;
-    margin-top: 2rem; /* Adjusted for space */
-  }
-
-  .hero-img img {
-    
-    margin-top: 3rem; /* Added margin */
-  }
-
-  .under-hero-text h2 {
-    font-size: 3rem;
-  }
-
-  .under-hero-section {
-    width: 90%;
-    height: auto;
-  }
-
-  .under-hero-section p {
-    font-size: 1.6rem;
-  }
-
-  .contact-form {
-    width: 90%;
-  }
-
-  .contact-page .contact-content p {
-    font-size: 2.4rem;
+    padding-left: 2rem; /* Reduced padding for smaller screens */
+    padding-right: 2rem; /* Symmetrical padding */
   }
 }
 
-/* Mobile Screens */
 @media (max-width: 480px) {
-  html {
-    font-size: 50%;
-  }
-
   .hero-content h1 {
     font-size: 3rem;
-    line-height: 1.1; /* Adjust to avoid cramped text */
+    line-height: 1.1;
   }
 
   .hero-content p {
@@ -320,42 +140,14 @@ html {
   .hero-btn {
     font-size: 1.6rem;
     padding: 1rem 1.5rem;
-    margin-top: 2rem; /* Adjusted for space */
+    margin-top: 2rem;
   }
 
   .hero-img img {
-
-    margin-top: 3rem; /* Added margin */
-  }
-
-  .under-hero-text h2 {
-    font-size: 2.6rem;
-  }
-
-  .under-hero-section {
-    width: 100%;
-  }
-
-  .under-hero-section p {
-    font-size: 1.4rem;
-  }
-
-  .contact-form {
-    width: 100%;
-  }
-
-  .contact-page .contact-content p {
-    font-size: 2rem;
-  }
-
-  .contact-form h2 {
-    font-size: 2.4rem;
-  }
-
-  #c-b {
-    font-size: 1.4rem;
-    padding: 0.8rem;
-    width: 12rem;
+    margin-top: 3rem;
   }
 }
+
+
+
 
