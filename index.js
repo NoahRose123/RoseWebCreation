@@ -1,9 +1,10 @@
+// Email sending function
 function sendMail() {
     var params = {
         name: document.getElementById("name").value,
         email: document.getElementById("email").value,
         message: document.getElementById("message").value,
-        myEmail: "your-email@example.com",  // Your personal email for receiving the message
+        myEmail: "your-email@example.com", // Your personal email for receiving the message
     };
 
     // Ensure fields are not empty
@@ -23,7 +24,7 @@ function sendMail() {
             params.attachmentName = file.name; // Pass file name
             sendEmailJS(params);
         };
-        reader.readAsDataURL(file);  // Read file as base64
+        reader.readAsDataURL(file); // Read file as base64
     } else {
         // No file, send email without attachment
         sendEmailJS(params);
@@ -40,7 +41,7 @@ function sendEmailJS(params) {
             document.getElementById("name").value = "";
             document.getElementById("email").value = "";
             document.getElementById("message").value = "";
-            document.getElementById("attachment").value = "";  // Clear file input
+            document.getElementById("attachment").value = ""; // Clear file input
             console.log(res);
             alert("Your message was sent successfully!");
         })
@@ -53,4 +54,8 @@ function sendEmailJS(params) {
 // Add event listener to button
 document.getElementById("sendMailBtn").addEventListener("click", sendMail);
 
-
+// Hamburger menu toggle
+function toggleMenu() {
+    const menu = document.getElementById('dropdownMenu');
+    menu.classList.toggle('show'); // This toggles the 'show' class to display/hide the menu
+}
