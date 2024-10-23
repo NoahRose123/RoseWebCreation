@@ -356,14 +356,14 @@ width:100%;
   }
   
   #c-b{
-  width:125px;
-  background-color:#04cc84;
-  border-color:black;
-  border:none;
-  border-radius:1rem;
-  height:40px;
-  width:100px;
-  font-size:20px;
+    width:200px;
+    background-color:#3A0A96;
+    border-color:black;
+    border:none;
+    border-radius:1rem;
+    height:50px;
+    font-size:25px;
+    text-align: center;
   }
   
   .contact-form .form-group input[type="submit"]{
