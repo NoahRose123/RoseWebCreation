@@ -4,58 +4,39 @@ function sendMail() {
         name: document.getElementById("name").value,
         email: document.getElementById("email").value,
         message: document.getElementById("message").value,
-        myEmail: "your-email@example.com", // Your personal email for receiving the message
     };
 
-    // Ensure fields are not empty
+    // Ensure all fields are filled
     if (!params.name || !params.email || !params.message) {
         alert("Please fill in all fields before sending.");
         return;
     }
 
-    const fileInput = document.getElementById("attachment");
-    const file = fileInput.files[0]; // Get the file
+    // Send email using EmailJS
+    const serviceID = "service_sjsyk68";  // Your EmailJS service ID
+    const templateID = "template_kau3sto";  // Your EmailJS template ID
 
-    // If a file is selected, we'll read it and send it as a base64 string
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            params.attachment = e.target.result; // Attach the file as base64
-            params.attachmentName = file.name; // Pass file name
-            sendEmailJS(params);
-        };
-        reader.readAsDataURL(file); // Read file as base64
-    } else {
-        // No file, send email without attachment
-        sendEmailJS(params);
-    }
-}
-
-function sendEmailJS(params) {
-    const serviceID = "service_sjsyk68";
-    const templateID = "template_kau3sto";
-
-    emailjs
-        .send(serviceID, templateID, params)
+    emailjs.send(serviceID, templateID, params)
         .then((res) => {
+            // Clear form after successful submission
             document.getElementById("name").value = "";
             document.getElementById("email").value = "";
             document.getElementById("message").value = "";
-            document.getElementById("attachment").value = ""; // Clear file input
-            console.log(res);
-            alert("Your message was sent successfully!");
+
+            // Display success message
+            const responseMessage = document.getElementById("responseMessage");
+            responseMessage.style.display = "block";
+            responseMessage.style.color = "green";
+            responseMessage.textContent = "Your message has been delivered successfully!";
         })
         .catch((err) => {
-            console.error(err);
-            alert("Failed to send your message. Please try again.");
+            // Display error message
+            const responseMessage = document.getElementById("responseMessage");
+            responseMessage.style.display = "block";
+            responseMessage.style.color = "red";
+            responseMessage.textContent = "Failed to send your message. Please try again.";
         });
 }
 
 // Add event listener to button
 document.getElementById("sendMailBtn").addEventListener("click", sendMail);
-
-// Hamburger menu toggle
-function toggleMenu() {
-    const menu = document.getElementById('dropdownMenu');
-    menu.classList.toggle('show'); // This toggles the 'show' class to display/hide the menu
-}
