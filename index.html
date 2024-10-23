@@ -4,13 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Noah's Website</title>
+    <title>Hire A Designer!</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="./css/reset.css">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="index.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <script src="index.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     <script type="text/javascript">
         (function () {
@@ -22,68 +21,58 @@
 </head>
 
 <body>
-    <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Responsive Navigation</title>
-    <link rel="stylesheet" href="styles.css">
-    <script src="https://kit.fontawesome.com/a076d05399.js"></script> <!-- For the hamburger icon -->
-</head>
-<body>
-    <!DOCTYPE html>
-    <html lang="en">
-    
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Noah's Website</title>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-        <link rel="stylesheet" href="style.css">
-        <script src="index.js"></script> <!-- External JavaScript file -->
-    </head>
-    
-    <body>
-        <header class="header-main">
-            <!-- Text-based Logo -->
-            <div class="nav-logo">
-                <span class="logo-circle">R</span>
-                Rose Web Creations
-            </div>
-    
-            <!-- Navigation Menu -->
-            <nav class="nav-options">
-                <ul class="nav-list">
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="services.html">Packages</a></li>
-                    <li><a href="about.html">About</a></li>
-                </ul>
-            </nav>
-    
-            <!-- Hire Button -->
-            <a href="ContactUs.html"><button class="main-btn" id="hireBtn">Hire Designer</button></a>
-    
-            <!-- Hamburger Menu for smaller screens -->
-            <div class="hamburger-menu" onclick="toggleMenu()">
-                <i class="fas fa-bars"></i>
-            </div>
-        </header>
-    
-        <!-- Dropdown Menu for Mobile -->
-        <div class="dropdown-menu" id="dropdownMenu">
-            <ul>
+    <header class="header-main">
+        <!-- Text-based Logo with enhanced styling -->
+      <!-- Text-based Logo -->
+<div class="nav-logo">
+    <span class="logo-circle">R</span> 
+    Rose Web Creations
+</div>
+
+        <!-- Navigation Menu -->
+        <nav class="nav-options">
+            <ul class="nav-list">
                 <li><a href="index.html">Home</a></li>
                 <li><a href="services.html">Packages</a></li>
-                <li><a href="about.html">About</a></li>
-                <li><a href="ContactUs.html">Hire Designer</a></li>
+                <li><a href="abt.html">About</a></li>
             </ul>
+        </nav>
+
+        <!-- Hire Button -->
+        <a href="ContactUs.html"><button class="main-btn" id="hireBtn">Hire Designer</button></a>
+
+        <!-- Hamburger Menu for smaller screens -->
+        <div class="hamburger-menu" onclick="toggleMenu()">
+            <i class="fas fa-bars"></i>
         </div>
-    
-        
-    
+    </header>
 
+    <!-- Dropdown Menu for Mobile -->
+    <div class="dropdown-menu" id="dropdownMenu">
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="services.html">Packages</a></li>
+            <li><a href="abt.html">About</a></li>
+            <li><a href="ContactUs.html">Hire Designer</a></li>
+        </ul>
+    </div>
 
+    <script>
+        function toggleMenu() {
+            const menu = document.getElementById('dropdownMenu');
+            menu.classList.toggle('show');
+        }
+
+        // Handle button visibility on small screens
+        window.addEventListener('resize', function () {
+            const hireBtn = document.getElementById('hireBtn');
+            if (window.innerWidth <= 768) {
+                hireBtn.style.display = 'none';
+            } else {
+                hireBtn.style.display = 'inline-block';
+            }
+        });
+    </script>
 
     <!-- Hero Section -->
     <div class="hero-main-main">
@@ -105,7 +94,7 @@
 
     <hr class="hero-hr">
 
-    <script src="index.js"></script>
+    <script src="nav.js"></script>
 </body>
 
 </html>
