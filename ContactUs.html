@@ -4,19 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contact Us</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="contact.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" />
 
-    <!-- EmailJS Library -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="index.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 
-    <script type="text/javascript">
-        (function () {
-            emailjs.init("Czs0cXQsp5B-Dbm8Y"); // Initialize EmailJS with your public key
-        })();
-    </script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <script src="index.js"></script>
+    <script type="text/javascript"
+        src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js">
+</script>
+<script type="text/javascript">
+   (function(){
+      emailjs.init({
+        publicKey: "Czs0cXQsp5B-Dbm8Y",
+      });
+   })();
+</script>
 </head>
 <body>
 
@@ -31,7 +39,7 @@
             <ul class="nav-list">
                 <li><a href="index.html">Home</a></li>
                 <li><a href="services.html">Packages</a></li>
-                <li><a href="About.html">About</a></li>
+                <li><a href="About.Html">About</a></li>
             </ul>
         </nav>
 
@@ -54,46 +62,67 @@
         </ul>
     </div>
 
-    <div class="contact-page-main">
-        <section class="contact-page">
-            <div class="contact-logo"></div>
-            <div class="contact-content">
-                <p>Let's connect with us.</p>
-            </div>
-            <div class="contact-container">
-                <div class="contact-info">
+    <script>
+        function toggleMenu() {
+            const menu = document.getElementById('dropdownMenu');
+            menu.classList.toggle('show');
+        }
 
-                    <div class="contact-form">
-                        <form id="contact-form">
-                            <h2>Send Message</h2>
-                            <div class="form-group">
-                                <h5 for="name">Name</h5>
-                                <input type="text" class="form-control" id="name" placeholder="Enter your name" required>
-                            </div>
-                            <div class="form-group">
-                                <h5 for="email">Email</h5>
-                                <input type="email" class="form-control" id="email" placeholder="Enter your email" required>
-                            </div>
-                            <div class="form-group">
-                                <h5 for="message">Message</h5>
-                                <textarea id="message" rows="3" class="form-control" placeholder="Type Your Message..." required></textarea>
-                            </div>
-                            <div class="form-group">
-                                <button type="button" class="btn btn-primary" id="sendMailBtn">Submit</button>
-                            </div>
-                        </form>
-                        <!-- Message to be displayed after submission -->
-                        <p id="responseMessage" style="display: none;"></p>
-                    </div>
+        // Handle button visibility on small screens
+        window.addEventListener('resize', function () {
+            const hireBtn = document.getElementById('hireBtn');
+            if (window.innerWidth <= 768) {
+                hireBtn.style.display = 'none';
+            } else {
+                hireBtn.style.display = 'inline-block';
+            }
+        });
+    </script>
 
-                </div>
+  
+<div class="contact-space"></div>
+
+<div class="contact-page-main">
+<section class="contact-page">
+    <div class="contact-logo"></div>
+<div class="contact-content">
+    <p>Let's connect you with Us.</p>
+</div>
+<div class="contact-container">
+    <div class="contact-info">
+
+
+    <div class="contact-form">
+        <form>
+            <h2>Send Message</h2>
+            <div class="form-group">
+                <h5 for="name">Name</h5>
+                <input type="text" class="form-control" id="name" placeholder="enter your name" required="required">
+      
             </div>
-        </section>
+            <div class="form-group">
+                <h5 for="email">Email</h5>
+                <input type="email" class="form-control" id="email" placeholder="enter your email" required="required">
+            </div>
+            <div class="form-group">
+                <h5 for="email">Message</h5>
+                <textarea name="" required="required" id="message" rows="3" class="form-control" placeholder="Type Your Message..."></textarea>
+            </div>
+            <div class="form-group">
+                <button id="c-b"class="btn btn-primary" onclick="sendMail()">Submit</button>
+            </div>
+        </form>
     </div>
+</div>
+</section>
+</div>
 
-    <script src="contact.js"></script> <!-- Link to the JavaScript file for EmailJS -->
+
+     
 </body>
 </html>
+
+
 
 
 
