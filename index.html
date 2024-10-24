@@ -5,11 +5,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hire A Designer!</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+        integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="./css/reset.css">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="index.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     <script type="text/javascript">
         (function () {
@@ -22,14 +26,13 @@
 
 <body>
     <header class="header-main">
-        <!-- Text-based Logo with enhanced styling -->
-      <!-- Text-based Logo -->
-<div class="nav-logo">
-    <span class="logo-circle">R</span> 
-    Rose Web Creations
-</div>
+        <!-- Logo -->
+        <div class="nav-logo">
+            <span class="logo-circle">R</span>
+            Rose Web Creations
+        </div>
 
-        <!-- Navigation Menu -->
+        <!-- Navigation Menu (Desktop) -->
         <nav class="nav-options">
             <ul class="nav-list">
                 <li><a href="index.html">Home</a></li>
@@ -38,16 +41,16 @@
             </ul>
         </nav>
 
-        <!-- Hire Button -->
+        <!-- Hire Button (Desktop) -->
         <a href="ContactUs.html"><button class="main-btn" id="hireBtn">Hire Designer</button></a>
 
-        <!-- Hamburger Menu for smaller screens -->
+        <!-- Hamburger Menu (Mobile) -->
         <div class="hamburger-menu" onclick="toggleMenu()">
             <i class="fas fa-bars"></i>
         </div>
     </header>
 
-    <!-- Dropdown Menu for Mobile -->
+    <!-- Dropdown Menu (Mobile) -->
     <div class="dropdown-menu" id="dropdownMenu">
         <ul>
             <li><a href="index.html">Home</a></li>
@@ -57,30 +60,16 @@
         </ul>
     </div>
 
-    <script>
-        function toggleMenu() {
-            const menu = document.getElementById('dropdownMenu');
-            menu.classList.toggle('show');
-        }
-
-        // Handle button visibility on small screens
-        window.addEventListener('resize', function () {
-            const hireBtn = document.getElementById('hireBtn');
-            if (window.innerWidth <= 768) {
-                hireBtn.style.display = 'none';
-            } else {
-                hireBtn.style.display = 'inline-block';
-            }
-        });
-    </script>
-
     <!-- Hero Section -->
     <div class="hero-main-main">
         <div class="hero-main">
             <section class="hero-home">
                 <div class="hero-content">
                     <h1 class="hero-title">Hire the Best Freelance Talent</h1>
-                    <p class="mb-8 text-gray-700 text-base leading-3 xl:text-lg xl:leading-4">Toptal is an exclusive network of the top freelance software developers, designers, marketing experts, finance experts, product managers, and project managers in the world. Top companies hire Toptal freelancers for their most important projects.</p>
+                    <p class="mb-8 text-gray-700 text-base leading-3 xl:text-lg xl:leading-4">Toptal is an exclusive
+                        network of the top freelance software developers, designers, marketing experts, finance experts,
+                        product managers, and project managers in the world. Top companies hire Toptal freelancers for
+                        their most important projects.</p>
                     <a href="services.html" class="hero-btn">Get Started</a>
                 </div>
                 <div class="hero-image-main">
@@ -94,7 +83,35 @@
 
     <hr class="hero-hr">
 
-    <script src="nav.js"></script>
+    <!-- JavaScript for Navbar Dropdown -->
+    <script>
+        // Function to toggle dropdown menu
+        function toggleMenu() {
+            const dropdownMenu = document.getElementById('dropdownMenu');
+            dropdownMenu.classList.toggle('show');
+
+            // Check if the dropdown is currently showing or hidden
+            if (dropdownMenu.classList.contains('show')) {
+                dropdownMenu.style.display = 'block';  // Show the dropdown
+            } else {
+                dropdownMenu.style.display = 'none';  // Hide the dropdown
+            }
+        }
+
+        // Ensure the DOM is ready before adding event listeners
+        document.addEventListener('DOMContentLoaded', function () {
+            const hamburgerMenu = document.querySelector('.hamburger-menu');
+            const dropdownMenu = document.querySelector('.dropdown-menu');
+
+            // Initially hide the dropdown
+            dropdownMenu.style.display = 'none';
+
+            // Add click event listener to the hamburger menu
+            hamburgerMenu.addEventListener('click', function () {
+                toggleMenu();  // Toggle dropdown when hamburger menu is clicked
+            });
+        });
+    </script>
 </body>
 
 </html>

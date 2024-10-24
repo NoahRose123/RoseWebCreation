@@ -51,11 +51,3 @@ function sendEmailJS(params) {
         });
 }
 
-// Add event listener to button
-document.getElementById("sendMailBtn").addEventListener("click", sendMail);
-
-// Hamburger menu toggle
-function toggleMenu() {
-    const menu = document.getElementById('dropdownMenu');
-    menu.classList.toggle('show'); // This toggles the 'show' class to display/hide the menu
-}

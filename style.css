@@ -1,6 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,600;1,600&display=swap");
 
-/* General Styles */
+/* General styles */
 * {
     box-sizing: border-box;
     margin: 0;
@@ -10,12 +10,6 @@
 
 html, body {
     font-size: 50%;
-}
-
-@media (min-width: 768px) {
-    html {
-        font-size: 62.5%;
-    }
 }
 
 /* Header and Navigation */
@@ -82,7 +76,6 @@ html, body {
     color: #d1c4f0;
 }
 
-/* Main Button */
 .main-btn {
     background-color: #fff;
     color: #3A0A96;
@@ -93,9 +86,6 @@ html, body {
     margin-left: 30px;
     cursor: pointer;
     transition: all 0.3s ease;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
 }
 
 .main-btn:hover {
@@ -103,10 +93,7 @@ html, body {
     color: #fff;
 }
 
-
-
-
-/* Hamburger Menu for smaller screens */
+/* Hamburger Menu for Mobile */
 .hamburger-menu {
     display: none;
     font-size: 30px;
@@ -117,12 +104,16 @@ html, body {
 /* Dropdown Menu (Mobile) */
 .dropdown-menu {
     display: none;
+    background-color: #3A0A96;
+    text-align: center;
+    width: 100%;
     position: absolute;
     top: 100px;
-    right: 10%;
-    background-color: #3A0A96;
-    width: 100%;
-    text-align: right;
+    left: 0;
+    opacity: 0;
+    max-height: 0;
+    transition: max-height 0.5s ease, opacity 0.5s ease;
+    overflow: hidden;
 }
 
 .dropdown-menu ul {
@@ -131,46 +122,39 @@ html, body {
 }
 
 .dropdown-menu li {
-    padding: 10px 20px;
+    padding: 15px 0;
 }
 
 .dropdown-menu li a {
-    font-size: 1.8rem; /* Updated for better mobile readability */
+    font-size: 1.8rem;
     color: #fff;
+    text-decoration: none;
+    display: block;
 }
 
 .dropdown-menu li a:hover {
     color: #d1c4f0;
 }
 
-/* Show dropdown on toggle */
-.show {
+/* Show dropdown when .show class is toggled */
+.dropdown-menu.show {
     display: block;
+    max-height: 300px; /* Adjust as needed */
+    opacity: 1;
 }
 
-/* Responsive Styling */
+/* Responsive styles */
 @media (max-width: 768px) {
-    .nav-options {
+    .nav-options, .main-btn {
         display: none;
     }
 
     .hamburger-menu {
         display: block;
-        margin-left: 20px;
-    }
-
-    .main-btn {
-        display: none;
-    }
-
-    .dropdown-menu {
-        padding: 10px 5%;
-    }
-
-    .dropdown-menu li {
-        padding: 15px 0;
     }
 }
+
+
 
 
 
