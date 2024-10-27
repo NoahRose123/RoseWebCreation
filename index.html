@@ -17,11 +17,114 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     <script type="text/javascript">
         (function () {
-            emailjs.init({
-                publicKey: "Czs0cXQsp5B-Dbm8Y",
-            });
+            emailjs.init("Czs0cXQsp5B-Dbm8Y");
         })();
     </script>
+    <script type="text/javascript">
+        function toggleMenu() {
+            const dropdownMenu = document.getElementById("dropdownMenu");
+            dropdownMenu.classList.toggle("show");
+        }
+    </script>
+    <style>
+        /* Base Styles */
+        .header-main {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background-color: #3A0A96;
+            color: #fff;
+        }
+
+        .nav-logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .nav-options {
+            display: flex;
+        }
+
+        .nav-list {
+            list-style: none;
+            display: flex;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav-list li {
+            margin-right: 20px;
+        }
+
+        .nav-list li a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .main-btn {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+
+        .hamburger-menu {
+            display: none; /* Hidden by default */
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        /* Dropdown Menu Styles */
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top:60px;
+            right: 0;
+            background-color: #3A0A96;
+            width: 100%;
+            margin-top:30px;
+            text-align: right;
+            padding:40px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .dropdown-menu.show {
+            display: block;
+        }
+
+        .dropdown-menu ul       .main-btn{
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .dropdown-menu ul li     .main-btn {
+            margin: 10px 0;
+        }
+
+        .dropdown-menu ul li a       .main-btn{
+            color: #fff;
+            text-decoration: none;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .nav-options {
+                display: none; /* Hide desktop menu */
+            }
+
+            .hamburger-menu {
+                display: block; /* Show hamburger icon */
+            }
+
+            .dropdown-menu {
+                display: none; /* Default state closed */
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -60,7 +163,9 @@
         </ul>
     </div>
 
-    <!-- Hero Section -->
+    <!-- Add additional content here -->
+
+     <!-- Hero Section -->
     <div class="hero-main-main">
         <div class="hero-main">
             <section class="hero-home">
@@ -81,37 +186,8 @@
         </div>
     </div>
 
-    <hr class="hero-hr">
 
-    <!-- JavaScript for Navbar Dropdown -->
-    <script>
-        // Function to toggle dropdown menu
-        function toggleMenu() {
-            const dropdownMenu = document.getElementById('dropdownMenu');
-            dropdownMenu.classList.toggle('show');
 
-            // Check if the dropdown is currently showing or hidden
-            if (dropdownMenu.classList.contains('show')) {
-                dropdownMenu.style.display = 'block';  // Show the dropdown
-            } else {
-                dropdownMenu.style.display = 'none';  // Hide the dropdown
-            }
-        }
-
-        // Ensure the DOM is ready before adding event listeners
-        document.addEventListener('DOMContentLoaded', function () {
-            const hamburgerMenu = document.querySelector('.hamburger-menu');
-            const dropdownMenu = document.querySelector('.dropdown-menu');
-
-            // Initially hide the dropdown
-            dropdownMenu.style.display = 'none';
-
-            // Add click event listener to the hamburger menu
-            hamburgerMenu.addEventListener('click', function () {
-                toggleMenu();  // Toggle dropdown when hamburger menu is clicked
-            });
-        });
-    </script>
 </body>
 
 </html>
