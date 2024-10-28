@@ -7,52 +7,171 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="contact.css">
-
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    
     <script src="index.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    
+    <script type="text/javascript">
+        (function(){
+            emailjs.init("Czs0cXQsp5B-Dbm8Y");
+        })();
+    </script>
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <style>
+        /* Navbar Styling */
+        .header-main {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background-color: #3A0A96;
+            color: #fff;
+        }
 
-    <script src="index.js"></script>
-    <script type="text/javascript"
-        src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js">
-</script>
-<script type="text/javascript">
-   (function(){
-      emailjs.init({
-        publicKey: "Czs0cXQsp5B-Dbm8Y",
-      });
-   })();
-</script>
+        .nav-logo {
+            font-size: 24px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-circle {
+            background-color: #fff;
+            color: #3A0A96;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-options {
+            display: flex;
+        }
+
+        .nav-list {
+            list-style: none;
+            display: flex;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav-list li {
+            margin-right: 20px;
+        }
+
+        .nav-list li a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 18px;
+        }
+
+        .main-btn {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .main-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .hamburger-menu {
+            display: none; /* Hidden by default for desktop */
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        /* Dropdown Menu Styles */
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 80px;
+            right: 10%;
+            background-color: #3A0A96;
+            width: 100%;
+            text-align: center;
+            padding: 20px 0;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            text-align:right;
+            padding-right:20px;
+        }
+
+        .dropdown-menu.show {
+            display: block;
+        }
+
+        .dropdown-menu ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .dropdown-menu ul li {
+            padding: 10px 0;
+        }
+
+        .dropdown-menu ul li a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 18px;
+        }
+
+        .dropdown-menu ul li a:hover {
+            color: #d1c4f0;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .nav-options, .main-btn {
+                display: none; /* Hide desktop menu */
+            }
+
+            .hamburger-menu {
+                display: block; /* Show hamburger icon for mobile */
+            }
+        }
+    </style>
 </head>
 <body>
 
+    <!-- Navbar Section -->
     <header class="header-main">
-        <!-- Text-based Logo with enhanced styling -->
+        <!-- Logo -->
         <div class="nav-logo">
             <span class="logo-circle">R</span> 
             Rose Web Creations
         </div>
-        <!-- Navigation Menu -->
+
+        <!-- Navigation Menu (Desktop) -->
         <nav class="nav-options">
             <ul class="nav-list">
                 <li><a href="index.html">Home</a></li>
                 <li><a href="services.html">Packages</a></li>
-                <li><a href="About.Html">About</a></li>
+                <li><a href="about.html">About</a></li>
             </ul>
         </nav>
 
-        <!-- Hire Button -->
+        <!-- Hire Button (Desktop) -->
         <a href="ContactUs.html"><button class="main-btn" id="hireBtn">Hire Designer</button></a>
 
-        <!-- Hamburger Menu for smaller screens -->
+        <!-- Hamburger Menu (Mobile) -->
         <div class="hamburger-menu" onclick="toggleMenu()">
             <i class="fas fa-bars"></i>
         </div>
     </header>
 
-    <!-- Dropdown Menu for Mobile -->
+    <!-- Dropdown Menu (Mobile) -->
     <div class="dropdown-menu" id="dropdownMenu">
         <ul>
             <li><a href="index.html">Home</a></li>
@@ -79,48 +198,45 @@
         });
     </script>
 
-  
-<div class="contact-space"></div>
+    <!-- Contact Page Content -->
+    <div class="contact-space"></div>
 
-<div class="contact-page-main">
-<section class="contact-page">
-    <div class="contact-logo"></div>
-<div class="contact-content">
-    <p>Let's connect you with Us.</p>
-</div>
-<div class="contact-container">
-    <div class="contact-info">
-
-
-    <div class="contact-form">
-        <form>
-            <h2>Send Message</h2>
-            <div class="form-group">
-                <h5 for="name">Name</h5>
-                <input type="text" class="form-control" id="name" placeholder="enter your name" required="required">
-      
+    <div class="contact-page-main">
+        <section class="contact-page">
+            <div class="contact-logo"></div>
+            <div class="contact-content">
+                <p>Let's connect you with Us.</p>
             </div>
-            <div class="form-group">
-                <h5 for="email">Email</h5>
-                <input type="email" class="form-control" id="email" placeholder="enter your email" required="required">
+            <div class="contact-container">
+                <div class="contact-info">
+                    <div class="contact-form">
+                        <form>
+                            <h2>Send Message</h2>
+                            <div class="form-group">
+                                <h5 for="name">Name</h5>
+                                <input type="text" class="form-control" id="name" placeholder="Enter your name" required="required">
+                            </div>
+                            <div class="form-group">
+                                <h5 for="email">Email</h5>
+                                <input type="email" class="form-control" id="email" placeholder="Enter your email" required="required">
+                            </div>
+                            <div class="form-group">
+                                <h5 for="message">Message</h5>
+                                <textarea id="message" rows="3" class="form-control" placeholder="Type Your Message..." required="required"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <button id="c-b" class="btn btn-primary" onclick="sendMail()">Submit</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <h5 for="email">Message</h5>
-                <textarea name="" required="required" id="message" rows="3" class="form-control" placeholder="Type Your Message..."></textarea>
-            </div>
-            <div class="form-group">
-                <button id="c-b"class="btn btn-primary" onclick="sendMail()">Submit</button>
-            </div>
-        </form>
+        </section>
     </div>
-</div>
-</section>
-</div>
 
-
-     
 </body>
 </html>
+
 
 
 
