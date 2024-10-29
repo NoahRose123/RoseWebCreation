@@ -47,8 +47,8 @@
         }
     </script>
     <style>
-        /* Base Styles */
-        .header-main {
+     /* Base Styles */
+     .header-main {
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -129,6 +129,7 @@
         }
 
 
+
         /* Dropdown Menu Styles */
         .dropdown-menu {
             display: none;
@@ -192,6 +193,7 @@
 
 
 <body>
+    <!-- Navbar Section -->
     <header class="header-main">
         <!-- Logo -->
         <div class="nav-logo">
@@ -199,20 +201,17 @@
             Rose Web Creations
         </div>
 
-
         <!-- Navigation Menu (Desktop) -->
         <nav class="nav-options">
             <ul class="nav-list">
                 <li><a href="index.html">Home</a></li>
                 <li><a href="services.html">Packages</a></li>
-                <li><a href="abt.html">About</a></li>
+                <li><a href="about.html">About</a></li>
             </ul>
         </nav>
 
-
         <!-- Hire Button (Desktop) -->
         <a href="ContactUs.html"><button class="main-btn" id="hireBtn">Hire Designer</button></a>
-
 
         <!-- Hamburger Menu (Mobile) -->
         <div class="hamburger-menu" onclick="toggleMenu()">
@@ -220,16 +219,16 @@
         </div>
     </header>
 
-
     <!-- Dropdown Menu (Mobile) -->
     <div class="dropdown-menu" id="dropdownMenu">
         <ul>
             <li><a href="index.html">Home</a></li>
             <li><a href="services.html">Packages</a></li>
-            <li><a href="abt.html">About</a></li>
+            <li><a href="about.html">About</a></li>
             <li><a href="ContactUs.html">Hire Designer</a></li>
         </ul>
     </div>
+
     <script src="nav.js"></script>
 
 
