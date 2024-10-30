@@ -1,54 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Packages</title>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-        <link rel="stylesheet" href="./css/reset.css">
-        <link rel="stylesheet" href="style.css">
-        <link rel="stylesheet" href="packages.css">   
-        <script src="nav.js"></script>
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-        <script type="text/javascript">
-            (function () {
-                emailjs.init({
-                    publicKey: "Czs0cXQsp5B-Dbm8Y",
-                });
-            })();
-        </script>
-    </head>
-    
-    
-
-
-
-
-
-
-
-<!DOCTYPE html>
-<html lang="en">
-
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hire A Designer!</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
-        integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>Packages</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="style.css">
-    <script type="text/javascript">
-        function toggleMenu() {
-            const dropdownMenu = document.getElementById("dropdownMenu");
-            dropdownMenu.classList.toggle("show");
-        }
-    </script>
     <style>
-     /* Base Styles */
-     .header-main {
+        /* Navbar Styling */
+        .header-main {
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -57,14 +18,12 @@
             color: #fff;
         }
 
-
         .nav-logo {
             font-size: 24px;
             font-weight: bold;
             display: flex;
             align-items: center;
         }
-
 
         .logo-circle {
             background-color: #fff;
@@ -80,11 +39,9 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
-
         .nav-options {
             display: flex;
         }
-
 
         .nav-list {
             list-style: none;
@@ -93,18 +50,15 @@
             padding: 0;
         }
 
-
         .nav-list li {
             margin-right: 20px;
         }
-
 
         .nav-list li a {
             color: #fff;
             text-decoration: none;
             font-size: 18px;
         }
-
 
         .main-btn {
             background-color: #007bff;
@@ -116,42 +70,33 @@
             transition: all 0.3s ease;
         }
 
-
         .main-btn:hover {
             background-color: #0056b3;
         }
 
-
         .hamburger-menu {
-            display: none; /* Hidden by default for desktop */
+            display: none;
             font-size: 24px;
             cursor: pointer;
         }
 
-
-
-        /* Dropdown Menu Styles */
+        /* Dropdown Menu */
         .dropdown-menu {
             display: none;
             position: absolute;
-            top: 55px;
+            top: 80px;
             right: 10%;
             background-color: #3A0A96;
-            width:100%;
-            padding:50px;
-            text-align: right;
-            padding-right:30px;
+            width: 80%;
+            text-align: center;
+            padding: 20px 0;
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
             transition: all 0.3s ease;
-            margin-top:40px;
-
         }
-
 
         .dropdown-menu.show {
             display: block;
         }
-
 
         .dropdown-menu ul {
             list-style: none;
@@ -159,11 +104,9 @@
             margin: 0;
         }
 
-
         .dropdown-menu ul li {
             padding: 10px 0;
         }
-
 
         .dropdown-menu ul li a {
             color: #fff;
@@ -171,37 +114,109 @@
             font-size: 18px;
         }
 
-
         .dropdown-menu ul li a:hover {
-            color: black;
+            color: #d1c4f0;
         }
-
 
         /* Responsive Styles */
         @media (max-width: 768px) {
             .nav-options, .main-btn {
-                display: none; /* Hide desktop menu */
+                display: none;
             }
-
-
             .hamburger-menu {
-                display: block; /* Show hamburger icon for mobile */
+                display: block;
             }
+        }
+
+        /* Package Section Styling */
+        .packages-main-main {
+            margin-top: 40px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        /* Package Card Styling */
+        .packages-card {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            margin: 20px;
+            width: 300px;
+            text-align: center;
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .packages-card:hover {
+            transform: scale(1.05);
+        }
+
+        /* Centered Header Content */
+        .card-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .card-header i {
+            font-size: 40px;
+            color: #3A0A96;
+            margin-bottom: 10px;
+        }
+
+        .package-card-detail p {
+            font-size: 18px;
+            color: #333;
+            margin: 10px 0;
+        }
+
+        .fa-check {
+            color: green;
+            margin-right: 5px;
+        }
+
+        .fa-xmark {
+            color: red;
+            margin-right: 5px;
+        }
+
+        .package-card-price p {
+            font-size: 26px;
+            font-weight: bold;
+            color: #3A0A96;
+            margin: 20px 0;
+        }
+
+        .package-card-btn {
+            background-color: #3A0A96;
+            color: #fff;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .package-card-btn:hover {
+            background-color: #2a0779;
         }
     </style>
 </head>
 
-
 <body>
-    <!-- Navbar Section -->
+
+    <!-- Navbar -->
     <header class="header-main">
-        <!-- Logo -->
         <div class="nav-logo">
             <span class="logo-circle">R</span>
             Rose Web Creations
         </div>
-
-        <!-- Navigation Menu (Desktop) -->
         <nav class="nav-options">
             <ul class="nav-list">
                 <li><a href="index.html">Home</a></li>
@@ -209,11 +224,7 @@
                 <li><a href="abt.html">About</a></li>
             </ul>
         </nav>
-
-        <!-- Hire Button (Desktop) -->
         <a href="ContactUs.html"><button class="main-btn" id="hireBtn">Hire Designer</button></a>
-
-        <!-- Hamburger Menu (Mobile) -->
         <div class="hamburger-menu" onclick="toggleMenu()">
             <i class="fas fa-bars"></i>
         </div>
@@ -229,140 +240,75 @@
         </ul>
     </div>
 
-    <script src="nav.js"></script>
-
-
-    <div class="packages-space"></div>
-
-
-<div class="packages-main-main">
-
-
-<div class="package-main">
-
-
-  <section class="packages-Pricing">
-
-
-    <div class="packages-card">
-
-
-        <div class="chd">
-
-
-        <div class="card-header">
-            <i class="fa-solid fa-hammer" id="package-i"></i>
-            <h2>STARTER</h2>
-        </div>
-    </div>
-
-
-        <div class="package-card-detail">
-            <p><span class="package-card-detail-span"></span><i class="fa-solid fa-check"></i> Custom Website</p>
-            <p><span class="package-card-detail-span"></span><i class="fa-solid fa-check"></i> Control Pannel</p>  
-            <p><span class="package-card-detail-span"></span><i class="fa-solid fa-check"></i> Site Automation</p>      
-            <p><span class="package-card-detail-span2"></span><i class="fa-x fa-x"></i>       Email Marketing</p>
-            <p><span class="package-card-detail-span2"></span><i class="fa-x fa-x"></i>        Google Ads</p>        
-        </div>
-
-
-        <div class="package-card-price">
-            <p><sup>$</sup>0<sub>/month</sub></p>
-        </div>
-
-
-        <a href="ContactUs.html"><button class="package-card-btn">CONTACT US</button></a>
-
-
-</div>
-
-
-
-
-<div class="packages-main-main">
-
-
-    <div class="package-main">
-   
-      <section class="packages-Pricing">
-   
+    <!-- Package Section -->
+    <div class="packages-main-main">
+        <!-- Starter Package Card -->
         <div class="packages-card">
-   
             <div class="card-header">
-                <i class="fa-solid fa-user-tie" id="package-i"></i>
+                <i class="fa-solid fa-hammer"></i>
+                <h2>STARTER</h2>
+            </div>
+            <div class="package-card-detail">
+                <p><i class="fa-solid fa-check"></i> Custom Website</p>
+                <p><i class="fa-solid fa-check"></i> Control Panel</p>  
+                <p><i class="fa-solid fa-check"></i> Site Automation</p>      
+                <p><i class="fa-solid fa-xmark"></i> Email Marketing</p>
+                <p><i class="fa-solid fa-xmark"></i> Google Ads</p>        
+            </div>
+            <div class="package-card-price">
+                <p><sup>$</sup>50<sub>/month</sub></p>
+            </div>
+            <a href="ContactUs.html"><button class="package-card-btn">CONTACT US</button></a>
+        </div>
+
+        <!-- Professional Package Card -->
+        <div class="packages-card">
+            <div class="card-header">
+                <i class="fa-solid fa-user-tie"></i>
                 <h2>PROFESSIONAL</h2>
             </div>
-   
             <div class="package-card-detail">
-                <p><span class="package-card-detail-span"></span><i class="fa-solid fa-check"></i> Custom Website</p>
-                <p><span class="package-card-detail-span"></span><i class="fa-solid fa-check"></i> Control Pannel</p>  
-                <p><span class="package-card-detail-span"></span><i class="fa-solid fa-check"></i> Site Automation</p>      
-                <p><span class="package-card-detail-span2"></span><i class="fa-solid fa-check"></i>   Email Marketing</p>
-                <p><span class="package-card-detail-span2"></span><i class="fa-x fa-x"></i>   Google Ads</p>
+                <p><i class="fa-solid fa-check"></i> Custom Website</p>
+                <p><i class="fa-solid fa-check"></i> Control Panel</p>  
+                <p><i class="fa-solid fa-check"></i> Site Automation</p>      
+                <p><i class="fa-solid fa-check"></i> Email Marketing</p>
+                <p><i class="fa-solid fa-xmark"></i> Google Ads</p>        
             </div>
-   
             <div class="package-card-price">
-                <p><sup>$</sup>0<sub>/month</sub></p>
+                <p><sup>$</sup>100<sub>/month</sub></p>
             </div>
-   
             <a href="ContactUs.html"><button class="package-card-btn">CONTACT US</button></a>
-   
+        </div>
+
+        <!-- Business Package Card -->
+        <div class="packages-card">
+            <div class="card-header">
+                <i class="fa-solid fa-business-time"></i>
+                <h2>BUSINESS</h2>
+            </div>
+            <div class="package-card-detail">
+                <p><i class="fa-solid fa-check"></i> Custom Website</p>
+                <p><i class="fa-solid fa-check"></i> Control Panel</p>  
+                <p><i class="fa-solid fa-check"></i> Site Automation</p>      
+                <p><i class="fa-solid fa-check"></i> Email Marketing</p>
+                <p><i class="fa-solid fa-check"></i> Google Ads</p>        
+            </div>
+            <div class="package-card-price">
+                <p><sup>$</sup>200<sub>/month</sub></p>
+            </div>
+            <a href="ContactUs.html"><button class="package-card-btn">CONTACT US</button></a>
+        </div>
     </div>
 
-
-<div class="packages-main-main">
-
-
-<div class="package-main">
-
-
-  <section class="packages-Pricing">
-
-
-    <div class="packages-card">
-
-
-        <div class="card-header">
-            <i class="fa-solid fa-business-time" id="package-i"></i>
-            <h2>BUSSINESS</h2>
-        </div>
-
-
-        <div class="package-card-detail">
-            <p><span class="package-card-detail-span"></span><i class="fa-solid fa-check"></i> Custom Website</p>
-            <p><span class="package-card-detail-span"></span><i class="fa-solid fa-check"></i> Control Pannel</p>  
-            <p><span class="package-card-detail-span"></span><i class="fa-solid fa-check"></i> Site Automation</p>      
-            <p><span class="package-card-detail-span2"></span><i class="fa-solid fa-check"></i>   Email Marketing</p>
-            <p><span class="package-card-detail-span2"></span><i class="fa-solid fa-check"></i>  Google Ads</p>
-        </div>
-
-
-        <div class="package-card-price">
-            <p><sup>$</sup>0<sub>/month</sub></p>
-        </div>
-
-
-        <a href="ContactUs.html"><button class="package-card-btn">CONTACT US</button></a>
-
-
-       
-</div>
-</section>
-</div>
-</div>
-
-
-
+    <!-- Script for Toggle Menu -->
+    <script>
+        function toggleMenu() {
+            const menu = document.getElementById('dropdownMenu');
+            menu.classList.toggle('show');
+        }
+    </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
 
 
 

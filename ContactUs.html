@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,27 +9,25 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="contact.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    
     <script src="index.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     
     <script type="text/javascript">
-        (function(){
+        (function() {
             emailjs.init("Czs0cXQsp5B-Dbm8Y");
         })();
     </script>
 
     <style>
-         /* Base Styles */
-    .header-main {
+        /* Base Styles */
+        .header-main {
             display: flex;
             justify-content: space-between;
-            align-items: center;
+            align-items: center; /* Center items vertically */
             padding: 20px;
             background-color: #3A0A96;
             color: #fff;
         }
-
 
         .nav-logo {
             font-size: 24px;
@@ -36,7 +35,6 @@
             display: flex;
             align-items: center;
         }
-
 
         .logo-circle {
             background-color: #fff;
@@ -52,11 +50,11 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
-
         .nav-options {
             display: flex;
+            align-items: center;
+            padding-bottom:20px;
         }
-
 
         .nav-list {
             list-style: none;
@@ -65,18 +63,15 @@
             padding: 0;
         }
 
-
         .nav-list li {
             margin-right: 20px;
         }
-
 
         .nav-list li a {
             color: #fff;
             text-decoration: none;
             font-size: 18px;
         }
-
 
         .main-btn {
             background-color: #007bff;
@@ -86,20 +81,18 @@
             border-radius: 30px;
             cursor: pointer;
             transition: all 0.3s ease;
+            align-self: center; /* Center button within flex container */
         }
-
 
         .main-btn:hover {
             background-color: #0056b3;
         }
 
-
         .hamburger-menu {
-            display: none; /* Hidden by default for desktop */
+            display: none;
             font-size: 24px;
             cursor: pointer;
         }
-
 
         /* Dropdown Menu Styles */
         .dropdown-menu {
@@ -112,9 +105,9 @@
             text-align: center;
             padding: 20px 0;
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: right;
+            padding-right: 20px;
             transition: all 0.3s ease;
-            text-align:right;
-            padding-right:20px;
         }
 
         .dropdown-menu.show {
@@ -144,22 +137,23 @@
         /* Responsive Styles */
         @media (max-width: 768px) {
             .nav-options, .main-btn {
-                display: none; /* Hide desktop menu */
+                display: none;
             }
 
             .hamburger-menu {
-                display: block; /* Show hamburger icon for mobile */
+                display: block;
             }
         }
     </style>
 </head>
+
 <body>
 
     <!-- Navbar Section -->
     <header class="header-main">
         <!-- Logo -->
         <div class="nav-logo">
-            <span class="logo-circle">R</span> 
+            <span class="logo-circle">R</span>
             Rose Web Creations
         </div>
 
@@ -198,7 +192,7 @@
         }
 
         // Handle button visibility on small screens
-        window.addEventListener('resize', function () {
+        window.addEventListener('resize', function() {
             const hireBtn = document.getElementById('hireBtn');
             if (window.innerWidth <= 768) {
                 hireBtn.style.display = 'none';
@@ -245,8 +239,8 @@
     </div>
 
 </body>
-</html>
 
+</html>
 
 
 
