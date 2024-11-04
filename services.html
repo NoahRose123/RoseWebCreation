@@ -63,13 +63,12 @@
         .main-btn {
             color: #3A0A96;
             background-color: #fff;
-            border:none;
+            border: none;
             padding: 10px 20px;
             border-radius: 30px;
             cursor: pointer;
             transition: all 0.3s ease;
         }
-
 
         .main-btn:hover {
             background-color: #0056b3;
@@ -79,7 +78,7 @@
             display: none;
             font-size: 24px;
             cursor: pointer;
-            padding-left:10px;
+            padding-left: 10px;
         }
 
         /* Dropdown Menu */
@@ -103,7 +102,7 @@
             list-style: none;
             padding: 0;
             margin: 0;
-            text-align: right; /* Align options to the right */
+            text-align: right;
             padding-right: 20px;
         }
 
@@ -123,9 +122,11 @@
 
         /* Responsive Styles */
         @media (max-width: 768px) {
-            .nav-options, .main-btn {
+            .nav-options,
+            .main-btn {
                 display: none;
             }
+
             .hamburger-menu {
                 display: block;
             }
@@ -151,10 +152,42 @@
             width: 300px;
             text-align: center;
             transition: transform 0.2s ease-in-out;
+            position: relative; /* Enable positioning for the discount sticker */
         }
 
         .packages-card:hover {
             transform: scale(1.05);
+        }
+
+        /* Flashy Discount Sticker */
+        .discount-sticker {
+            position: absolute;
+            width:100px;
+            height:70px;
+            text-align: center;
+            padding:10px;
+            top: 10px;
+            right: -15px;
+            background-color: #118C4F;
+            color: #fff;
+            font-size: 2rem;
+            font-weight: bold;
+            border-radius: 8px;
+            transform: rotate(-15deg); /* Add tilt */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            text-transform: uppercase;
+            animation: bounce 1s infinite alternate; /* Apply bounce animation */
+        }
+
+        /* Bounce Animation */
+        @keyframes bounce {
+            0% {
+                transform: rotate(-15deg) translateY(0);
+            }
+
+            100% {
+                transform: rotate(-15deg) translateY(-5px);
+            }
         }
 
         /* Centered Header Content */
@@ -245,30 +278,13 @@
 
     <!-- Package Section -->
     <div class="packages-main-main">
-        <!-- Starter Package Card -->
-        <div class="packages-card">
-            <div class="card-header">
-                <i class="fa-solid fa-hammer"></i>
-                <h2>STARTER</h2>
-            </div>
-            <div class="package-card-detail">
-                <p><i class="fa-solid fa-check"></i> Custom Website</p>
-                <p><i class="fa-solid fa-check"></i> Control Panel</p>  
-                <p><i class="fa-solid fa-check"></i> Site Automation</p>      
-                <p><i class="fa-solid fa-xmark"></i> Email Marketing</p>
-                <p><i class="fa-solid fa-xmark"></i> Google Ads</p>        
-            </div>
-            <div class="package-card-price">
-                <p><sup>$</sup>50<sub>/month</sub></p>
-            </div>
-            <a href="ContactUs.html"><button class="package-card-btn">CONTACT US</button></a>
-        </div>
+        
 
         <!-- Professional Package Card -->
         <div class="packages-card">
             <div class="card-header">
                 <i class="fa-solid fa-user-tie"></i>
-                <h2>PROFESSIONAL</h2>
+                <h2>Monthly</h2>
             </div>
             <div class="package-card-detail">
                 <p><i class="fa-solid fa-check"></i> Custom Website</p>
@@ -278,16 +294,17 @@
                 <p><i class="fa-solid fa-xmark"></i> Google Ads</p>        
             </div>
             <div class="package-card-price">
-                <p><sup>$</sup>100<sub>/month</sub></p>
+                <p><sup>$</sup>29.99<sub>/CAD</sub></p>
             </div>
             <a href="ContactUs.html"><button class="package-card-btn">CONTACT US</button></a>
         </div>
 
         <!-- Business Package Card -->
         <div class="packages-card">
+            <span class="discount-sticker">15% Cheaper</span>
             <div class="card-header">
                 <i class="fa-solid fa-business-time"></i>
-                <h2>BUSINESS</h2>
+                <h2>Annually</h2>
             </div>
             <div class="package-card-detail">
                 <p><i class="fa-solid fa-check"></i> Custom Website</p>
@@ -297,7 +314,7 @@
                 <p><i class="fa-solid fa-check"></i> Google Ads</p>        
             </div>
             <div class="package-card-price">
-                <p><sup>$</sup>200<sub>/month</sub></p>
+                <p><sup>$</sup>99.99<sub>/CAD</sub></p>
             </div>
             <a href="ContactUs.html"><button class="package-card-btn">CONTACT US</button></a>
         </div>
@@ -312,9 +329,6 @@
     </script>
 </body>
 </html>
-
-
-
 
 
 
