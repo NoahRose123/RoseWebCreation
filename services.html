@@ -84,13 +84,14 @@
         /* Dropdown Menu */
         .dropdown-menu {
             display: none;
-            position: absolute;
+            position: absolute; /* Ensure it overlays other sections */
             top: 80px;
             right: 0;
             background-color: #3A0A96;
             width: 100%;
             padding: 20px;
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 10; /* Higher z-index to overlay the Packages section */
             transition: all 0.3s ease;
         }
 
@@ -278,43 +279,39 @@
 
     <!-- Package Section -->
     <div class="packages-main-main">
-        
-
-        <!-- Professional Package Card -->
         <div class="packages-card">
             <div class="card-header">
                 <i class="fa-solid fa-user-tie"></i>
                 <h2>Monthly</h2>
             </div>
             <div class="package-card-detail">
-                <p><i class="fa-solid fa-check"></i> Custom Website</p>
-                <p><i class="fa-solid fa-check"></i> Control Panel</p>  
-                <p><i class="fa-solid fa-check"></i> Site Automation</p>      
-                <p><i class="fa-solid fa-check"></i> Email Marketing</p>
-                <p><i class="fa-solid fa-xmark"></i> Google Ads</p>        
+                <p><i class="fa-solid fa-check"></i>Custom Website</p>
+                <p><i class="fa-solid fa-check"></i>No Company Branding</p>  
+                <p><i class="fa-solid fa-check"></i>Site Automation</p>      
+                <p><i class="fa-solid fa-check"></i>Personal Support</p>
+                <p><i class="fa-solid fa-check"></i>Daily Site Maintenance</p>  
             </div>
             <div class="package-card-price">
-                <p><sup>$</sup>29.99<sub>/CAD</sub></p>
+                <p><sup>$</sup>34.99<sub>/CAD</sub></p>
             </div>
             <a href="ContactUs.html"><button class="package-card-btn">CONTACT US</button></a>
         </div>
 
-        <!-- Business Package Card -->
         <div class="packages-card">
-            <span class="discount-sticker">15% Cheaper</span>
+            <span class="discount-sticker">40% Cheaper</span>
             <div class="card-header">
                 <i class="fa-solid fa-business-time"></i>
                 <h2>Annually</h2>
             </div>
             <div class="package-card-detail">
-                <p><i class="fa-solid fa-check"></i> Custom Website</p>
-                <p><i class="fa-solid fa-check"></i> Control Panel</p>  
-                <p><i class="fa-solid fa-check"></i> Site Automation</p>      
-                <p><i class="fa-solid fa-check"></i> Email Marketing</p>
-                <p><i class="fa-solid fa-check"></i> Google Ads</p>        
+                <p><i class="fa-solid fa-check"></i>Custom Website</p>
+                <p><i class="fa-solid fa-check"></i>No Company Branding</p>  
+                <p><i class="fa-solid fa-check"></i>Site Automation</p>      
+                <p><i class="fa-solid fa-check"></i>Personal Support</p>
+                <p><i class="fa-solid fa-check"></i>Daily Site Maintenance</p>        
             </div>
             <div class="package-card-price">
-                <p><sup>$</sup>99.99<sub>/CAD</sub></p>
+                <p><sup>$</sup>249.99<sub>/CAD</sub></p>
             </div>
             <a href="ContactUs.html"><button class="package-card-btn">CONTACT US</button></a>
         </div>
@@ -329,8 +326,6 @@
     </script>
 </body>
 </html>
-
-
 
 
 
