@@ -14,7 +14,7 @@
       margin: 0;
       padding: 0;
       font-family: 'Jost', sans-serif;
-      font-weight:600;
+      font-weight: 600;
     }
 
     body {
@@ -35,6 +35,7 @@
       justify-content: space-between;
       align-items: center;
       padding: 20px;
+      position: relative;
     }
 
     .nav-logo {
@@ -60,8 +61,6 @@
 
     .nav-options {
       display: flex;
-      font-family: 'Jost', sans-serif;
-      font-weight: 600;
     }
 
     .nav-list {
@@ -69,7 +68,6 @@
       display: flex;
       margin: 0;
       padding: 0;
-      font-family: 'Jost', sans-serif; /* Font for Navbar Links */
     }
 
     .nav-list li {
@@ -80,7 +78,6 @@
       color: #fff;
       text-decoration: none;
       font-size: 18px;
-      font-family: 'Jost', sans-serif; /* Font for Navbar Links */
     }
 
     .main-btn {
@@ -105,75 +102,23 @@
       padding-left: 10px;
     }
 
-    /* Dropdown Menu for Mobile */
-    .dropdown-menu {
-      display: none;
-      position: absolute;
-      top: 60px;
-      right: 0;
-      background-color: #3A0A96;
+    /* Contact Page Layout */
+    .contact-container {
+      display: flex;
+      gap: 20px;
       width: 100%;
-      padding: 10px;
-      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-      font-family: 'Jost', sans-serif; /* Font for Dropdown Links */
-    }
-
-    .dropdown-menu.show {
-      display: block;
-    }
-
-    .dropdown-menu ul {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-      text-align: right;
-    }
-
-    .dropdown-menu ul li {
-      padding: 10px 0;
-    }
-
-    .dropdown-menu ul li a {
-      color: #fff;
-      text-decoration: none;
-      font-size: 18px;
-      font-family: 'Jost', sans-serif; /* Font for Dropdown Links */
-    }
-
-    /* Responsive Styles for Navbar */
-    @media (max-width: 768px) {
-      .nav-options, .main-btn {
-        display: none;
-      }
-      .hamburger-menu {
-        display: block;
-      }
-    }
-
-    /* Responsive Image Section */
-    .image-container {
-      width: 100%;
-      max-width: 800px;
-      margin: 20px 0;
-      padding: 0 20px;
-    }
-
-    .image-container img {
-      width: 100%;
-      height: auto;
-      border-radius: 8px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      max-width: 1000px;
+      padding: 40px;
+      flex-direction: row;
     }
 
     /* Contact Form Styling */
     .contact-form {
-      width: 100%;
-      max-width: 400px;
+      width: 50%;
       background: #ffffff;
       padding: 20px;
       border-radius: 8px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      margin-top: 20px;
     }
 
     .contact-form h2 {
@@ -226,34 +171,86 @@
       background-color: #2a0779;
     }
 
-    /* Responsive Styling for Contact Form */
-    @media (max-width: 600px) {
-      .contact-form {
-        width: 90%;
-        padding: 15px;
-      }
-      
-      .form-group button {
-        font-size: 0.9em;
-      }
-
-      .form-group label,
-      .form-group input,
-      .form-group textarea {
-        font-size: 0.9em;
-      }
-
-      .contact-form h2 {
-        font-size: 1.3em;
-      }
+    /* Contact Info Section */
+    .contact-info {
+      width: 50%;
+      background: #ffffff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      color: #333;
     }
 
-    /* Status message styling */
-    #statusMessage {
-      margin-top: 1em;
-      font-size: 0.9em;
-      color: green;
-      text-align: center;
+    .contact-info h3 {
+      font-size: 1.3em;
+      color: #3A0A96;
+      margin-bottom: 10px;
+    }
+
+    .contact-info p, .contact-info iframe {
+      margin-bottom: 15px;
+    }
+
+    .contact-info iframe {
+      width: 100%;
+      height: 200px;
+      border: 0;
+      border-radius: 4px;
+    }
+
+    /* Dropdown Menu for Mobile */
+    .dropdown-menu {
+      display: none;
+      position: absolute;
+      top: 60px;
+      right: 0;
+      background-color: #3A0A96;
+      width: 100%;
+      padding: 10px;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+      z-index: 10;
+    }
+
+    .dropdown-menu.show {
+      display: block;
+    }
+
+    .dropdown-menu ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      text-align: right;
+    }
+
+    .dropdown-menu ul li {
+      padding: 10px 0;
+    }
+
+    .dropdown-menu ul li a {
+      color: #fff;
+      text-decoration: none;
+      font-size: 18px;
+    }
+
+    /* Responsive Styling */
+    @media (max-width: 768px) {
+      /* Navbar Responsive */
+      .nav-options, .main-btn {
+        display: none;
+      }
+      .hamburger-menu {
+        display: block;
+      }
+
+      /* Contact Page Responsive */
+      .contact-container {
+        flex-direction: column;
+        padding: 20px;
+      }
+      
+      .contact-form, .contact-info {
+        width: 100%;
+      }
     }
   </style>
 </head>
@@ -289,29 +286,43 @@
     </ul>
   </div>
 
+  <!-- Contact Form and Info Container -->
+  <div class="contact-container">
+    <!-- Contact Form -->
+    <div class="contact-form">
+      <h2>Contact Us</h2>
+      <form action="https://formspree.io/f/xrbgpayg" method="POST">
+        <div class="form-group">
+          <label for="name">Name</label>
+          <input type="text" id="name" name="name" required>
+        </div>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" required>
+        </div>
+        <div class="form-group">
+          <label for="message">Message</label>
+          <textarea id="message" name="message" rows="4" required></textarea>
+        </div>
+        <div class="form-group">
+          <button type="submit">Send Message</button>
+        </div>
+      </form>
+    </div>
 
+    <!-- Contact Information Section -->
+    <div class="contact-info">
+      <h3>Contact Information</h3>
+      <p><i class="fas fa-phone"></i> Phone: (123) 456-7890</p>
+      <p><i class="fas fa-envelope"></i> Email: rosewebc@gmail.com</p>
+      
+      <h3>Opening Hours</h3>
+      <p>Monday - Friday: 4:00 PM - 10:00 PM</p>
+      <p>Saturday - Sunday: 1:00 PM - 10:00 PM</p>
 
-  <!-- Contact Form Container -->
-  <div class="contact-form">
-    <h2>Contact Us</h2>
-    <form action="https://formspree.io/f/xrbgpayg" method="POST">
-      <div class="form-group">
-        <label for="name">Name</label>
-        <input type="text" id="name" name="name" required>
-      </div>
-      <div class="form-group">
-        <label for="email">Email</label>
-        <input type="email" id="email" name="email" required>
-      </div>
-      <div class="form-group">
-        <label for="message">Message</label>
-        <textarea id="message" name="message" rows="4" required></textarea>
-      </div>
-      <div class="form-group">
-        <button type="submit">Send Message</button>
-      </div>
-    </form>
-    <p id="statusMessage">Thank you for reaching out!</p>
+      <h3>Our Location</h3>
+      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5703394.676546272!2d-88.30136317019338!3d51.253775387912654!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4d2c83df6c085721%3A0x4121fcfbb9f2b38d!2sOntario%2C%20Canada!5e0!3m2!1sen!2sus!4v1699578349321!5m2!1sen!2sus" allowfullscreen="" loading="lazy"></iframe>
+    </div>
   </div>
 
   <!-- Script for Toggle Menu -->
@@ -323,6 +334,10 @@
   </script>
 </body>
 </html>
+
+
+
+
 
 
 

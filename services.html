@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,7 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="style.css">
     <style>
-        /* Navbar Styling */
+        /* Navbar Styling (unchanged) */
         .header-main {
             display: flex;
             justify-content: space-between;
@@ -17,82 +16,113 @@
             background-color: #3A0A96;
             color: #fff;
         }
-
-        .nav-logo {
-            font-size: 24px;
-            font-weight: bold;
+        
+        /* Package Section Styling */
+        .packages-main-main {
             display: flex;
-            align-items: center;
-        }
-
-        .logo-circle {
-            background-color: #fff;
-            color: #3A0A96;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
             justify-content: center;
-            font-weight: bold;
-            margin-right: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            gap: 20px;
+            padding: 40px;
+            background-color: #f9f9f9;
+            flex-wrap: wrap;
         }
 
-        .nav-options {
-            display: flex;
-        }
-
-        .nav-list {
-            list-style: none;
-            display: flex;
-            margin: 0;
-            padding: 0;
-        }
-
-        .nav-list li {
-            margin-right: 20px;
-        }
-
-        .nav-list li a {
-            color: #fff;
-            text-decoration: none;
-            font-size: 18px;
-        }
-
-        .main-btn {
-            color: #3A0A96;
+        .packages-card {
             background-color: #fff;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 30px;
-            cursor: pointer;
-            transition: all 0.3s ease;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            width: 280px; /* Fixed width for consistency */
+            text-align: center;
+            position: relative;
+            transition: transform 0.2s ease-in-out;
         }
 
-        .main-btn:hover {
-            background-color: #0056b3;
+        .packages-card:hover {
+            transform: scale(1.05);
         }
 
-        .hamburger-menu {
-            display: none;
+        .packages-card .discount-banner {
+            position: absolute;
+            top: 10px;
+            left: 0;
+            background-color: orange;
+            color: white;
+            padding: 5px 10px;
+            font-size: 14px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .card-header h2 {
             font-size: 24px;
-            cursor: pointer;
-            padding-left: 10px;
+            font-weight: bold;
+            color: #3A0A96;
+            margin: 10px 0;
         }
 
-        /* Dropdown Menu */
+        .card-subtitle {
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 20px;
+        }
+
+        .package-price {
+            font-size: 36px;
+            font-weight: bold;
+            color: #3A0A96;
+        }
+
+        .package-old-price {
+            font-size: 18px;
+            color: #888;
+            text-decoration: line-through;
+        }
+
+        .select-button {
+            margin-top: 20px;
+            padding: 10px 25px;
+            border: 2px solid #3A0A96;
+            border-radius: 20px;
+            background-color: transparent;
+            color: #3A0A96;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .select-button:hover {
+            background-color: #3A0A96;
+            color: #fff;
+        }
+
+        .package-details {
+            text-align: left;
+            margin-top: 20px;
+        }
+
+        .package-details p {
+            font-size: 16px;
+            color: #333;
+            margin: 8px 0;
+        }
+
+        .highlight {
+            font-weight: bold;
+        }
+
+        /* Dropdown Menu Styling */
         .dropdown-menu {
             display: none;
-            position: absolute; /* Ensure it overlays other sections */
+            position: absolute;
             top: 80px;
             right: 0;
             background-color: #3A0A96;
             width: 100%;
             padding: 20px;
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-            z-index: 10; /* Higher z-index to overlay the Packages section */
-            transition: all 0.3s ease;
+            z-index: 10;
         }
 
         .dropdown-menu.show {
@@ -121,8 +151,19 @@
             color: #d1c4f0;
         }
 
-        /* Responsive Styles */
+        /* Responsive Layout for Mobile Screens */
         @media (max-width: 768px) {
+            /* Stack package cards in a single column */
+            .packages-main-main {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .packages-card {
+                margin-bottom: 20px; /* Space between stacked cards */
+            }
+
+            /* Navbar Responsive */
             .nav-options,
             .main-btn {
                 display: none;
@@ -132,123 +173,11 @@
                 display: block;
             }
         }
-
-        /* Package Section Styling */
-        .packages-main-main {
-            margin-top: 40px;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 20px;
-        }
-
-        /* Package Card Styling */
-        .packages-card {
-            background-color: #fff;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            padding: 30px;
-            margin: 20px;
-            width: 300px;
-            text-align: center;
-            transition: transform 0.2s ease-in-out;
-            position: relative; /* Enable positioning for the discount sticker */
-        }
-
-        .packages-card:hover {
-            transform: scale(1.05);
-        }
-
-        /* Flashy Discount Sticker */
-        .discount-sticker {
-            position: absolute;
-            width:100px;
-            height:70px;
-            text-align: center;
-            padding:10px;
-            top: 10px;
-            right: -15px;
-            background-color: #118C4F;
-            color: #fff;
-            font-size: 2rem;
-            font-weight: bold;
-            border-radius: 8px;
-            transform: rotate(-15deg); /* Add tilt */
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-            text-transform: uppercase;
-            animation: bounce 1s infinite alternate; /* Apply bounce animation */
-        }
-
-        /* Bounce Animation */
-        @keyframes bounce {
-            0% {
-                transform: rotate(-15deg) translateY(0);
-            }
-
-            100% {
-                transform: rotate(-15deg) translateY(-5px);
-            }
-        }
-
-        /* Centered Header Content */
-        .card-header {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 20px;
-        }
-
-        .card-header i {
-            font-size: 40px;
-            color: #3A0A96;
-            margin-bottom: 10px;
-        }
-
-        .package-card-detail p {
-            font-size: 18px;
-            color: #333;
-            margin: 10px 0;
-        }
-
-        .fa-check {
-            color: green;
-            margin-right: 5px;
-        }
-
-        .fa-xmark {
-            color: red;
-            margin-right: 5px;
-        }
-
-        .package-card-price p {
-            font-size: 26px;
-            font-weight: bold;
-            color: #3A0A96;
-            margin: 20px 0;
-        }
-
-        .package-card-btn {
-            background-color: #3A0A96;
-            color: #fff;
-            border: none;
-            padding: 12px 25px;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .package-card-btn:hover {
-            background-color: #2a0779;
-        }
     </style>
 </head>
-
 <body>
 
-    <!-- Navbar -->
+    <!-- Navbar (unchanged) -->
     <header class="header-main">
         <div class="nav-logo">
             <span class="logo-circle">R</span>
@@ -267,7 +196,7 @@
         </div>
     </header>
 
-    <!-- Dropdown Menu (Mobile) -->
+    <!-- Dropdown Menu -->
     <div class="dropdown-menu" id="dropdownMenu">
         <ul>
             <li><a href="index.html">Home</a></li>
@@ -279,41 +208,41 @@
 
     <!-- Package Section -->
     <div class="packages-main-main">
+        <!-- Package Card 1 -->
         <div class="packages-card">
             <div class="card-header">
-                <i class="fa-solid fa-user-tie"></i>
                 <h2>Monthly</h2>
+                <p class="card-subtitle">Scale your business</p>
             </div>
-            <div class="package-card-detail">
-                <p><i class="fa-solid fa-check"></i>Custom Website</p>
-                <p><i class="fa-solid fa-check"></i>No Company Branding</p>  
-                <p><i class="fa-solid fa-check"></i>Site Automation</p>      
-                <p><i class="fa-solid fa-check"></i>Personal Support</p>
-                <p><i class="fa-solid fa-check"></i>Daily Site Maintenance</p>  
+            <div class="package-price">CAD 44.99/mo</div>
+            <div class="package-old-price">CAD 59.99</div>
+            <button class="select-button" onclick="window.location.href='ContactUs.html'">Select</button>
+            <div class="package-details">
+                <p><span class="highlight">Custom</span> Website</p>
+                <p><span class="highlight">No</span> Branding</p>
+                <p><span class="highlight">Site</span> Automation</p>
+                <p><span class="highlight">Personal</span> Support</p>
+                <p>Daily Maintenance</p>
             </div>
-            <div class="package-card-price">
-                <p><sup>$</sup>34.99<sub>/CAD</sub></p>
-            </div>
-            <a href="ContactUs.html"><button class="package-card-btn">CONTACT US</button></a>
         </div>
 
+        <!-- Package Card 2 -->
         <div class="packages-card">
-            <span class="discount-sticker">40% Cheaper</span>
+            <div class="discount-banner">Better Deal</div>
             <div class="card-header">
-                <i class="fa-solid fa-business-time"></i>
                 <h2>Annually</h2>
+                <p class="card-subtitle">Grow your brand</p>
             </div>
-            <div class="package-card-detail">
-                <p><i class="fa-solid fa-check"></i>Custom Website</p>
-                <p><i class="fa-solid fa-check"></i>No Company Branding</p>  
-                <p><i class="fa-solid fa-check"></i>Site Automation</p>      
-                <p><i class="fa-solid fa-check"></i>Personal Support</p>
-                <p><i class="fa-solid fa-check"></i>Daily Site Maintenance</p>        
+            <div class="package-price">CAD 529.99/year</div>
+            <div class="package-old-price">CAD 549.99</div>
+            <button class="select-button" onclick="window.location.href='ContactUs.html'">Select</button>
+            <div class="package-details">
+                <p><span class="highlight">Custom</span> Website</p>
+                <p><span class="highlight">No</span> Branding</p>
+                <p><span class="highlight">Site</span> Automation</p>
+                <p><span class="highlight">Personal</span> Support</p>
+                <p>Daily Maintenance</p>
             </div>
-            <div class="package-card-price">
-                <p><sup>$</sup>249.99<sub>/CAD</sub></p>
-            </div>
-            <a href="ContactUs.html"><button class="package-card-btn">CONTACT US</button></a>
         </div>
     </div>
 
@@ -326,50 +255,6 @@
     </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</body>
-
-
-
 
 
 
