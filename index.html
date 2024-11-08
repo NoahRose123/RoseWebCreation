@@ -27,32 +27,43 @@
         }
     </script>
     <script>
-        // JavaScript for Hero Image Slideshow
-        document.addEventListener("DOMContentLoaded", function() {
+        // JavaScript for Hero Image Slideshow with combined slide and fade effect
+        document.addEventListener("DOMContentLoaded", function () {
             const images = [
                 "pexels-thisisengineering-3861959.jpg",
                 "canada.jpg",
-                 "meinboat.jpg"
+                "gph.jpg"
             ];
             let currentImageIndex = 0;
             const heroImage = document.querySelector(".hero-img img");
 
             function changeImage() {
-                heroImage.classList.add("fade-out");
+                // Apply combined slide-out and fade-out effect
+                heroImage.classList.add("slide-fade-out");
+
                 setTimeout(() => {
+                    // Update image source after transition effect
                     currentImageIndex = (currentImageIndex + 1) % images.length;
                     heroImage.src = images[currentImageIndex];
-                    heroImage.classList.remove("fade-out");
-                    heroImage.classList.add("fade-in");
-                }, 500); // Smooth transition timing
-                setTimeout(() => heroImage.classList.remove("fade-in"), 1000); // Clean up fade-in class
+
+                    // Remove the slide-fade-out effect and apply slide-fade-in effect
+                    heroImage.classList.remove("slide-fade-out");
+                    heroImage.classList.add("slide-fade-in");
+
+                    // Clean up the slide-fade-in effect after transition
+                    setTimeout(() => heroImage.classList.remove("slide-fade-in"), 500);
+                }, 500); // Duration for slide-fade-out effect
             }
-            setInterval(changeImage, 4000); // Change image every 4 seconds
+
+            // Start the first transition immediately
+            changeImage();
+            // Continue cycling images with a consistent interval
+            setInterval(changeImage, 4000);
         });
     </script>
     <style>
-    /* Base Styles */
-    .header-main {
+        /* Base Styles */
+        .header-main {
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -106,7 +117,7 @@
         .main-btn {
             color: #3A0A96;
             background-color: #fff;
-            border:none;
+            border: none;
             padding: 10px 20px;
             border-radius: 30px;
             cursor: pointer;
@@ -121,7 +132,7 @@
             display: none; /* Hidden by default for desktop */
             font-size: 24px;
             cursor: pointer;
-            padding-left:10px;
+            padding-left: 10px;
         }
 
         /* Dropdown Menu Styles */
@@ -131,13 +142,13 @@
             top: 55px;
             right: 10%;
             background-color: #3A0A96;
-            width:100%;
+            width: 100%;
             text-align: right;
-            padding-right:30px;
+            padding-right: 30px;
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
             transition: all 0.3s ease;
-            margin-top:40px;
-            padding-bottom:10px;
+            margin-top: 40px;
+            padding-bottom: 10px;
         }
 
         .dropdown-menu.show {
@@ -166,7 +177,8 @@
 
         /* Responsive Styles */
         @media (max-width: 768px) {
-            .nav-options, .main-btn {
+            .nav-options,
+            .main-btn {
                 display: none; /* Hide desktop menu */
             }
 
@@ -174,15 +186,18 @@
                 display: block; /* Show hamburger icon for mobile */
             }
         }
-        /* Fade animations */
-        .fade-out {
+
+        /* Combined slide and fade animations */
+        .slide-fade-out {
             opacity: 0;
-            transition: opacity 0.5s ease-in-out;
+            transform: translateX(-50%);
+            transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
         }
 
-        .fade-in {
+        .slide-fade-in {
             opacity: 1;
-            transition: opacity 0.5s ease-in-out;
+            transform: translateX(0);
+            transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
         }
 
         /* Hero Image Margin Adjustment */
@@ -192,6 +207,8 @@
 
         .hero-img img {
             margin-bottom: 30px;
+            opacity: 1; /* Start with fully visible */
+            transform: translateX(0); /* Initial position */
         }
     </style>
 </head>
@@ -256,5 +273,4 @@
 </body>
 
 </html>
-
 
