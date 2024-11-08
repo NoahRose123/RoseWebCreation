@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -151,6 +151,19 @@
             color: #d1c4f0;
         }
 
+        /* Desktop-specific adjustments */
+        @media (min-width: 768px) {
+            /* Make nav items and button font size larger on desktop */
+            .nav-options ul.nav-list li a {
+                font-size: 20px;
+            }
+
+            .main-btn {
+                font-size: 18px;
+                padding: 10px 20px;
+            }
+        }
+        
         /* Responsive Layout for Mobile Screens */
         @media (max-width: 768px) {
             /* Stack package cards in a single column */

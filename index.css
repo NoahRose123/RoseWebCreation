@@ -41,6 +41,7 @@ html, body {
   padding-right: 2rem;
   text-align: left;
   padding-left: 3rem; /* Added padding to move content away from the left */
+  margin-bottom:60px;
 }
 
 .hero-content h1 {
@@ -79,13 +80,13 @@ html, body {
   display: flex;
   justify-content: center;
   align-items: center;
+  border-radius: 20px;
 }
 
 .hero-img img {
   height: 400px;
   max-width: 100%;
-  border-radius: 2rem;
-  border: 5px solid #000;
+  border-radius: 20px;
   object-fit: cover;
   margin-top: 3rem;
 }

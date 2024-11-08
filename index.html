@@ -26,6 +26,30 @@
             dropdownMenu.classList.toggle("show");
         }
     </script>
+    <script>
+        // JavaScript for Hero Image Slideshow
+        document.addEventListener("DOMContentLoaded", function() {
+            const images = [
+                "pexels-thisisengineering-3861959.jpg",
+                "canada.jpg",
+                 "meinboat.jpg"
+            ];
+            let currentImageIndex = 0;
+            const heroImage = document.querySelector(".hero-img img");
+
+            function changeImage() {
+                heroImage.classList.add("fade-out");
+                setTimeout(() => {
+                    currentImageIndex = (currentImageIndex + 1) % images.length;
+                    heroImage.src = images[currentImageIndex];
+                    heroImage.classList.remove("fade-out");
+                    heroImage.classList.add("fade-in");
+                }, 500); // Smooth transition timing
+                setTimeout(() => heroImage.classList.remove("fade-in"), 1000); // Clean up fade-in class
+            }
+            setInterval(changeImage, 4000); // Change image every 4 seconds
+        });
+    </script>
     <style>
     /* Base Styles */
     .header-main {
@@ -37,14 +61,12 @@
             color: #fff;
         }
 
-
         .nav-logo {
             font-size: 24px;
             font-weight: bold;
             display: flex;
             align-items: center;
         }
-
 
         .logo-circle {
             background-color: #fff;
@@ -60,11 +82,9 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
-
         .nav-options {
             display: flex;
         }
-
 
         .nav-list {
             list-style: none;
@@ -73,18 +93,15 @@
             padding: 0;
         }
 
-
         .nav-list li {
             margin-right: 20px;
         }
-
 
         .nav-list li a {
             color: #fff;
             text-decoration: none;
             font-size: 18px;
         }
-
 
         .main-btn {
             color: #3A0A96;
@@ -96,21 +113,16 @@
             transition: all 0.3s ease;
         }
 
-
         .main-btn:hover {
             background-color: #0056b3;
         }
-
 
         .hamburger-menu {
             display: none; /* Hidden by default for desktop */
             font-size: 24px;
             cursor: pointer;
             padding-left:10px;
-
         }
-
-
 
         /* Dropdown Menu Styles */
         .dropdown-menu {
@@ -120,7 +132,6 @@
             right: 10%;
             background-color: #3A0A96;
             width:100%;
-            
             text-align: right;
             padding-right:30px;
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
@@ -129,11 +140,9 @@
             padding-bottom:10px;
         }
 
-
         .dropdown-menu.show {
             display: block;
         }
-
 
         .dropdown-menu ul {
             list-style: none;
@@ -141,11 +150,9 @@
             margin: 0;
         }
 
-
         .dropdown-menu ul li {
             padding: 10px 0;
         }
-
 
         .dropdown-menu ul li a {
             color: #fff;
@@ -153,11 +160,9 @@
             font-size: 18px;
         }
 
-
         .dropdown-menu ul li a:hover {
             color: black;
         }
-
 
         /* Responsive Styles */
         @media (max-width: 768px) {
@@ -165,10 +170,28 @@
                 display: none; /* Hide desktop menu */
             }
 
-
             .hamburger-menu {
                 display: block; /* Show hamburger icon for mobile */
             }
+        }
+        /* Fade animations */
+        .fade-out {
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        .fade-in {
+            opacity: 1;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        /* Hero Image Margin Adjustment */
+        .hero-main-main {
+            margin-top: 0; /* Removed excess top margin */
+        }
+
+        .hero-img img {
+            margin-bottom: 30px;
         }
     </style>
 </head>
@@ -210,17 +233,15 @@
         </ul>
     </div>
 
-    <!-- Add additional content here -->
-
-     <!-- Hero Section -->
+    <!-- Hero Section -->
     <div class="hero-main-main">
         <div class="hero-main">
             <section class="hero-home">
                 <div class="hero-content">
                     <h1 class="hero-title">Hire the Best Freelance Talent</h1>
-                    <p class="mb-8 text-gray-700 text-base leading-3 xl:text-lg xl:leading-4">RoseWeb is a exclusive
-                        developing bussiness of freelance software developers, designers, 
-                        and project managers. Bussiness hire us freelancers for
+                    <p class="mb-8 text-gray-700 text-base leading-3 xl:text-lg xl:leading-4">RoseWeb is an exclusive
+                        developing business of freelance software developers, designers, 
+                        and project managers. Businesses hire our freelancers for
                         their most important projects.</p>
                     <a href="services.html" class="hero-btn">Get Started</a>
                 </div>
@@ -232,9 +253,8 @@
             </section>
         </div>
     </div>
-
-
-
 </body>
 
 </html>
+
+
