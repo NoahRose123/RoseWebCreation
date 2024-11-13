@@ -7,24 +7,140 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="style.css">
     <style>
-        /* Navbar Styling (unchanged) */
-        .header-main {
+       /* Base Styles */
+       .header-main {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 20px;
             background-color: #3A0A96;
+            color: #fff; 
+            height:80px;
+        }
+
+        .nav-logo {
+            font-size: 24px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-circle {
+            background-color: #fff;
+            color: #3A0A96;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-options {
+            display: flex;
+        }
+
+        .nav-list {
+            list-style: none;
+            display: flex;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav-list li {
+            margin-right: 20px;
+        }
+
+        .nav-list li a {
             color: #fff;
+            text-decoration: none;
+            font-size: 18px;
+        }
+
+        .main-btn {
+            color: #3A0A96;
+            background-color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .main-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .hamburger-menu {
+            display: none; /* Hidden by default for desktop */
+            font-size: 24px;
+            cursor: pointer;
+            padding-left: 10px;
+        }
+
+        /* Dropdown Menu Styling - Displayed under navbar */
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 60px; /* Adjust based on navbar height */
+            left: 0;
+            width: 100%;
+            background-color: #3A0A96;
+            padding: 20px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 1000; /* Ensures it overlays other content */
+            padding-top:30px;
+        }
+
+        .dropdown-menu.show {
+            display: block;
+        }
+
+        .dropdown-menu ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            text-align: right;
+            padding-right: 20px;
+        }
+
+        .dropdown-menu ul li {
+            padding: 10px 0;
+        }
+
+        .dropdown-menu ul li a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 18px;
+        }
+
+        .dropdown-menu ul li a:hover {
+            color: #d1c4f0;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .nav-options,
+            .main-btn {
+                display: none; /* Hide desktop menu */
+            }
+
+            .hamburger-menu {
+                display: block; /* Show hamburger icon for mobile */
+            }
         }
         
         /* Package Section Styling */
         .packages-main-main {
             display: flex;
-            justify-content: center;
-            gap: 20px;
+            flex-direction: column;
+            align-items: center;
             padding: 40px;
             background-color: #f9f9f9;
-            flex-wrap: wrap;
+            gap: 20px;
         }
 
         .packages-card {
@@ -55,6 +171,8 @@
             text-transform: uppercase;
         }
 
+
+        
         .card-header h2 {
             font-size: 24px;
             font-weight: bold;
@@ -112,71 +230,16 @@
             font-weight: bold;
         }
 
-        /* Dropdown Menu Styling */
-        .dropdown-menu {
-            display: none;
-            position: absolute;
-            top: 80px;
-            right: 0;
-            background-color: #3A0A96;
-            width: 100%;
-            padding: 20px;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-            z-index: 10;
-        }
-
-        .dropdown-menu.show {
-            display: block;
-        }
-
-        .dropdown-menu ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            text-align: right;
-            padding-right: 20px;
-        }
-
-        .dropdown-menu ul li {
-            padding: 10px 0;
-        }
-
-        .dropdown-menu ul li a {
-            color: #fff;
-            text-decoration: none;
-            font-size: 18px;
-        }
-
-        .dropdown-menu ul li a:hover {
-            color: #d1c4f0;
-        }
-
-        /* Desktop-specific adjustments */
+        /* Responsive Layout */
         @media (min-width: 768px) {
-            /* Make nav items and button font size larger on desktop */
-            .nav-options ul.nav-list li a {
-                font-size: 20px;
-            }
-
-            .main-btn {
-                font-size: 18px;
-                padding: 10px 20px;
+            .packages-main-main {
+                flex-direction: row;
+                justify-content: center;
             }
         }
-        
-        /* Responsive Layout for Mobile Screens */
+
+        /* Mobile-specific layout adjustments */
         @media (max-width: 768px) {
-            /* Stack package cards in a single column */
-            .packages-main-main {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .packages-card {
-                margin-bottom: 20px; /* Space between stacked cards */
-            }
-
-            /* Navbar Responsive */
             .nav-options,
             .main-btn {
                 display: none;
@@ -186,11 +249,16 @@
                 display: block;
             }
         }
+
+         .fa-gift{
+            color:ORANGE;
+            font-size:20px;
+         }
     </style>
 </head>
 <body>
 
-    <!-- Navbar (unchanged) -->
+    <!-- Navbar -->
     <header class="header-main">
         <div class="nav-logo">
             <span class="logo-circle">R</span>
@@ -225,7 +293,7 @@
         <div class="packages-card">
             <div class="card-header">
                 <h2>Monthly</h2>
-                <p class="card-subtitle">Scale your business</p>
+                <p class="card-subtitle">Monthly Plan</p>
             </div>
             <div class="package-price">CAD 39.99/mo</div>
             <button class="select-button" onclick="window.location.href='ContactUs.html'">Select</button>
@@ -234,16 +302,36 @@
                 <p><span class="highlight">No</span> Branding</p>
                 <p><span class="highlight">Site</span> Automation</p>
                 <p><span class="highlight">Personal</span> Support</p>
+                <p><span class="highlight">$80 Start</span> Up Fee</p>
                 <p>Daily Maintenance</p>
             </div>
         </div>
 
-        <!-- Package Card 2 -->
+        <!-- Package Card 2 with Icon-->
         <div class="packages-card">
-            <div class="discount-banner">Save 16%</div>
+            <div class="discount-banner">NO SET UP FEE</div>
+            <div class="card-header">
+                <h2>PROMO</h2>
+                <p class="card-subtitle">3 Month Starting Plan</p>
+            </div>
+            <div class="package-price">CAD 99.99/3mo</div>
+            <button class="select-button" onclick="window.location.href='ContactUs.html'">Select</button>
+            <div class="package-details">
+                <p><span class="highlight">Custom</span> Website</p>
+                <p><span class="highlight">No</span> Branding</p>
+                <p><span class="highlight">Site</span> Automation</p>
+                <p><span class="highlight">Personal</span> Support</p>
+                <p><span class="highlight">3 Month</span> Starting Plan</p>
+                <p><span class="highlight">No Start</span> Up Fee  <i class="fas fa-gift"></i></p>
+                <p>Daily Maintenance</p>
+            </div>
+        </div>
+
+        <!-- Package Card 3 -->
+        <div class="packages-card">
             <div class="card-header">
                 <h2>Annually</h2>
-                <p class="card-subtitle">Grow your brand</p>
+                <p class="card-subtitle">Yearly Plan</p>
             </div>
             <div class="package-price">CAD 399.99/year</div>
             <button class="select-button" onclick="window.location.href='ContactUs.html'">Select</button>
@@ -252,6 +340,7 @@
                 <p><span class="highlight">No</span> Branding</p>
                 <p><span class="highlight">Site</span> Automation</p>
                 <p><span class="highlight">Personal</span> Support</p>
+                <p><span class="highlight">$80 Start</span> Up Fee</p>
                 <p>Daily Maintenance</p>
             </div>
         </div>
