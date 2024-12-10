@@ -17,13 +17,14 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     <script type="text/javascript">
         (function () {
-            emailjs.init("Czs0cXQsp5B-Dbm8Y");
+            emailjs.init({
+                publicKey: "Czs0cXQsp5B-Dbm8Y",
+            });
         })();
-    </script>
+    </script>           
 </head>
 
 <body>
-    <!-- Navbar Section -->
     <header class="header-main">
         <!-- Logo -->
         <div class="nav-logo">
@@ -59,21 +60,58 @@
         </ul>
     </div>
 
-    <!-- Call Badge -->
-    <div class="call-badge">
-        <a href="tel:289-544-4444">Call 289-213-0256</a>
+    <!-- Hero Section -->
+    <div class="hero-main-main">
+        <div class="hero-main">
+            <section class="hero-home">
+                <div class="hero-content">
+                    <h1 class="hero-title">Hire the Best Freelance Talent</h1>
+                    <p class="mb-8 text-gray-700 text-base leading-3 xl:text-lg xl:leading-4">Toptal is an exclusive
+                        network of the top freelance software developers, designers, marketing experts, finance experts,
+                        product managers, and project managers in the world. Top companies hire Toptal freelancers for
+                        their most important projects.</p>
+                    <a href="services.html" class="hero-btn">Get Started</a>
+                </div>
+                <div class="hero-image-main">
+                    <div class="hero-img">
+                        <img src="pexels-thisisengineering-3861959.jpg" alt="Freelancer working on a project">
+                    </div>
+                </div>
+            </section>
+        </div>
     </div>
 
-   <!-- Hero Section -->
-   <section class="hero" id="home">
-    <div class="hero-overlay"></div>
-    <div class="hero-content">
-        <h1>Professional Website Service</h1>
-        <p>Hire a trusted freelancer today.</p>
-        <a href="services.html" class="cta-btn">GET STARTED</a>
-    </div>
-</section>
+    <hr class="hero-hr">
 
+    <!-- JavaScript for Navbar Dropdown -->
+    <script>
+        // Function to toggle dropdown menu
+        function toggleMenu() {
+            const dropdownMenu = document.getElementById('dropdownMenu');
+            dropdownMenu.classList.toggle('show');
+
+            // Check if the dropdown is currently showing or hidden
+            if (dropdownMenu.classList.contains('show')) {
+                dropdownMenu.style.display = 'block';  // Show the dropdown
+            } else {
+                dropdownMenu.style.display = 'none';  // Hide the dropdown
+            }
+        }
+
+        // Ensure the DOM is ready before adding event listeners
+        document.addEventListener('DOMContentLoaded', function () {
+            const hamburgerMenu = document.querySelector('.hamburger-menu');
+            const dropdownMenu = document.querySelector('.dropdown-menu');
+
+            // Initially hide the dropdown
+            dropdownMenu.style.display = 'none';
+
+            // Add click event listener to the hamburger menu
+            hamburgerMenu.addEventListener('click', function () {
+                toggleMenu();  // Toggle dropdown when hamburger menu is clicked
+            });
+        });
+    </script>
 </body>
 
 </html>
