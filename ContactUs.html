@@ -1,126 +1,339 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact Us</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="contact.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Form</title>
+  <!-- Google Fonts for Consistent Styling -->
+  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <style>
+    /* Base Font Style for Entire Page */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Jost', sans-serif;
+      font-weight: 600;
+    }
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <script src="index.js"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    body {
+      background-color: #f4f4f9;
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    /* Navbar Styling */
+    .header-main {
+      width: 100%;
+      background-color: #3A0A96;
+      color: #fff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px;
+      position: relative;
+    }
 
-    <script src="index.js"></script>
-    <script type="text/javascript"
-        src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js">
-</script>
-<script type="text/javascript">
-   (function(){
-      emailjs.init({
-        publicKey: "Czs0cXQsp5B-Dbm8Y",
-      });
-   })();
-</script>
+    .nav-logo {
+      font-size: 24px;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+    }
+
+    .logo-circle {
+      background-color: #fff;
+      color: #3A0A96;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      margin-right: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .nav-options {
+      display: flex;
+    }
+
+    .nav-list {
+      list-style: none;
+      display: flex;
+      margin: 0;
+      padding: 0;
+    }
+
+    .nav-list li {
+      margin-right: 20px;
+    }
+
+    .nav-list li a {
+      color: #fff;
+      text-decoration: none;
+      font-size: 18px;
+    }
+
+    .main-btn {
+      color: #3A0A96;
+      background-color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 14px;
+    }
+
+    .main-btn:hover {
+      background-color: #0056b3;
+    }
+
+    .hamburger-menu {
+      display: none;
+      font-size: 24px;
+      cursor: pointer;
+      padding-left: 10px;
+    }
+
+    /* Contact Page Layout */
+    .contact-container {
+      display: flex;
+      gap: 20px;
+      width: 100%;
+      max-width: 1000px;
+      padding: 40px;
+      flex-direction: row;
+    }
+
+    /* Contact Form Styling */
+    .contact-form {
+      width: 50%;
+      background: #ffffff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .contact-form h2 {
+      margin-bottom: 1em;
+      font-size: 1.5em;
+      color: #3A0A96;
+      text-align: center;
+    }
+
+    .form-group {
+      margin-bottom: 1.2em;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5em;
+      font-weight: bold;
+      color: #555;
+    }
+
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 1em;
+      transition: border-color 0.3s ease;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+      border-color: #3A0A96;
+      outline: none;
+    }
+
+    .form-group button {
+      width: 100%;
+      padding: 10px;
+      background-color: #3A0A96;
+      color: #ffffff;
+      border: none;
+      border-radius: 4px;
+      font-size: 1em;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .form-group button:hover {
+      background-color: #2a0779;
+    }
+
+    /* Contact Info Section */
+    .contact-info {
+      width: 50%;
+      background: #ffffff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      color: #333;
+    }
+
+    .contact-info h3 {
+      font-size: 1.3em;
+      color: #3A0A96;
+      margin-bottom: 10px;
+    }
+
+    .contact-info p, .contact-info iframe {
+      margin-bottom: 15px;
+    }
+
+    .contact-info iframe {
+      width: 100%;
+      height: 200px;
+      border: 0;
+      border-radius: 4px;
+    }
+
+    /* Dropdown Menu for Mobile */
+    .dropdown-menu {
+      display: none;
+      position: absolute;
+      top: 60px;
+      right: 0;
+      background-color: #3A0A96;
+      width: 100%;
+      padding: 10px;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+      z-index: 10;
+      margin-bottom:3px;
+    }
+
+    .dropdown-menu.show {
+      display: block;
+    }
+
+    .dropdown-menu ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      text-align: right;
+    }
+
+    .dropdown-menu ul li {
+      padding: 10px 0;
+    }
+
+    .dropdown-menu ul li a {
+      color: #fff;
+      text-decoration: none;
+      font-size: 18px;
+    }
+
+    /* Responsive Styling */
+    @media (max-width: 768px) {
+      /* Navbar Responsive */
+      .nav-options, .main-btn {
+        display: none;
+      }
+      .hamburger-menu {
+        display: block;
+      }
+
+      /* Contact Page Responsive */
+      .contact-container {
+        flex-direction: column;
+        padding: 20px;
+      }
+      
+      .contact-form, .contact-info {
+        width: 100%;
+      }
+    }
+  </style>
 </head>
+
 <body>
 
-    <header class="header-main">
-        <!-- Text-based Logo with enhanced styling -->
-        <div class="nav-logo">
-            <span class="logo-circle">R</span> 
-            Rose Web Creations
-        </div>
-        <!-- Navigation Menu -->
-        <nav class="nav-options">
-            <ul class="nav-list">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="services.html">Packages</a></li>
-                <li><a href="About.Html">About</a></li>
-            </ul>
-        </nav>
-
-        <!-- Hire Button -->
-        <a href="ContactUs.html"><button class="main-btn" id="hireBtn">Hire Designer</button></a>
-
-        <!-- Hamburger Menu for smaller screens -->
-        <div class="hamburger-menu" onclick="toggleMenu()">
-            <i class="fas fa-bars"></i>
-        </div>
-    </header>
-
-    <!-- Dropdown Menu for Mobile -->
-    <div class="dropdown-menu" id="dropdownMenu">
-        <ul>
-            <li><a href="index.html">Home</a></li>
-            <li><a href="services.html">Packages</a></li>
-            <li><a href="about.html">About</a></li>
-            <li><a href="ContactUs.html">Hire Designer</a></li>
-        </ul>
+  <!-- Navbar -->
+  <header class="header-main">
+    <div class="nav-logo">
+      <span class="logo-circle">R</span>
+      Rose Web Creations
     </div>
+    <nav class="nav-options">
+      <ul class="nav-list">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="services.html">Packages</a></li>
+        <li><a href="abt.html">About</a></li>
+      </ul>
+    </nav>
+    <a href="ContactUs.html"><button class="main-btn">Hire Designer</button></a>
+    <div class="hamburger-menu" onclick="toggleMenu()">
+      <i class="fas fa-bars"></i>
+    </div>
+  </header>
 
-    <script>
-        function toggleMenu() {
-            const menu = document.getElementById('dropdownMenu');
-            menu.classList.toggle('show');
-        }
+  <!-- Dropdown Menu (Mobile) -->
+  <div class="dropdown-menu" id="dropdownMenu">
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="services.html">Packages</a></li>
+      <li><a href="abt.html">About</a></li>
+      <li><a href="ContactUs.html">Hire Designer</a></li>
+    </ul>
+  </div>
 
-        // Handle button visibility on small screens
-        window.addEventListener('resize', function () {
-            const hireBtn = document.getElementById('hireBtn');
-            if (window.innerWidth <= 768) {
-                hireBtn.style.display = 'none';
-            } else {
-                hireBtn.style.display = 'inline-block';
-            }
-        });
-    </script>
-
-  
-<div class="contact-space"></div>
-
-<div class="contact-page-main">
-<section class="contact-page">
-    <div class="contact-logo"></div>
-<div class="contact-content">
-    <p>Let's connect you with Us.</p>
-</div>
-<div class="contact-container">
-    <div class="contact-info">
-
-
+  <!-- Contact Form and Info Container -->
+  <div class="contact-container">
+    <!-- Contact Form -->
     <div class="contact-form">
-        <form>
-            <h2>Send Message</h2>
-            <div class="form-group">
-                <h5 for="name">Name</h5>
-                <input type="text" class="form-control" id="name" placeholder="enter your name" required="required">
-      
-            </div>
-            <div class="form-group">
-                <h5 for="email">Email</h5>
-                <input type="email" class="form-control" id="email" placeholder="enter your email" required="required">
-            </div>
-            <div class="form-group">
-                <h5 for="email">Message</h5>
-                <textarea name="" required="required" id="message" rows="3" class="form-control" placeholder="Type Your Message..."></textarea>
-            </div>
-            <div class="form-group">
-                <button id="c-b"class="btn btn-primary" onclick="sendMail()">Submit</button>
-            </div>
-        </form>
+      <h2>Contact Us</h2>
+      <form action="https://formspree.io/f/xrbgpayg" method="POST">
+        <div class="form-group">
+          <label for="name">Name</label>
+          <input type="text" id="name" name="name" required>
+        </div>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" required>
+        </div>
+        <div class="form-group">
+          <label for="message">Message</label>
+          <textarea id="message" name="message" rows="4" required></textarea>
+        </div>
+        <div class="form-group">
+          <button type="submit">Send Message</button>
+        </div>
+      </form>
     </div>
-</div>
-</section>
-</div>
 
+    <!-- Contact Information Section -->
+    <div class="contact-info">
+      <h3>Contact Information</h3>
+      <p><i class="fas fa-phone"></i> Phone: (289) 213-0256</p>
+      <p><i class="fas fa-envelope"></i> Email: rosewebc@gmail.com</p>
+      
+    
 
-     
+      <h3>Our Location</h3>
+      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2894.649119687073!2d-79.56347302459872!3d43.20015824203681!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x882c8a059cf891cf%3A0x7a27b5d13d636b22!2sGrimsby%2C%20ON%2C%20Canada!5e0!3m2!1sen!2sus!4v1699578349321!5m2!1sen!2sus" allowfullscreen="" loading="lazy"></iframe>
+    </div>
+  </div>
+
+  <!-- Script for Toggle Menu -->
+  <script>
+    function toggleMenu() {
+      const menu = document.getElementById('dropdownMenu');
+      menu.classList.toggle('show');
+    }
+  </script>
 </body>
 </html>
+
 
 
 
