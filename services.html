@@ -1,232 +1,368 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Packages</title>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-        <link rel="stylesheet" href="./css/reset.css">
-        <link rel="stylesheet" href="style.css">
-        <link rel="stylesheet" href="packages.css">   
-        <script src="nav.js"></script>
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-        <script type="text/javascript">
-            (function () {
-                emailjs.init({
-                    publicKey: "Czs0cXQsp5B-Dbm8Y",
-                });
-            })();
-        </script>
-    </head>
-    
-    <body>
-        <header class="header-main">
-            <!-- Text-based Logo with enhanced styling -->
-          <!-- Text-based Logo -->  
-    <div class="nav-logo">
-        <span class="logo-circle">R</span> 
-        Rose Web Creations
-    </div>
-    
-            <!-- Navigation Menu -->
-            <nav class="nav-options">
-                <ul class="nav-list">
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="services.html">Packages</a></li>
-                    <li><a href="about.html">About</a></li>
-                </ul>
-            </nav>
-    
-            <!-- Hire Button -->
-            <a href="ContactUs.html"><button class="main-btn" id="hireBtn">Hire Designer</button></a>
-    
-            <!-- Hamburger Menu for smaller screens -->
-            <div class="hamburger-menu" onclick="toggleMenu()">
-                <i class="fas fa-bars"></i>
-            </div>
-        </header>
-    
-        <!-- Dropdown Menu for Mobile -->
-        <div class="dropdown-menu" id="dropdownMenu">
-            <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="services.html">Packages</a></li>
-                <li><a href="about.html">About</a></li>
-                <li><a href="ContactUs.html">Hire Designer</a></li>
-            </ul>
-        </div>
-    
-        <script>
-            function toggleMenu() {
-                const menu = document.getElementById('dropdownMenu');
-                menu.classList.toggle('show');
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Packages</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="style.css">
+    <style>
+       /* Base Styles */
+       .header-main {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background-color: #3A0A96;
+            color: #fff; 
+            height:80px;
+        }
+
+        .nav-logo {
+            font-size: 24px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-circle {
+            background-color: #fff;
+            color: #3A0A96;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-options {
+            display: flex;
+        }
+
+        .nav-list {
+            list-style: none;
+            display: flex;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav-list li {
+            margin-right: 20px;
+        }
+
+        .nav-list li a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 18px;
+        }
+
+        .main-btn {
+            color: #3A0A96;
+            background-color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .main-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .hamburger-menu {
+            display: none; /* Hidden by default for desktop */
+            font-size: 24px;
+            cursor: pointer;
+            padding-left: 10px;
+        }
+
+        /* Dropdown Menu Styling - Displayed under navbar */
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 60px; /* Adjust based on navbar height */
+            left: 0;
+            width: 100%;
+            background-color: #3A0A96;
+            padding: 20px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 1000; /* Ensures it overlays other content */
+            padding-top:30px;
+        }
+
+        .dropdown-menu.show {
+            display: block;
+        }
+
+        .dropdown-menu ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            text-align: right;
+            padding-right: 20px;
+        }
+
+        .dropdown-menu ul li {
+            padding: 10px 0;
+        }
+
+        .dropdown-menu ul li a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 18px;
+        }
+
+        .dropdown-menu ul li a:hover {
+            color: #d1c4f0;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .nav-options,
+            .main-btn {
+                display: none; /* Hide desktop menu */
             }
-    
-            // Handle button visibility on small screens
-            window.addEventListener('resize', function () {
-                const hireBtn = document.getElementById('hireBtn');
-                if (window.innerWidth <= 768) {
-                    hireBtn.style.display = 'none';
-                } else {
-                    hireBtn.style.display = 'inline-block';
-                }
-            });
-        </script>
 
+            .hamburger-menu {
+                display: block; /* Show hamburger icon for mobile */
+            }
+        }
+        
+        /* Package Section Styling */
+        .packages-main-main {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px;
+            background-color: #f9f9f9;
+            gap: 20px;
+        }
 
-<div class="packages-space"></div>
+        .packages-card {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            width: 280px; /* Fixed width for consistency */
+            text-align: center;
+            position: relative;
+            transition: transform 0.2s ease-in-out;
+        }
 
-<div class="packages-main-main">
+        .packages-card:hover {
+            transform: scale(1.05);
+        }
 
-<div class="package-main">
+        .packages-card .discount-banner {
+            position: absolute;
+            top: 10px;
+            left: 0;
+            background-color: orange;
+            color: white;
+            padding: 5px 10px;
+            font-size: 14px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
 
-  <section class="packages-Pricing">
-
-    <div class="packages-card">
-
-        <div class="chd">
-
-        <div class="card-header">
-            <i class="fa-solid fa-hammer" id="package-i"></i>
-            <h2>STARTER</h2>
-        </div>
-    </div>
-
-        <div class="package-card-detail">
-            <p><span class="package-card-detail-span"></span><i class="fa-solid fa-check"></i> Custom Website</p>
-            <p><span class="package-card-detail-span"></span><i class="fa-solid fa-check"></i> Control Pannel</p>  
-            <p><span class="package-card-detail-span"></span><i class="fa-solid fa-check"></i> Site Automation</p>       
-            <p><span class="package-card-detail-span2"></span><i class="fa-x fa-x"></i>       Email Marketing</p> 
-            <p><span class="package-card-detail-span2"></span><i class="fa-x fa-x"></i>        Google Ads</p>         
-        </div>
-
-        <div class="package-card-price">
-            <p><sup>$</sup>0<sub>/month</sub></p>
-        </div>
-
-        <a href="ContactUs.html"><button class="package-card-btn">CONTACT US</button></a>
-
-</div>
-
-
-<div class="packages-main-main">
-
-    <div class="package-main">
-    
-      <section class="packages-Pricing">
-    
-        <div class="packages-card">
-    
-            <div class="card-header">
-                <i class="fa-solid fa-user-tie" id="package-i"></i>
-                <h2>PROFESSIONAL</h2>
-            </div>
-    
-            <div class="package-card-detail">
-                <p><span class="package-card-detail-span"></span><i class="fa-solid fa-check"></i> Custom Website</p>
-                <p><span class="package-card-detail-span"></span><i class="fa-solid fa-check"></i> Control Pannel</p>  
-                <p><span class="package-card-detail-span"></span><i class="fa-solid fa-check"></i> Site Automation</p>       
-                <p><span class="package-card-detail-span2"></span><i class="fa-solid fa-check"></i>   Email Marketing</p> 
-                <p><span class="package-card-detail-span2"></span><i class="fa-x fa-x"></i>   Google Ads</p> 
-            </div>
-    
-            <div class="package-card-price">
-                <p><sup>$</sup>0<sub>/month</sub></p>
-            </div>
-    
-            <a href="ContactUs.html"><button class="package-card-btn">CONTACT US</button></a>
-    
-    </div>
-
-<div class="packages-main-main">
-
-<div class="package-main">
-
-  <section class="packages-Pricing">
-
-    <div class="packages-card">
-
-        <div class="card-header">
-            <i class="fa-solid fa-business-time" id="package-i"></i>
-            <h2>BUSSINESS</h2>
-        </div>
-
-        <div class="package-card-detail">
-            <p><span class="package-card-detail-span"></span><i class="fa-solid fa-check"></i> Custom Website</p>
-            <p><span class="package-card-detail-span"></span><i class="fa-solid fa-check"></i> Control Pannel</p>  
-            <p><span class="package-card-detail-span"></span><i class="fa-solid fa-check"></i> Site Automation</p>       
-            <p><span class="package-card-detail-span2"></span><i class="fa-solid fa-check"></i>   Email Marketing</p> 
-            <p><span class="package-card-detail-span2"></span><i class="fa-solid fa-check"></i>  Google Ads</p> 
-        </div>
-
-        <div class="package-card-price">
-            <p><sup>$</sup>0<sub>/month</sub></p>
-        </div>
-
-        <a href="ContactUs.html"><button class="package-card-btn">CONTACT US</button></a>
 
         
-</div>
-</section>
-</div>
-</div>
+        .card-header h2 {
+            font-size: 24px;
+            font-weight: bold;
+            color: #3A0A96;
+            margin: 10px 0;
+        }
 
-<script src="nav.js"></script>
+        .card-subtitle {
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 20px;
+        }
+
+        .hst{
+            font-size: 15px;
+            color:#555;
+        }
+
+        .package-price {
+            font-size: 36px;
+            font-weight: bold;
+            color: #3A0A96;
+        }
+
+        .package-old-price {
+            font-size: 18px;
+            color: #888;
+            text-decoration: line-through;
+        }
+
+        .select-button {
+            margin-top: 20px;
+            padding: 10px 25px;
+            border: 2px solid #3A0A96;
+            border-radius: 20px;
+            background-color: transparent;
+            color: #3A0A96;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .select-button:hover {
+            background-color: #3A0A96;
+            color: #fff;
+        }
+
+        .package-details {
+            text-align: left;
+            margin-top: 20px;
+        }
+
+        .package-details p {
+            font-size: 16px;
+            color: #333;
+            margin: 8px 0;
+        }
+
+        .highlight {
+            font-weight: bold;
+        }
+
+        /* Responsive Layout */
+        @media (min-width: 768px) {
+            .packages-main-main {
+                flex-direction: row;
+                justify-content: center;
+            }
+        }
+
+        /* Mobile-specific layout adjustments */
+        @media (max-width: 768px) {
+            .nav-options,
+            .main-btn {
+                display: none;
+            }
+
+            .hamburger-menu {
+                display: block;
+            }
+        }
+
+         .fa-gift{
+            color:ORANGE;
+            font-size:20px;
+         }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <header class="header-main">
+        <div class="nav-logo">
+            <span class="logo-circle">R</span>
+            Rose Web Creations
+        </div>
+        <nav class="nav-options">
+            <ul class="nav-list">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="services.html">Packages</a></li>
+                <li><a href="abt.html">About</a></li>
+            </ul>
+        </nav>
+        <a href="ContactUs.html"><button class="main-btn" id="hireBtn">Hire Designer</button></a>
+        <div class="hamburger-menu" onclick="toggleMenu()">
+            <i class="fas fa-bars"></i>
+        </div>
+    </header>
+
+    <!-- Dropdown Menu -->
+    <div class="dropdown-menu" id="dropdownMenu">
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="services.html">Packages</a></li>
+            <li><a href="abt.html">About</a></li>
+            <li><a href="ContactUs.html">Hire Designer</a></li>
+        </ul>
+    </div>
+
+    <!-- Package Section -->
+    <div class="packages-main-main">
+        <!-- Package Card 1 -->
+        <div class="packages-card">
+            <div class="card-header">
+                <h2>Monthly</h2>
+                <p class="card-subtitle">Monthly Plan</p>
+            </div>
+            <div class="package-price">CAD 39.99/mo</div>
+            <p class="hst">+ HST</p>
+            <button class="select-button" onclick="window.location.href='ContactUs.html'">Select</button>
+            <div class="package-details">
+                <p><span class="highlight">Custom</span> Website</p>
+                <p><span class="highlight">No</span> Branding</p>
+                <p><span class="highlight">Site</span> Automation</p>
+                <p><span class="highlight">Personal</span> Support</p>
+                <p><span class="highlight">$80 Start</span> Up Fee</p>
+                <p>Daily Maintenance</p>
+            </div>
+        </div>
+
+        <!-- Package Card 2 with Icon-->
+        <div class="packages-card">
+            <div class="discount-banner">NO SET UP FEE</div>
+            <div class="card-header">
+                <h2>PROMO</h2>
+                <p class="card-subtitle">3 Month Starting Plan</p>
+            </div>
+            <div class="package-price">CAD 99.99/3mo</div>
+            <p class="hst">+ HST</p>
+            <button class="select-button" onclick="window.location.href='ContactUs.html'">Select</button>
+            <div class="package-details">
+                <p><span class="highlight">Custom</span> Website</p>
+                <p><span class="highlight">No</span> Branding</p>
+                <p><span class="highlight">Site</span> Automation</p>
+                <p><span class="highlight">Personal</span> Support</p>
+                <p><span class="highlight">3 Month</span> Starting Plan</p>
+                <p><span class="highlight">No Start</span> Up Fee  <i class="fas fa-gift"></i></p>
+                <p>Daily Maintenance</p>
+            </div>
+        </div>
+
+        <!-- Package Card 3 -->
+        <div class="packages-card">
+            <div class="card-header">
+                <h2>Annually</h2>
+                <p class="card-subtitle">Yearly Plan</p>
+            </div>
+            <div class="package-price">CAD 399.99/year</div>
+            <p class="hst">+ HST</p>
+            <button class="select-button" onclick="window.location.href='ContactUs.html'">Select</button>
+            <div class="package-details">
+                <p><span class="highlight">Custom</span> Website</p>
+                <p><span class="highlight">No</span> Branding</p>
+                <p><span class="highlight">Site</span> Automation</p>
+                <p><span class="highlight">Personal</span> Support</p>
+                <p><span class="highlight">$80 Start</span> Up Fee</p>
+                <p>Daily Maintenance</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script for Toggle Menu -->
+    <script>
+        function toggleMenu() {
+            const menu = document.getElementById('dropdownMenu');
+            menu.classList.toggle('show');
+        }
+    </script>
 </body>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</body>
-
-
-
+</html>
 
 
 
