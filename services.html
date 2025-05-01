@@ -7,35 +7,61 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="style.css">
     <style>
-       /* Base Styles */
-       .header-main {
+        :root {
+            --primary: #3a86ff;
+            --secondary: #ff006e;
+            --dark: #212529;
+            --light: #f8f9fa;
+            --success: #4cc9f0;
+            --warning: #fb5607;
+            --gradient: linear-gradient(135deg, var(--primary), var(--secondary));
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: var(--dark);
+            overflow-x: hidden;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+        }
+
+        /* Navbar Section */
+        .header-main {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 20px;
-            background-color: #3A0A96;
-            color: #fff; 
-            height:80px;
+            padding: 20px 5%;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            background-color: rgba(58, 134, 255, 0.95);
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+            box-sizing: border-box;
+            height: 80px;
         }
 
         .nav-logo {
-            font-size: 24px;
-            font-weight: bold;
             display: flex;
             align-items: center;
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: white;
         }
 
         .logo-circle {
-            background-color: #fff;
-            color: #3A0A96;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: bold;
+            width: 40px;
+            height: 40px;
+            background: white;
+            color: var(--primary);
+            border-radius: 50%;
             margin-right: 10px;
+            font-weight: 700;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
@@ -55,44 +81,65 @@
         }
 
         .nav-list li a {
-            color: #fff;
+            color: white;
             text-decoration: none;
             font-size: 18px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-list li a:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            background: white;
+            bottom: -5px;
+            left: 0;
+            transition: width 0.3s ease;
+        }
+
+        .nav-list li a:hover:after {
+            width: 100%;
         }
 
         .main-btn {
-            color: #3A0A96;
-            background-color: #fff;
+            background-color: white;
+            color: var(--primary);
             border: none;
-            padding: 10px 20px;
+            padding: 10px 25px;
             border-radius: 30px;
+            font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
 
         .main-btn:hover {
-            background-color: #0056b3;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+            background-color: rgba(255, 255, 255, 0.9);
         }
 
         .hamburger-menu {
-            display: none; /* Hidden by default for desktop */
+            display: none;
             font-size: 24px;
             cursor: pointer;
-            padding-left: 10px;
+            color: white;
         }
 
-        /* Dropdown Menu Styling - Displayed under navbar */
+        /* Dropdown Menu */
         .dropdown-menu {
             display: none;
-            position: absolute;
-            top: 60px; /* Adjust based on navbar height */
+            position: fixed;
+            top: 80px;
             left: 0;
             width: 100%;
-            background-color: #3A0A96;
+            background: var(--gradient);
             padding: 20px;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-            z-index: 1000; /* Ensures it overlays other content */
-            padding-top:30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            z-index: 999;
+            border-radius: 0 0 15px 15px;
         }
 
         .dropdown-menu.show {
@@ -112,89 +159,104 @@
         }
 
         .dropdown-menu ul li a {
-            color: #fff;
+            color: white;
             text-decoration: none;
             font-size: 18px;
+            transition: all 0.3s ease;
+            display: block;
+            padding: 5px;
         }
 
         .dropdown-menu ul li a:hover {
-            color: #d1c4f0;
+            color: rgba(255, 255, 255, 0.8);
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
         }
 
-        /* Responsive Styles */
-        @media (max-width: 768px) {
-            .nav-options,
-            .main-btn {
-                display: none; /* Hide desktop menu */
-            }
-
-            .hamburger-menu {
-                display: block; /* Show hamburger icon for mobile */
-            }
-        }
-        
         /* Package Section Styling */
         .packages-main-main {
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 40px;
-            background-color: #f9f9f9;
-            gap: 20px;
+            padding: 120px 40px 60px;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            gap: 30px;
         }
 
         .packages-card {
-            background-color: #fff;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            padding: 30px;
-            width: 280px; /* Fixed width for consistency */
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            padding: 35px;
+            width: 280px;
             text-align: center;
             position: relative;
-            transition: transform 0.2s ease-in-out;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0, 0, 0, 0.05);
         }
 
         .packages-card:hover {
-            transform: scale(1.05);
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(58, 134, 255, 0.15);
         }
 
         .packages-card .discount-banner {
             position: absolute;
-            top: 10px;
-            left: 0;
-            background-color: orange;
+            top: 15px;
+            left: -5px;
+            background: var(--gradient);
             color: white;
-            padding: 5px 10px;
+            padding: 8px 15px;
             font-size: 14px;
             font-weight: bold;
             text-transform: uppercase;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 0 4px 4px 0;
         }
 
+        .packages-card .discount-banner:after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -5px;
+            width: 0;
+            height: 0;
+            border-top: 5px solid var(--secondary);
+            border-left: 5px solid transparent;
+            filter: brightness(70%);
+        }
 
-        
         .card-header h2 {
             font-size: 24px;
-            font-weight: bold;
-            color: #3A0A96;
+            font-weight: 700;
+            color: var(--primary);
             margin: 10px 0;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
         }
 
         .card-subtitle {
             font-size: 14px;
-            color: #555;
+            color: #6c757d;
             margin-bottom: 20px;
         }
 
-        .hst{
+        .hst {
             font-size: 15px;
-            color:#555;
+            color: #6c757d;
+            margin-top: 5px;
         }
 
         .package-price {
             font-size: 36px;
-            font-weight: bold;
-            color: #3A0A96;
+            font-weight: 700;
+            color: var(--primary);
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
         }
 
         .package-old-price {
@@ -204,47 +266,78 @@
         }
 
         .select-button {
-            margin-top: 20px;
-            padding: 10px 25px;
-            border: 2px solid #3A0A96;
-            border-radius: 20px;
-            background-color: transparent;
-            color: #3A0A96;
+            margin-top: 25px;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 30px;
+            background: var(--gradient);
+            color: white;
             font-size: 16px;
+            font-weight: 600;
             cursor: pointer;
-            transition: background-color 0.3s ease;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(58, 134, 255, 0.3);
         }
 
         .select-button:hover {
-            background-color: #3A0A96;
-            color: #fff;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(58, 134, 255, 0.4);
         }
 
         .package-details {
             text-align: left;
-            margin-top: 20px;
+            margin-top: 30px;
         }
 
         .package-details p {
             font-size: 16px;
-            color: #333;
-            margin: 8px 0;
+            color: #495057;
+            margin: 12px 0;
+            position: relative;
+            padding-left: 25px;
+        }
+
+        .package-details p:before {
+            content: "\f058";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            color: var(--success);
+            position: absolute;
+            left: 0;
         }
 
         .highlight {
-            font-weight: bold;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .fa-gift {
+            color: var(--warning);
+            font-size: 20px;
+            margin-left: 5px;
         }
 
         /* Responsive Layout */
-        @media (min-width: 768px) {
+        @media (min-width: 992px) {
             .packages-main-main {
                 flex-direction: row;
                 justify-content: center;
+                gap: 30px;
+            }
+            
+            /* Highlight middle card */
+            .packages-main-main .packages-card:nth-child(2) {
+                transform: scale(1.05);
+                z-index: 2;
+            }
+            
+            .packages-main-main .packages-card:nth-child(2):hover {
+                transform: scale(1.05) translateY(-10px);
             }
         }
 
         /* Mobile-specific layout adjustments */
-        @media (max-width: 768px) {
+        @media (max-width: 991px) {
             .nav-options,
             .main-btn {
                 display: none;
@@ -253,12 +346,17 @@
             .hamburger-menu {
                 display: block;
             }
+            
+            .packages-main-main {
+                padding-top: 100px;
+            }
+            
+            .packages-card {
+                margin-bottom: 10px;
+                width: 100%;
+                max-width: 320px;
+            }
         }
-
-         .fa-gift{
-            color:ORANGE;
-            font-size:20px;
-         }
     </style>
 </head>
 <body>
@@ -360,11 +458,19 @@
             const menu = document.getElementById('dropdownMenu');
             menu.classList.toggle('show');
         }
+        
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('.header-main');
+            if (window.scrollY > 50) {
+                header.style.background = 'var(--primary)';
+                header.style.padding = '15px 5%';
+            } else {
+                header.style.background = 'rgba(58, 134, 255, 0.95)';
+                header.style.padding = '20px 5%';
+            }
+        });
     </script>
 </body>
 </html>
-
-
-
-
 

@@ -16,34 +16,60 @@
         }
     </script>
     <style>
+        :root {
+            --primary: #3a86ff;
+            --secondary: #ff006e;
+            --dark: #212529;
+            --light: #f8f9fa;
+            --success: #4cc9f0;
+            --warning: #fb5607;
+            --gradient: linear-gradient(135deg, var(--primary), var(--secondary));
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: var(--dark);
+            overflow-x: hidden;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+        }
+
         /* Base Styles */
         .header-main {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 20px;
-            background-color: #3A0A96;
-            color: #fff;
+            padding: 20px 5%;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            background: var(--gradient);
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+            height: 80px;
         }
 
         .nav-logo {
-            font-size: 24px;
-            font-weight: bold;
             display: flex;
             align-items: center;
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: white;
         }
 
         .logo-circle {
-            background-color: #fff;
-            color: #3A0A96;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: bold;
+            width: 40px;
+            height: 40px;
+            background: white;
+            color: var(--primary);
+            border-radius: 50%;
             margin-right: 10px;
+            font-weight: 700;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
@@ -63,47 +89,65 @@
         }
 
         .nav-list li a {
-            color: #fff;
+            color: white;
             text-decoration: none;
             font-size: 18px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-list li a:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            background: white;
+            bottom: -5px;
+            left: 0;
+            transition: width 0.3s ease;
+        }
+
+        .nav-list li a:hover:after {
+            width: 100%;
         }
 
         .main-btn {
-            color: #3A0A96;
-            background-color: #fff;
-            border:none;
-            padding: 10px 20px;
+            background-color: white;
+            color: var(--primary);
+            border: none;
+            padding: 10px 25px;
             border-radius: 30px;
+            font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
 
-
         .main-btn:hover {
-            background-color: #0056b3;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
         }
 
         .hamburger-menu {
             display: none;
             font-size: 24px;
             cursor: pointer;
-            padding-left:10px;
+            color: white;
+            padding-left: 10px;
         }
 
         /* Dropdown Menu Styles */
         .dropdown-menu {
             display: none;
-            position: absolute;
-            top: 75px;
-            right: 10%;
-            background-color: #3A0A96;
+            position: fixed;
+            top: 80px;
+            left: 0;
             width: 100%;
-            text-align: right;
+            background: var(--gradient);
             padding: 20px;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-            transition: all 0.3s ease;
-            padding-right: 20px;
-            
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            z-index: 999;
+            border-radius: 0 0 15px 15px;
         }
 
         .dropdown-menu.show {
@@ -114,6 +158,8 @@
             list-style: none;
             padding: 0;
             margin: 0;
+            text-align: right;
+            padding-right: 20px;
         }
 
         .dropdown-menu ul li {
@@ -121,19 +167,132 @@
         }
 
         .dropdown-menu ul li a {
-            color: #fff;
+            color: white;
             text-decoration: none;
             font-size: 18px;
+            transition: all 0.3s ease;
+            display: block;
+            padding: 5px;
         }
 
         .dropdown-menu ul li a:hover {
-            color: #d1c4f0;
+            color: rgba(255, 255, 255, 0.8);
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
         }
 
-        /* About Section Image Styling */
+        /* About Section Styling */
+        .abt-hr {
+            margin-top: 80px;
+            border: none;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+            opacity: 0.5;
+        }
+
+        .about-main {
+            padding: 60px 0;
+        }
+
+        .abt-section {
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            margin: 0 5%;
+        }
+
+        .abt-container {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            padding: 40px;
+        }
+
+        .content-section {
+            flex: 1;
+            min-width: 300px;
+            padding-right: 40px;
+        }
+
+        .abt-title {
+            margin-bottom: 30px;
+        }
+
+        .abt-title h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--primary);
+            position: relative;
+            display: inline-block;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .abt-title h1:after {
+            content: '';
+            position: absolute;
+            width: 50%;
+            height: 4px;
+            background: var(--gradient);
+            bottom: -10px;
+            left: 0;
+        }
+
+        .abt-content p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #6c757d;
+        }
+
+        .abt-img-section {
+            flex: 1;
+            min-width: 300px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
         .abt-img-section img {
             width: 100%;
             max-width: 600px;
+            border-radius: 15px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .abt-img-section img:hover {
+            transform: scale(1.02);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 991px) {
+            .nav-options,
+            .main-btn {
+                display: none;
+            }
+
+            .hamburger-menu {
+                display: block;
+            }
+            
+            .abt-container {
+                flex-direction: column;
+                padding: 30px 20px;
+            }
+            
+            .content-section {
+                padding-right: 0;
+                text-align: center;
+                margin-bottom: 30px;
+            }
+            
+            .abt-title h1:after {
+                left: 25%;
+            }
         }
 
         /* Center image on mobile screens */
@@ -143,13 +302,9 @@
                 justify-content: center;
                 margin-top: 20px;
             }
-
-            .nav-options, .main-btn {
-                display: none;
-            }
-
-            .hamburger-menu {
-                display: block;
+            
+            .abt-img-section img {
+                max-width: 100%;
             }
         }
     </style>
@@ -204,5 +359,19 @@
             </div>  
         </div>
     </div>
+
+    <!-- Script for navbar scroll effect -->
+    <script>
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('.header-main');
+            if (window.scrollY > 50) {
+                header.style.padding = '15px 5%';
+                header.style.background = 'var(--primary)';
+            } else {
+                header.style.padding = '20px 5%';
+                header.style.background = 'var(--gradient)';
+            }
+        });
+    </script>
 </body>
 </html>
