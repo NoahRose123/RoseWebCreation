@@ -1,8 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ['rosewebcreation.com'],
+    domains: ['localhost'],
   },
-};
+}
 
-module.exports = nextConfig;
+module.exports = nextConfig
