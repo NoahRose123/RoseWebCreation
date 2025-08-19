@@ -24,6 +24,7 @@ import {
 import Image from 'next/image'
 import Header from './components/Header'
 import Footer from './components/Footer'
+import { addBooking } from '../lib/firebase'
 
 export default function Home() {
   const [isVisible, setIsVisible] = useState(false)
@@ -164,41 +165,37 @@ export default function Home() {
     completionRate: 95
   }
 
-  const handleBookingSubmit = (e: React.FormEvent) => {
+  const handleBookingSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     
-    // Create new booking with unique ID and timestamp
-    const newBooking = {
-      id: Date.now(),
-      ...bookingData,
-      status: 'Pending' as const,
-      createdAt: new Date().toISOString()
+    try {
+      // Create new booking data
+      const newBooking = {
+        ...bookingData,
+        status: 'Pending' as const
+      }
+      
+      // Add booking to Firestore
+      await addBooking(newBooking)
+      
+      // Reset form and close modal
+      setShowBookingModal(false)
+      setBookingData({
+        name: '',
+        email: '',
+        phone: '',
+        service: '',
+        date: '',
+        time: '',
+        message: ''
+      })
+      
+      // Show success message
+      alert('Booking submitted successfully! We will contact you soon.')
+    } catch (error) {
+      console.error('Error submitting booking:', error)
+      alert('There was an error submitting your booking. Please try again.')
     }
-    
-    // Get existing bookings from localStorage
-    const existingBookings = localStorage.getItem('bookings')
-    const bookings = existingBookings ? JSON.parse(existingBookings) : []
-    
-    // Add new booking
-    bookings.push(newBooking)
-    
-    // Save back to localStorage
-    localStorage.setItem('bookings', JSON.stringify(bookings))
-    
-    // Reset form and close modal
-    setShowBookingModal(false)
-    setBookingData({
-      name: '',
-      email: '',
-      phone: '',
-      service: '',
-      date: '',
-      time: '',
-      message: ''
-    })
-    
-    // Show success message (you can add a toast notification here)
-    alert('Booking submitted successfully! We will contact you soon.')
   }
 
   return (

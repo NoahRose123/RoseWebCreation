@@ -1,0 +1,94 @@
+import { initializeApp } from "firebase/app";
+import { getFirestore, collection, addDoc, getDocs, updateDoc, deleteDoc, doc, query, orderBy } from "firebase/firestore";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAYFVAMd2lzqNLKekuTE2Mt404tuOq2mnk",
+  authDomain: "rosewebcreation.firebaseapp.com",
+  projectId: "rosewebcreation",
+  storageBucket: "rosewebcreation.firebasestorage.app",
+  messagingSenderId: "901821617734",
+  appId: "1:901821617734:web:2d2698126bde404f849c47",
+  measurementId: "G-XX9ERZJ5W7"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+
+// Initialize Firestore
+export const db = getFirestore(app);
+
+// Collection references
+export const bookingsCollection = collection(db, "bookings");
+
+// Booking functions
+export const addBooking = async (bookingData: any) => {
+  try {
+    const docRef = await addDoc(bookingsCollection, {
+      ...bookingData,
+      createdAt: new Date().toISOString(),
+      id: Date.now() // Generate unique ID
+    });
+    return docRef;
+  } catch (error) {
+    console.error("Error adding booking: ", error);
+    throw error;
+  }
+};
+
+export const getBookings = async () => {
+  try {
+    const q = query(bookingsCollection, orderBy("createdAt", "desc"));
+    const querySnapshot = await getDocs(q);
+    const bookings = querySnapshot.docs.map(doc => {
+      const data = doc.data();
+      return {
+        id: data.id,
+        name: data.name,
+        email: data.email,
+        phone: data.phone,
+        service: data.service,
+        date: data.date,
+        time: data.time,
+        message: data.message,
+        status: data.status,
+        createdAt: data.createdAt
+      };
+    });
+    return bookings;
+  } catch (error) {
+    console.error("Error getting bookings: ", error);
+    throw error;
+  }
+};
+
+export const updateBooking = async (id: number, status: string) => {
+  try {
+    const q = query(bookingsCollection);
+    const querySnapshot = await getDocs(q);
+    const bookingDoc = querySnapshot.docs.find(doc => doc.data().id === id);
+    
+    if (bookingDoc) {
+      await updateDoc(doc(db, "bookings", bookingDoc.id), {
+        status: status
+      });
+    }
+  } catch (error) {
+    console.error("Error updating booking: ", error);
+    throw error;
+  }
+};
+
+export const deleteBooking = async (id: number) => {
+  try {
+    const q = query(bookingsCollection);
+    const querySnapshot = await getDocs(q);
+    const bookingDoc = querySnapshot.docs.find(doc => doc.data().id === id);
+    
+    if (bookingDoc) {
+      await deleteDoc(doc(db, "bookings", bookingDoc.id));
+    }
+  } catch (error) {
+    console.error("Error deleting booking: ", error);
+    throw error;
+  }
+};

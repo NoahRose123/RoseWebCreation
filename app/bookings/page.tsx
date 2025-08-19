@@ -23,6 +23,7 @@ import {
 } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { getBookings, updateBooking, deleteBooking } from '../../lib/firebase'
 
 interface Booking {
   id: number
@@ -45,12 +46,18 @@ export default function BookingsPage() {
   const [bookings, setBookings] = useState<Booking[]>([])
   const [selectedStatus, setSelectedStatus] = useState<'all' | 'Confirmed' | 'Pending' | 'Cancelled'>('all')
 
-  // Load bookings from localStorage on component mount
+  // Load bookings from Firestore on component mount
   useEffect(() => {
-    const savedBookings = localStorage.getItem('bookings')
-    if (savedBookings) {
-      setBookings(JSON.parse(savedBookings))
+    const loadBookings = async () => {
+      try {
+        const firestoreBookings = await getBookings()
+        setBookings(firestoreBookings)
+      } catch (error) {
+        console.error('Error loading bookings:', error)
+      }
     }
+    
+    loadBookings()
   }, [])
 
   const handleCodeSubmit = (e: React.FormEvent) => {
@@ -63,18 +70,26 @@ export default function BookingsPage() {
     }
   }
 
-  const updateBookingStatus = (id: number, status: 'Confirmed' | 'Pending' | 'Cancelled') => {
-    const updatedBookings = bookings.map(booking => 
-      booking.id === id ? { ...booking, status } : booking
-    )
-    setBookings(updatedBookings)
-    localStorage.setItem('bookings', JSON.stringify(updatedBookings))
+  const updateBookingStatus = async (id: number, status: 'Confirmed' | 'Pending' | 'Cancelled') => {
+    try {
+      await updateBooking(id, status)
+      // Reload bookings from Firestore
+      const firestoreBookings = await getBookings()
+      setBookings(firestoreBookings)
+    } catch (error) {
+      console.error('Error updating booking status:', error)
+    }
   }
 
-  const deleteBooking = (id: number) => {
-    const updatedBookings = bookings.filter(booking => booking.id !== id)
-    setBookings(updatedBookings)
-    localStorage.setItem('bookings', JSON.stringify(updatedBookings))
+  const handleDeleteBooking = async (id: number) => {
+    try {
+      await deleteBooking(id)
+      // Reload bookings from Firestore
+      const firestoreBookings = await getBookings()
+      setBookings(firestoreBookings)
+    } catch (error) {
+      console.error('Error deleting booking:', error)
+    }
   }
 
   const downloadBookings = (status?: 'Confirmed' | 'Pending' | 'Cancelled') => {
@@ -542,10 +557,10 @@ export default function BookingsPage() {
                           <option value="Confirmed">Confirmed</option>
                           <option value="Cancelled">Cancelled</option>
                         </select>
-                        <button
-                          onClick={() => deleteBooking(booking.id)}
-                          className="p-1 text-red-600 hover:text-red-800 hover:bg-red-50 rounded"
-                        >
+                                                 <button
+                           onClick={() => handleDeleteBooking(booking.id)}
+                           className="p-1 text-red-600 hover:text-red-800 hover:bg-red-50 rounded"
+                         >
                           <X className="h-4 w-4" />
                         </button>
                       </div>
