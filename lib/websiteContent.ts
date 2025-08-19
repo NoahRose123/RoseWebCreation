@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect } from 'react'
+import { getWebsiteContent, updateWebsiteContent } from './firebase'
 
 export interface WebsiteContent {
   // Hero Section
@@ -68,27 +69,56 @@ const WebsiteContentContext = createContext<{
 export const useWebsiteContent = () => useContext(WebsiteContentContext)
 
 export const WebsiteContentProvider = ({ children }: { children: React.ReactNode }) => {
-  const [content, setContent] = useState<WebsiteContent>(() => {
-    if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('mobile-mountain-content')
-      return saved ? { ...defaultContent, ...JSON.parse(saved) } : defaultContent
-    }
-    return defaultContent
-  })
+  const [content, setContent] = useState<WebsiteContent>(defaultContent)
+  const [loading, setLoading] = useState(true)
 
-  const updateContent = (updates: Partial<WebsiteContent>) => {
-    const newContent = { ...content, ...updates }
-    setContent(newContent)
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('mobile-mountain-content', JSON.stringify(newContent))
+  // Load content from Firebase on mount
+  useEffect(() => {
+    const loadContent = async () => {
+      try {
+        const firebaseContent = await getWebsiteContent()
+        setContent(firebaseContent)
+      } catch (error) {
+        console.error('Error loading website content:', error)
+        // Keep default content if Firebase fails
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    loadContent()
+  }, [])
+
+  const updateContent = async (updates: Partial<WebsiteContent>) => {
+    try {
+      const newContent = { ...content, ...updates }
+      setContent(newContent)
+      await updateWebsiteContent(newContent)
+    } catch (error) {
+      console.error('Error updating website content:', error)
+      // Revert to previous content if update fails
+      setContent(content)
     }
   }
 
-  const resetContent = () => {
-    setContent(defaultContent)
-    if (typeof window !== 'undefined') {
-      localStorage.removeItem('mobile-mountain-content')
+  const resetContent = async () => {
+    try {
+      setContent(defaultContent)
+      await updateWebsiteContent(defaultContent)
+    } catch (error) {
+      console.error('Error resetting website content:', error)
     }
+  }
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading website content...</p>
+        </div>
+      </div>
+    )
   }
 
   return (

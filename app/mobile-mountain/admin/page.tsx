@@ -98,17 +98,9 @@ export default function MobileMountainAdminPage() {
       try {
         const firestoreBookings = await getBookings('mobile-mountain-bookings')
         setBookings(firestoreBookings)
-      } catch (error) {
-        console.error('Error loading bookings from Firestore:', error)
-        
-        // Fallback: Load from localStorage if Firestore fails
-        try {
-          const localBookings = JSON.parse(localStorage.getItem('mobile-mountain-bookings') || '[]')
-          setBookings(localBookings)
-        } catch (localError) {
-          console.error('Error loading bookings from localStorage:', localError)
-        }
-      }
+             } catch (error) {
+         console.error('Error loading bookings from Firestore:', error)
+       }
     }
     
     if (isAuthenticated) {
@@ -1002,11 +994,11 @@ export default function MobileMountainAdminPage() {
                   </div>
                 </div>
                 
-                <div className="mt-6 p-4 bg-green-50 border border-green-200 rounded-lg">
-                  <p className="text-green-800 text-sm">
-                    ✅ Changes are saved automatically and appear instantly on the website!
-                  </p>
-                </div>
+                                 <div className="mt-6 p-4 bg-green-50 border border-green-200 rounded-lg">
+                   <p className="text-green-800 text-sm">
+                     ✅ Changes are saved to Firebase and appear instantly on the website!
+                   </p>
+                 </div>
               </div>
             </motion.div>
           )}

@@ -206,39 +206,7 @@ export default function MobileMountainPage() {
       // Show a more user-friendly error message
       const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred'
       
-      // Fallback: Store booking locally if Firebase fails
-      if (errorMessage.includes('permissions') || errorMessage.includes('network')) {
-        // Store in localStorage as fallback
-        const existingBookings = JSON.parse(localStorage.getItem('mobile-mountain-bookings') || '[]')
-        const newBooking = {
-          ...bookingData,
-          status: 'Pending',
-          id: Date.now(),
-          createdAt: new Date().toISOString()
-        }
-        existingBookings.push(newBooking)
-        localStorage.setItem('mobile-mountain-bookings', JSON.stringify(existingBookings))
-        
-        // Reset form and close modal
-        setShowBookingModal(false)
-        setBookingData({
-          name: '',
-          email: '',
-          phone: '',
-          service: '',
-          date: '',
-          time: '',
-          message: ''
-        })
-        
-        // Show success message
-        setShowSuccessMessage(true)
-        setTimeout(() => setShowSuccessMessage(false), 5000)
-        
-        alert('Booking submitted successfully! We\'ll contact you soon to confirm.')
-      } else {
-        alert('There was an error submitting your booking. Please try again.')
-      }
+             alert('There was an error submitting your booking. Please try again.')
     } finally {
       setIsSubmitting(false)
     }
