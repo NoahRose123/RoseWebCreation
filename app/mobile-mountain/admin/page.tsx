@@ -62,7 +62,7 @@ export default function MobileMountainAdminPage() {
   const [error, setError] = useState('')
   const [bookings, setBookings] = useState<Booking[]>([])
   const [selectedStatus, setSelectedStatus] = useState<'all' | 'Confirmed' | 'Pending' | 'Cancelled'>('all')
-  const [activeTab, setActiveTab] = useState<'bookings' | 'availability' | 'settings'>('bookings')
+  const [activeTab, setActiveTab] = useState<'bookings' | 'availability' | 'settings' | 'website'>('bookings')
   const [availability, setAvailability] = useState<Availability[]>([
     { day: 'Monday', startTime: '08:00', endTime: '18:00', isAvailable: true },
     { day: 'Tuesday', startTime: '08:00', endTime: '18:00', isAvailable: true },
@@ -72,6 +72,18 @@ export default function MobileMountainAdminPage() {
     { day: 'Saturday', startTime: '09:00', endTime: '17:00', isAvailable: true },
     { day: 'Sunday', startTime: '10:00', endTime: '16:00', isAvailable: false }
   ])
+
+  // Function to get the actual date for a day of the week
+  const getDateForDay = (dayName: string) => {
+    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+    const today = new Date()
+    const currentDay = today.getDay()
+    const targetDay = days.indexOf(dayName)
+    const daysToAdd = (targetDay - currentDay + 7) % 7
+    const targetDate = new Date(today)
+    targetDate.setDate(today.getDate() + daysToAdd)
+    return targetDate.toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' })
+  }
 
   // Load bookings from Firestore on component mount
   useEffect(() => {
@@ -204,14 +216,14 @@ export default function MobileMountainAdminPage() {
           >
             <div className="text-center mb-8">
               <div className="flex items-center justify-center space-x-3 mb-4">
-                <Image
-                  src="/mobile-mountain-logo.png"
-                  alt="Noah's Dube Car Detailing"
-                  width={48}
-                  height={48}
-                  className="rounded-lg"
-                />
-                <h1 className="text-2xl font-bold text-gray-900">Admin Access</h1>
+                                 <Image
+                   src="/mobile-mountain-logo.png"
+                   alt="Mobile Mountain Detail"
+                   width={48}
+                   height={48}
+                   className="rounded-lg"
+                 />
+                 <h1 className="text-2xl font-bold text-gray-900">Admin Access</h1>
               </div>
               <p className="text-gray-600">Enter the admin code to access the dashboard</p>
             </div>
@@ -272,14 +284,14 @@ export default function MobileMountainAdminPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center space-x-3">
-              <Image
-                src="/mobile-mountain-logo.png"
-                alt="Noah's Dube Car Detailing"
-                width={32}
-                height={32}
-                className="rounded-lg"
-              />
-              <h1 className="text-xl font-bold text-gray-900">Admin Dashboard</h1>
+                             <Image
+                 src="/mobile-mountain-logo.png"
+                 alt="Mobile Mountain Detail"
+                 width={32}
+                 height={32}
+                 className="rounded-lg"
+               />
+               <h1 className="text-xl font-bold text-gray-900">Admin Dashboard</h1>
             </div>
             <Link 
               href="/mobile-mountain"
@@ -315,21 +327,96 @@ export default function MobileMountainAdminPage() {
             >
               Availability
             </button>
-            <button
-              onClick={() => setActiveTab('settings')}
-              className={`py-2 px-1 border-b-2 font-medium text-sm ${
-                activeTab === 'settings'
-                  ? 'border-blue-500 text-blue-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-              }`}
-            >
-              Settings
-            </button>
+                         <button
+               onClick={() => setActiveTab('settings')}
+               className={`py-2 px-1 border-b-2 font-medium text-sm ${
+                 activeTab === 'settings'
+                   ? 'border-blue-500 text-blue-600'
+                   : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+               }`}
+             >
+               Settings
+             </button>
+             <button
+               onClick={() => setActiveTab('website')}
+               className={`py-2 px-1 border-b-2 font-medium text-sm ${
+                 activeTab === 'website'
+                   ? 'border-blue-500 text-blue-600'
+                   : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+               }`}
+             >
+               Website
+             </button>
           </nav>
         </div>
 
-        {/* Analytics Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                 {/* Analytics Cards */}
+         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+           {/* Pie Chart */}
+           <motion.div
+             initial={{ opacity: 0, y: 20 }}
+             animate={{ opacity: 1, y: 0 }}
+             transition={{ delay: 0.4 }}
+             className="md:col-span-2 bg-white rounded-lg shadow p-6"
+           >
+             <h3 className="text-lg font-semibold text-gray-900 mb-4">Booking Status Distribution</h3>
+             <div className="flex items-center justify-center">
+               <div className="relative w-32 h-32">
+                 <svg className="w-32 h-32 transform -rotate-90" viewBox="0 0 36 36">
+                   <path
+                     d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                     fill="none"
+                     stroke="#e5e7eb"
+                     strokeWidth="3"
+                   />
+                   {analytics.total > 0 && (
+                     <>
+                       <path
+                         d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                         fill="none"
+                         stroke="#10b981"
+                         strokeWidth="3"
+                         strokeDasharray={`${(analytics.confirmed / analytics.total) * 100} ${100 - (analytics.confirmed / analytics.total) * 100}`}
+                       />
+                       <path
+                         d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                         fill="none"
+                         stroke="#f59e0b"
+                         strokeWidth="3"
+                         strokeDasharray={`${(analytics.pending / analytics.total) * 100} ${100 - (analytics.pending / analytics.total) * 100}`}
+                         strokeDashoffset={`-${(analytics.confirmed / analytics.total) * 100}`}
+                       />
+                       <path
+                         d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                         fill="none"
+                         stroke="#ef4444"
+                         strokeWidth="3"
+                         strokeDasharray={`${(analytics.cancelled / analytics.total) * 100} ${100 - (analytics.cancelled / analytics.total) * 100}`}
+                         strokeDashoffset={`-${((analytics.confirmed + analytics.pending) / analytics.total) * 100}`}
+                       />
+                     </>
+                   )}
+                 </svg>
+                 <div className="absolute inset-0 flex items-center justify-center">
+                   <span className="text-2xl font-bold text-gray-900">{analytics.total}</span>
+                 </div>
+               </div>
+               <div className="ml-6 space-y-2">
+                 <div className="flex items-center">
+                   <div className="w-3 h-3 bg-green-500 rounded-full mr-2"></div>
+                   <span className="text-sm text-gray-600">Confirmed: {analytics.confirmed}</span>
+                 </div>
+                 <div className="flex items-center">
+                   <div className="w-3 h-3 bg-yellow-500 rounded-full mr-2"></div>
+                   <span className="text-sm text-gray-600">Pending: {analytics.pending}</span>
+                 </div>
+                 <div className="flex items-center">
+                   <div className="w-3 h-3 bg-red-500 rounded-full mr-2"></div>
+                   <span className="text-sm text-gray-600">Cancelled: {analytics.cancelled}</span>
+                 </div>
+               </div>
+             </div>
+           </motion.div>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -539,7 +626,9 @@ export default function MobileMountainAdminPage() {
                           onChange={(e) => updateAvailability(index, 'isAvailable', e.target.checked)}
                           className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
                         />
-                        <span className="ml-2 text-sm font-medium text-gray-900">{day.day}</span>
+                                                 <span className="ml-2 text-sm font-medium text-gray-900">
+                           {day.day} ({getDateForDay(day.day)})
+                         </span>
                       </label>
                     </div>
                     
@@ -589,53 +678,8 @@ export default function MobileMountainAdminPage() {
               <p className="text-sm text-gray-600">Manage your business settings</p>
             </div>
             
-            <div className="p-6">
-              <div className="space-y-6">
-                <div>
-                  <h3 className="text-lg font-medium text-gray-900 mb-4">Business Information</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Business Name
-                      </label>
-                      <input
-                        type="text"
-                        defaultValue="Noah's Dube Car Detailing"
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Phone Number
-                      </label>
-                      <input
-                        type="tel"
-                        defaultValue="(555) 123-4567"
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Email
-                      </label>
-                      <input
-                        type="email"
-                        defaultValue="info@noahsdubedetailing.com"
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Service Area
-                      </label>
-                      <input
-                        type="text"
-                        defaultValue="25-mile radius"
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      />
-                    </div>
-                  </div>
-                </div>
+                         <div className="p-6">
+               <div className="space-y-6">
                 
                 <div>
                   <h3 className="text-lg font-medium text-gray-900 mb-4">Services & Pricing</h3>
@@ -688,9 +732,174 @@ export default function MobileMountainAdminPage() {
                 </button>
               </div>
             </div>
-          </motion.div>
-        )}
-      </div>
-    </div>
-  )
-}
+                     </motion.div>
+         )}
+
+         {activeTab === 'website' && (
+           <motion.div
+             initial={{ opacity: 0 }}
+             animate={{ opacity: 1 }}
+             className="bg-white rounded-lg shadow"
+           >
+             <div className="px-6 py-4 border-b border-gray-200">
+               <h2 className="text-lg font-semibold text-gray-900">Website Management</h2>
+               <p className="text-sm text-gray-600">Customize your website content and settings</p>
+             </div>
+             
+             <div className="p-6">
+               <div className="space-y-6">
+                 <div>
+                   <h3 className="text-lg font-medium text-gray-900 mb-4">Business Information</h3>
+                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                     <div>
+                       <label className="block text-sm font-medium text-gray-700 mb-2">
+                         Business Name
+                       </label>
+                       <input
+                         type="text"
+                         defaultValue="Mobile Mountain Detail"
+                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                       />
+                     </div>
+                     <div>
+                       <label className="block text-sm font-medium text-gray-700 mb-2">
+                         Phone Number
+                       </label>
+                       <input
+                         type="tel"
+                         defaultValue="(555) 123-4567"
+                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                       />
+                     </div>
+                     <div>
+                       <label className="block text-sm font-medium text-gray-700 mb-2">
+                         Email
+                       </label>
+                       <input
+                         type="email"
+                         defaultValue="info@mobilemountaindetail.com"
+                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                       />
+                     </div>
+                     <div>
+                       <label className="block text-sm font-medium text-gray-700 mb-2">
+                         Service Area
+                       </label>
+                       <input
+                         type="text"
+                         defaultValue="25-mile radius"
+                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                       />
+                     </div>
+                   </div>
+                 </div>
+
+                 <div>
+                   <h3 className="text-lg font-medium text-gray-900 mb-4">Hero Section</h3>
+                   <div className="space-y-4">
+                     <div>
+                       <label className="block text-sm font-medium text-gray-700 mb-2">
+                         Main Headline
+                       </label>
+                       <input
+                         type="text"
+                         defaultValue="Mobile Mountain Detail"
+                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                       />
+                     </div>
+                     <div>
+                       <label className="block text-sm font-medium text-gray-700 mb-2">
+                         Subtitle
+                       </label>
+                       <textarea
+                         rows={3}
+                         defaultValue="We bring the mountain of quality car detailing services right to your doorstep. Professional, convenient, and guaranteed satisfaction."
+                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                       />
+                     </div>
+                   </div>
+                 </div>
+
+                 <div>
+                   <h3 className="text-lg font-medium text-gray-900 mb-4">Services & Pricing</h3>
+                   <div className="space-y-4">
+                     <div className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
+                       <div>
+                         <h4 className="font-medium text-gray-900">Basic Wash</h4>
+                         <p className="text-sm text-gray-600">Exterior wash, tire cleaning, interior vacuum</p>
+                       </div>
+                       <div className="flex items-center space-x-2">
+                         <span className="text-lg font-bold text-gray-900">$45</span>
+                         <button className="text-blue-600 hover:text-blue-700">
+                           <Edit className="h-4 w-4" />
+                         </button>
+                       </div>
+                     </div>
+                     
+                     <div className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
+                       <div>
+                         <h4 className="font-medium text-gray-900">Premium Detail</h4>
+                         <p className="text-sm text-gray-600">Complete interior and exterior detailing</p>
+                       </div>
+                       <div className="flex items-center space-x-2">
+                         <span className="text-lg font-bold text-gray-900">$125</span>
+                         <button className="text-blue-600 hover:text-blue-700">
+                           <Edit className="h-4 w-4" />
+                         </button>
+                       </div>
+                     </div>
+                     
+                     <div className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
+                       <div>
+                         <h4 className="font-medium text-gray-900">Ultimate Detail</h4>
+                         <p className="text-sm text-gray-600">Premium service with paint correction</p>
+                       </div>
+                       <div className="flex items-center space-x-2">
+                         <span className="text-lg font-bold text-gray-900">$200</span>
+                         <button className="text-blue-600 hover:text-blue-700">
+                           <Edit className="h-4 w-4" />
+                         </button>
+                       </div>
+                     </div>
+                   </div>
+                 </div>
+
+                 <div>
+                   <h3 className="text-lg font-medium text-gray-900 mb-4">Contact Information</h3>
+                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                     <div>
+                       <label className="block text-sm font-medium text-gray-700 mb-2">
+                         Footer Phone
+                       </label>
+                       <input
+                         type="tel"
+                         defaultValue="(555) 123-4567"
+                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                       />
+                     </div>
+                     <div>
+                       <label className="block text-sm font-medium text-gray-700 mb-2">
+                         Footer Email
+                       </label>
+                       <input
+                         type="email"
+                         defaultValue="info@mobilemountaindetail.com"
+                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                       />
+                     </div>
+                   </div>
+                 </div>
+               </div>
+               
+               <div className="mt-6">
+                 <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition-colors duration-300">
+                   Save Website Changes
+                 </button>
+               </div>
+             </div>
+           </motion.div>
+         )}
+       </div>
+     </div>
+   )
+ }

@@ -40,7 +40,7 @@ export default function MobileMountainHeader() {
           >
             <Image
               src="/mobile-mountain-logo.png"
-              alt="Noah's Dube Car Detailing"
+                             alt="Mobile Mountain Detail"
               width={40}
               height={40}
               className="rounded-lg"
@@ -48,7 +48,7 @@ export default function MobileMountainHeader() {
             <span className={`font-bold text-xl transition-colors duration-300 ${
               isScrolled ? 'text-gray-900' : 'text-white'
             }`}>
-              Noah's Dube Car Detailing
+              Mobile Mountain Detail
             </span>
           </motion.div>
 

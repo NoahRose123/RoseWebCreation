@@ -223,7 +223,7 @@ export default function MobileMountainPage() {
               className="space-y-8"
             >
                              <h1 className="text-5xl lg:text-6xl font-bold text-white leading-tight">
-                 Noah's Dube <span className="text-blue-400">Car Detailing</span>
+                 Mobile Mountain <span className="text-blue-400">Detail</span>
                </h1>
               <p className="text-xl text-gray-300 leading-relaxed">
                 We bring the mountain of quality car detailing services right to your doorstep. Professional, convenient, and guaranteed satisfaction.
@@ -251,14 +251,32 @@ export default function MobileMountainPage() {
               className="relative"
             >
               <div className="relative">
-                                 <Image
-                   src="/mobile-mountain-hero.jpg"
-                   alt="Noah's Dube Car Detailing - Professional Car Detailing"
-                   width={600}
-                   height={400}
-                   className="w-full h-auto rounded-lg shadow-2xl"
-                   priority
-                 />
+                                 <div className="grid grid-cols-2 gap-4">
+                   <Image
+                     src="/mobile-mountain-hero.jpg"
+                     alt="Mobile Mountain Detail - Professional Car Detailing"
+                     width={300}
+                     height={200}
+                     className="w-full h-auto rounded-lg shadow-2xl"
+                     priority
+                   />
+                   <Image
+                     src="/mobile-mountain-hero-2.jpg"
+                     alt="Mobile Mountain Detail - Professional Car Detailing"
+                     width={300}
+                     height={200}
+                     className="w-full h-auto rounded-lg shadow-2xl"
+                     priority
+                   />
+                   <Image
+                     src="/mobile-mountain-hero-3.jpg"
+                     alt="Mobile Mountain Detail - Professional Car Detailing"
+                     width={300}
+                     height={200}
+                     className="w-full h-auto rounded-lg shadow-2xl col-span-2"
+                     priority
+                   />
+                 </div>
               </div>
             </motion.div>
           </div>

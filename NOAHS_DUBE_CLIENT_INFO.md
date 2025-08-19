@@ -1,8 +1,8 @@
-# Noah's Dube Car Detailing - Client Information Package
+# Mobile Mountain Detail - Client Information Package
 
 ## 🚗 **Business Overview**
 
-### **Business Name**: Noah's Dube Car Detailing
+### **Business Name**: Mobile Mountain Detail
 ### **Service Type**: Mobile Car Detailing Service
 ### **Website URL**: `/mobile-mountain` (on your domain)
 
@@ -11,7 +11,7 @@
 ## 📋 **Complete Website Features**
 
 ### **🎨 Visual Design**
-- **Logo**: Custom "Noah's Dube Car Detailing" logo with transparent background
+- **Logo**: Custom "Mobile Mountain Detail" logo with transparent background
 - **Hero Image**: Professional car detailing showcase image
 - **Color Scheme**: Blue and gray professional theme
 - **Responsive Design**: Works perfectly on all devices (mobile, tablet, desktop)
@@ -19,7 +19,7 @@
 ### **📱 Website Sections**
 
 #### **1. Hero Section**
-- **Headline**: "Noah's Dube Car Detailing"
+- **Headline**: "Mobile Mountain Detail"
 - **Subtitle**: Professional mobile car detailing services
 - **Call-to-Action**: "Book Appointment" button
 - **Background**: Professional car detailing image
@@ -56,7 +56,7 @@
 ## 🔥 **Technical Features**
 
 ### **Firebase Integration**
-- **Database**: Separate collection for Noah's Dube bookings (`mobile-mountain-bookings`)
+- **Database**: Separate collection for Mobile Mountain Detail bookings (`mobile-mountain-bookings`)
 - **Real-time**: Instant booking submissions
 - **Secure**: Protected data storage
 - **Backup**: Automatic data backup
@@ -179,7 +179,7 @@
 ## 📞 **Contact Information**
 
 ### **Business Details**
-- **Business Name**: Noah's Dube Car Detailing
+- **Business Name**: Mobile Mountain Detail
 - **Service Type**: Mobile Car Detailing
 - **Coverage Area**: 25-mile radius
 - **Operating Hours**: 
@@ -251,6 +251,6 @@
 
 ---
 
-**Noah's Dube Car Detailing** - Professional mobile car detailing services that come to you!
+**Mobile Mountain Detail** - Professional mobile car detailing services that come to you!
 
 *Website developed by Rose Web Creation*
