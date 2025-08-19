@@ -245,6 +245,12 @@ export default function Home() {
                     <div className="w-3 h-3 bg-green-400 rounded-full"></div>
                   </div>
                   
+                  {/* Dashboard Title */}
+                  <div className="text-center mb-4">
+                    <h3 className="text-lg font-bold text-gray-800">Business Dashboard</h3>
+                    <p className="text-xs text-gray-600">Real-time Analytics & Insights</p>
+                  </div>
+                  
                   {/* Analytics Dashboard */}
                   <div className="grid grid-cols-2 gap-4 mb-4">
                     <div className="bg-gradient-to-br from-blue-100 to-blue-200 rounded-lg p-4">
@@ -269,12 +275,15 @@ export default function Home() {
                   
                   {/* Chart Placeholder */}
                   <div className="bg-gray-100 rounded-lg p-4 h-20 flex items-center justify-center">
-                    <div className="flex space-x-1">
-                      <div className="w-2 bg-blue-500 rounded-t h-8"></div>
-                      <div className="w-2 bg-blue-500 rounded-t h-12"></div>
-                      <div className="w-2 bg-blue-500 rounded-t h-6"></div>
-                      <div className="w-2 bg-blue-500 rounded-t h-10"></div>
-                      <div className="w-2 bg-blue-500 rounded-t h-8"></div>
+                    <div className="text-center">
+                      <p className="text-xs text-gray-600 mb-2">Analytics Chart</p>
+                      <div className="flex space-x-1">
+                        <div className="w-2 bg-blue-500 rounded-t h-8"></div>
+                        <div className="w-2 bg-blue-500 rounded-t h-12"></div>
+                        <div className="w-2 bg-blue-500 rounded-t h-6"></div>
+                        <div className="w-2 bg-blue-500 rounded-t h-10"></div>
+                        <div className="w-2 bg-blue-500 rounded-t h-8"></div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -285,6 +294,9 @@ export default function Home() {
                     <div className="w-2 h-2 bg-red-400 rounded-full"></div>
                     <div className="w-2 h-2 bg-yellow-400 rounded-full"></div>
                     <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+                  </div>
+                  <div className="text-center mb-3">
+                    <p className="text-xs font-medium text-gray-700">Modern Website</p>
                   </div>
                   <div className="bg-gradient-to-br from-primary-100 to-primary-200 rounded-lg p-3">
                     <div className="h-2 bg-white rounded mb-2"></div>
@@ -300,9 +312,28 @@ export default function Home() {
                     <div className="w-1.5 h-1.5 bg-yellow-400 rounded-full"></div>
                     <div className="w-1.5 h-1.5 bg-green-400 rounded-full"></div>
                   </div>
+                  <div className="text-center mb-2">
+                    <p className="text-xs font-medium text-gray-700">Mobile App</p>
+                  </div>
                   <div className="bg-gradient-to-br from-purple-100 to-purple-200 rounded-lg p-2">
                     <div className="h-1.5 bg-white rounded mb-1"></div>
                     <div className="h-1.5 bg-white rounded w-2/3"></div>
+                  </div>
+                </div>
+                
+                {/* Software Development */}
+                <div className="bg-white rounded-xl shadow-xl p-3 transform -rotate-2 hover:rotate-0 transition-transform duration-500 ml-12 mt-4">
+                  <div className="flex space-x-1 mb-2">
+                    <div className="w-1.5 h-1.5 bg-red-400 rounded-full"></div>
+                    <div className="w-1.5 h-1.5 bg-yellow-400 rounded-full"></div>
+                    <div className="w-1.5 h-1.5 bg-green-400 rounded-full"></div>
+                  </div>
+                  <div className="text-center mb-2">
+                    <p className="text-xs font-medium text-gray-700">Custom Software</p>
+                  </div>
+                  <div className="bg-gradient-to-br from-orange-100 to-orange-200 rounded-lg p-2">
+                    <div className="h-1.5 bg-white rounded mb-1"></div>
+                    <div className="h-1.5 bg-white rounded w-1/2"></div>
                   </div>
                 </div>
               </div>

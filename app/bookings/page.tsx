@@ -43,7 +43,6 @@ export default function BookingsPage() {
   const [error, setError] = useState('')
   const [bookings, setBookings] = useState<Booking[]>([])
   const [selectedStatus, setSelectedStatus] = useState<'all' | 'Confirmed' | 'Pending' | 'Cancelled'>('all')
-  const [showAnalytics, setShowAnalytics] = useState(false)
 
   // Load bookings from localStorage on component mount
   useEffect(() => {
@@ -241,24 +240,8 @@ export default function BookingsPage() {
                 <span className="font-bold text-lg text-secondary-900">Bookings Dashboard</span>
               </div>
             </div>
-            <div className="flex items-center space-x-4">
-              <button
-                onClick={() => setShowAnalytics(!showAnalytics)}
-                className="flex items-center space-x-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
-              >
-                <BarChart3 className="h-4 w-4" />
-                <span>Analytics</span>
-              </button>
-              <button
-                onClick={() => downloadBookings()}
-                className="flex items-center space-x-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
-              >
-                <Download className="h-4 w-4" />
-                <span>Download All</span>
-              </button>
-              <div className="text-sm text-secondary-600">
-                {bookings.length} total bookings
-              </div>
+            <div className="text-sm text-secondary-600">
+              {bookings.length} total bookings
             </div>
           </div>
         </div>
@@ -271,14 +254,8 @@ export default function BookingsPage() {
           animate={{ opacity: 1, y: 0 }}
           className="space-y-6"
         >
-          {/* Analytics Section */}
-          {showAnalytics && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              exit={{ opacity: 0, height: 0 }}
-              className="bg-white rounded-xl shadow-sm border p-6 mb-6"
-            >
+          {/* Analytics Section - Always Visible */}
+          <div className="bg-white rounded-xl shadow-sm border p-6 mb-6">
               <h3 className="text-xl font-semibold text-secondary-900 mb-6 flex items-center">
                 <PieChart className="h-5 w-5 mr-2" />
                 Analytics Overview
@@ -382,92 +359,59 @@ export default function BookingsPage() {
                       <TrendingUp className="h-8 w-8 text-blue-600" />
                     </div>
                   </div>
-                </div>
-              </div>
-            </motion.div>
-          )}
+                                 </div>
+               </div>
+           </div>
 
-          {/* Clickable Status Headers */}
-          <div className="bg-white rounded-xl shadow-sm border p-6 mb-6">
-            <div className="flex flex-wrap gap-4">
-              <button
-                onClick={() => setSelectedStatus('all')}
-                className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-colors ${
-                  selectedStatus === 'all' 
-                    ? 'bg-primary-600 text-white' 
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                }`}
-              >
-                <Calendar className="h-4 w-4" />
-                <span>All ({bookings.length})</span>
-              </button>
-              <button
-                onClick={() => setSelectedStatus('Confirmed')}
-                className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-colors ${
-                  selectedStatus === 'Confirmed' 
-                    ? 'bg-green-600 text-white' 
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                }`}
-              >
-                <CheckCircle className="h-4 w-4" />
-                <span>Confirmed ({bookings.filter(b => b.status === 'Confirmed').length})</span>
-              </button>
-              <button
-                onClick={() => setSelectedStatus('Pending')}
-                className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-colors ${
-                  selectedStatus === 'Pending' 
-                    ? 'bg-yellow-600 text-white' 
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                }`}
-              >
-                <Clock className="h-4 w-4" />
-                <span>Pending ({bookings.filter(b => b.status === 'Pending').length})</span>
-              </button>
-              <button
-                onClick={() => setSelectedStatus('Cancelled')}
-                className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-colors ${
-                  selectedStatus === 'Cancelled' 
-                    ? 'bg-red-600 text-white' 
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                }`}
-              >
-                <X className="h-4 w-4" />
-                <span>Cancelled ({bookings.filter(b => b.status === 'Cancelled').length})</span>
-              </button>
+                      {/* Clickable Status Headers */}
+            <div className="bg-white rounded-xl shadow-sm border p-6 mb-6">
+              <div className="flex flex-wrap gap-4">
+                <button
+                  onClick={() => setSelectedStatus('all')}
+                  className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-colors ${
+                    selectedStatus === 'all' 
+                      ? 'bg-primary-600 text-white' 
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  <Calendar className="h-4 w-4" />
+                  <span>All ({bookings.length})</span>
+                </button>
+                <button
+                  onClick={() => setSelectedStatus('Confirmed')}
+                  className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-colors ${
+                    selectedStatus === 'Confirmed' 
+                      ? 'bg-green-600 text-white' 
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  <CheckCircle className="h-4 w-4" />
+                  <span>Confirmed ({bookings.filter(b => b.status === 'Confirmed').length})</span>
+                </button>
+                <button
+                  onClick={() => setSelectedStatus('Pending')}
+                  className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-colors ${
+                    selectedStatus === 'Pending' 
+                      ? 'bg-yellow-600 text-white' 
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  <Clock className="h-4 w-4" />
+                  <span>Pending ({bookings.filter(b => b.status === 'Pending').length})</span>
+                </button>
+                <button
+                  onClick={() => setSelectedStatus('Cancelled')}
+                  className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-colors ${
+                    selectedStatus === 'Cancelled' 
+                      ? 'bg-red-600 text-white' 
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  <X className="h-4 w-4" />
+                  <span>Cancelled ({bookings.filter(b => b.status === 'Cancelled').length})</span>
+                </button>
+              </div>
             </div>
-            
-            {/* Download buttons for each status */}
-            <div className="flex flex-wrap gap-2 mt-4">
-              <button
-                onClick={() => downloadBookings()}
-                className="flex items-center space-x-2 px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700 transition-colors"
-              >
-                <Download className="h-3 w-3" />
-                <span>Download All</span>
-              </button>
-              <button
-                onClick={() => downloadBookings('Confirmed')}
-                className="flex items-center space-x-2 px-3 py-1 bg-green-600 text-white text-sm rounded hover:bg-green-700 transition-colors"
-              >
-                <Download className="h-3 w-3" />
-                <span>Download Confirmed</span>
-              </button>
-              <button
-                onClick={() => downloadBookings('Pending')}
-                className="flex items-center space-x-2 px-3 py-1 bg-yellow-600 text-white text-sm rounded hover:bg-yellow-700 transition-colors"
-              >
-                <Download className="h-3 w-3" />
-                <span>Download Pending</span>
-              </button>
-              <button
-                onClick={() => downloadBookings('Cancelled')}
-                className="flex items-center space-x-2 px-3 py-1 bg-red-600 text-white text-sm rounded hover:bg-red-700 transition-colors"
-              >
-                <Download className="h-3 w-3" />
-                <span>Download Cancelled</span>
-              </button>
-            </div>
-          </div>
 
           {/* Bookings List */}
           <div className="bg-white rounded-xl shadow-sm border">
@@ -571,13 +515,66 @@ export default function BookingsPage() {
                   </motion.div>
                 ))}
               </div>
-            )}
-          </div>
-        </motion.div>
-      </div>
-    </div>
-  )
-}
+                         )}
+             
+             {/* Download Section - Only show when there are bookings */}
+             {filteredBookings.length > 0 && (
+               <div className="p-6 border-t bg-gray-50">
+                 <h3 className="text-lg font-semibold text-secondary-900 mb-4 flex items-center">
+                   <Download className="h-5 w-5 mr-2" />
+                   Download Data
+                 </h3>
+                 <div className="flex flex-wrap gap-3">
+                   <button
+                     onClick={() => downloadBookings()}
+                     className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                   >
+                     <Download className="h-4 w-4" />
+                     <span>Download All Bookings</span>
+                   </button>
+                   {selectedStatus === 'all' && (
+                     <>
+                       <button
+                         onClick={() => downloadBookings('Confirmed')}
+                         className="flex items-center space-x-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+                       >
+                         <Download className="h-4 w-4" />
+                         <span>Download Confirmed Only</span>
+                       </button>
+                       <button
+                         onClick={() => downloadBookings('Pending')}
+                         className="flex items-center space-x-2 px-4 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition-colors"
+                       >
+                         <Download className="h-4 w-4" />
+                         <span>Download Pending Only</span>
+                       </button>
+                       <button
+                         onClick={() => downloadBookings('Cancelled')}
+                         className="flex items-center space-x-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+                       >
+                         <Download className="h-4 w-4" />
+                         <span>Download Cancelled Only</span>
+                       </button>
+                     </>
+                   )}
+                   {selectedStatus !== 'all' && (
+                     <button
+                       onClick={() => downloadBookings(selectedStatus)}
+                       className="flex items-center space-x-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
+                     >
+                       <Download className="h-4 w-4" />
+                       <span>Download {selectedStatus} Bookings</span>
+                     </button>
+                   )}
+                 </div>
+               </div>
+             )}
+           </div>
+         </motion.div>
+       </div>
+     </div>
+   )
+ }
 
 
 
