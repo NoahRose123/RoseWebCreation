@@ -28,8 +28,10 @@ import Image from 'next/image'
 import Header from '../components/MobileMountainHeader'
 import Footer from '../components/MobileMountainFooter'
 import { addBooking } from '../../lib/firebase'
+import { useWebsiteContent } from '../../lib/websiteContent'
 
 export default function MobileMountainPage() {
+  const { content } = useWebsiteContent()
   const [isVisible, setIsVisible] = useState(false)
   const [showBookingModal, setShowBookingModal] = useState(false)
   const [selectedService, setSelectedService] = useState('')
@@ -247,7 +249,7 @@ export default function MobileMountainPage() {
       <Header />
       
              {/* Hero Section */}
-       <section id="home" className="bg-gradient-to-br from-gray-900 via-blue-900 to-gray-800 min-h-[80vh] flex items-center justify-center relative overflow-hidden pt-20 md:pt-0">
+       <section id="home" className="bg-gradient-to-br from-gray-900 via-blue-900 to-gray-800 min-h-[60vh] flex items-center justify-center relative overflow-hidden pt-20 md:pt-0">
         <div className="absolute inset-0 bg-gradient-to-br from-gray-800/50 to-blue-900/50"></div>
         <div className="container-custom section-padding relative z-10">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
@@ -258,10 +260,10 @@ export default function MobileMountainPage() {
               className="space-y-8"
             >
                              <h1 className="text-5xl lg:text-6xl font-bold text-white leading-tight">
-                 Mobile Mountain <span className="text-blue-400">Detail</span>
+                 {content.heroTitle}
                </h1>
               <p className="text-xl text-gray-300 leading-relaxed">
-                We bring the mountain of quality car detailing services right to your doorstep. Professional, convenient, and guaranteed satisfaction.
+                {content.heroSubtitle}
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <button 
@@ -290,32 +292,32 @@ export default function MobileMountainPage() {
                    <Image
                      src="/mobile-mountain-hero.jpg"
                      alt="Mobile Mountain Detail - Professional Car Detailing"
-                     width={250}
-                     height={150}
+                     width={200}
+                     height={120}
                      className="w-full h-auto rounded-lg shadow-2xl"
                      priority
                    />
                    <Image
                      src="/mobile-mountain-hero-2.jpg"
                      alt="Mobile Mountain Detail - Professional Car Detailing"
-                     width={250}
-                     height={150}
+                     width={200}
+                     height={120}
                      className="w-full h-auto rounded-lg shadow-2xl"
                      priority
                    />
                    <Image
                      src="/mobile-mountain-hero-3.jpg"
                      alt="Mobile Mountain Detail - Professional Car Detailing"
-                     width={250}
-                     height={150}
+                     width={200}
+                     height={120}
                      className="w-full h-auto rounded-lg shadow-2xl"
                      priority
                    />
                    <Image
                      src="/mobile-mountain-hero-4.jpg"
                      alt="Mobile Mountain Detail - Professional Car Detailing"
-                     width={250}
-                     height={150}
+                     width={200}
+                     height={120}
                      className="w-full h-auto rounded-lg shadow-2xl"
                      priority
                    />
@@ -344,10 +346,10 @@ export default function MobileMountainPage() {
             className="text-center mb-16"
           >
             <h2 className="text-4xl font-bold text-gray-900 mb-4">
-              Our Detailing Services
+              {content.servicesTitle}
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Professional mobile car detailing services that bring the mountain of quality right to your location.
+              {content.servicesSubtitle}
             </p>
           </motion.div>
           

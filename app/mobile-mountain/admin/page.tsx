@@ -34,6 +34,7 @@ import {
 import Image from 'next/image'
 import Link from 'next/link'
 import { getBookings, updateBooking, deleteBooking } from '../../../lib/firebase'
+import { useWebsiteContent } from '../../../lib/websiteContent'
 
 interface Booking {
   id: number
@@ -56,6 +57,7 @@ interface Availability {
 }
 
 export default function MobileMountainAdminPage() {
+  const { content, updateContent } = useWebsiteContent()
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [code, setCode] = useState('')
   const [showPassword, setShowPassword] = useState(false)
@@ -837,170 +839,177 @@ export default function MobileMountainAdminPage() {
            </motion.div>
          )}
 
-         {activeTab === 'website' && (
-           <motion.div
-             initial={{ opacity: 0 }}
-             animate={{ opacity: 1 }}
-             className="bg-white rounded-lg shadow"
-           >
-             <div className="px-6 py-4 border-b border-gray-200">
-               <h2 className="text-lg font-semibold text-gray-900">Website Management</h2>
-               <p className="text-sm text-gray-600">Customize your website content and settings</p>
-             </div>
-             
-             <div className="p-6">
-               <div className="space-y-6">
-                 <div>
-                   <h3 className="text-lg font-medium text-gray-900 mb-4">Business Information</h3>
-                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                     <div>
-                       <label className="block text-sm font-medium text-gray-700 mb-2">
-                         Business Name
-                       </label>
-                       <input
-                         type="text"
-                         defaultValue="Mobile Mountain Detail"
-                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                       />
-                     </div>
-                     <div>
-                       <label className="block text-sm font-medium text-gray-700 mb-2">
-                         Phone Number
-                       </label>
-                       <input
-                         type="tel"
-                         defaultValue="(555) 123-4567"
-                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                       />
-                     </div>
-                     <div>
-                       <label className="block text-sm font-medium text-gray-700 mb-2">
-                         Email
-                       </label>
-                       <input
-                         type="email"
-                         defaultValue="info@mobilemountaindetail.com"
-                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                       />
-                     </div>
-                     <div>
-                       <label className="block text-sm font-medium text-gray-700 mb-2">
-                         Service Area
-                       </label>
-                       <input
-                         type="text"
-                         defaultValue="25-mile radius"
-                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                       />
-                     </div>
-                   </div>
-                 </div>
+                   {activeTab === 'website' && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="bg-white rounded-lg shadow"
+            >
+              <div className="px-6 py-4 border-b border-gray-200">
+                <h2 className="text-lg font-semibold text-gray-900">Real-Time Website Content Editor</h2>
+                <p className="text-sm text-gray-600">Edit website content and see changes instantly</p>
+              </div>
+              
+              <div className="p-6">
+                <div className="space-y-6">
+                  <div>
+                    <h3 className="text-lg font-medium text-gray-900 mb-4">Hero Section</h3>
+                    <div className="space-y-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Main Headline
+                        </label>
+                        <input
+                          type="text"
+                          value={content.heroTitle}
+                          onChange={(e) => updateContent({ heroTitle: e.target.value })}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Subtitle
+                        </label>
+                        <textarea
+                          rows={3}
+                          value={content.heroSubtitle}
+                          onChange={(e) => updateContent({ heroSubtitle: e.target.value })}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        />
+                      </div>
+                    </div>
+                  </div>
 
-                 <div>
-                   <h3 className="text-lg font-medium text-gray-900 mb-4">Hero Section</h3>
-                   <div className="space-y-4">
-                     <div>
-                       <label className="block text-sm font-medium text-gray-700 mb-2">
-                         Main Headline
-                       </label>
-                       <input
-                         type="text"
-                         defaultValue="Mobile Mountain Detail"
-                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                       />
-                     </div>
-                     <div>
-                       <label className="block text-sm font-medium text-gray-700 mb-2">
-                         Subtitle
-                       </label>
-                       <textarea
-                         rows={3}
-                         defaultValue="We bring the mountain of quality car detailing services right to your doorstep. Professional, convenient, and guaranteed satisfaction."
-                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                       />
-                     </div>
-                   </div>
-                 </div>
+                  <div>
+                    <h3 className="text-lg font-medium text-gray-900 mb-4">Services Section</h3>
+                    <div className="space-y-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Section Title
+                        </label>
+                        <input
+                          type="text"
+                          value={content.servicesTitle}
+                          onChange={(e) => updateContent({ servicesTitle: e.target.value })}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Section Subtitle
+                        </label>
+                        <textarea
+                          rows={2}
+                          value={content.servicesSubtitle}
+                          onChange={(e) => updateContent({ servicesSubtitle: e.target.value })}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        />
+                      </div>
+                    </div>
+                  </div>
 
-                 <div>
-                   <h3 className="text-lg font-medium text-gray-900 mb-4">Services & Pricing</h3>
-                   <div className="space-y-4">
-                     <div className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
-                       <div>
-                         <h4 className="font-medium text-gray-900">Basic Wash</h4>
-                         <p className="text-sm text-gray-600">Exterior wash, tire cleaning, interior vacuum</p>
-                       </div>
-                       <div className="flex items-center space-x-2">
-                         <span className="text-lg font-bold text-gray-900">$45</span>
-                         <button className="text-blue-600 hover:text-blue-700">
-                           <Edit className="h-4 w-4" />
-                         </button>
-                       </div>
-                     </div>
-                     
-                     <div className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
-                       <div>
-                         <h4 className="font-medium text-gray-900">Premium Detail</h4>
-                         <p className="text-sm text-gray-600">Complete interior and exterior detailing</p>
-                       </div>
-                       <div className="flex items-center space-x-2">
-                         <span className="text-lg font-bold text-gray-900">$125</span>
-                         <button className="text-blue-600 hover:text-blue-700">
-                           <Edit className="h-4 w-4" />
-                         </button>
-                       </div>
-                     </div>
-                     
-                     <div className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
-                       <div>
-                         <h4 className="font-medium text-gray-900">Ultimate Detail</h4>
-                         <p className="text-sm text-gray-600">Premium service with paint correction</p>
-                       </div>
-                       <div className="flex items-center space-x-2">
-                         <span className="text-lg font-bold text-gray-900">$200</span>
-                         <button className="text-blue-600 hover:text-blue-700">
-                           <Edit className="h-4 w-4" />
-                         </button>
-                       </div>
-                     </div>
-                   </div>
-                 </div>
+                  <div>
+                    <h3 className="text-lg font-medium text-gray-900 mb-4">Pricing Section</h3>
+                    <div className="space-y-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Section Title
+                        </label>
+                        <input
+                          type="text"
+                          value={content.pricingTitle}
+                          onChange={(e) => updateContent({ pricingTitle: e.target.value })}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Section Subtitle
+                        </label>
+                        <textarea
+                          rows={2}
+                          value={content.pricingSubtitle}
+                          onChange={(e) => updateContent({ pricingSubtitle: e.target.value })}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        />
+                      </div>
+                    </div>
+                  </div>
 
-                 <div>
-                   <h3 className="text-lg font-medium text-gray-900 mb-4">Contact Information</h3>
-                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                     <div>
-                       <label className="block text-sm font-medium text-gray-700 mb-2">
-                         Footer Phone
-                       </label>
-                       <input
-                         type="tel"
-                         defaultValue="(555) 123-4567"
-                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                       />
-                     </div>
-                     <div>
-                       <label className="block text-sm font-medium text-gray-700 mb-2">
-                         Footer Email
-                       </label>
-                       <input
-                         type="email"
-                         defaultValue="info@mobilemountaindetail.com"
-                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                       />
-                     </div>
-                   </div>
-                 </div>
-               </div>
-               
-               <div className="mt-6">
-                 <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition-colors duration-300">
-                   Save Website Changes
-                 </button>
-               </div>
-             </div>
-           </motion.div>
-         )}
+                  <div>
+                    <h3 className="text-lg font-medium text-gray-900 mb-4">Business Information</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Business Name
+                        </label>
+                        <input
+                          type="text"
+                          value={content.businessName}
+                          onChange={(e) => updateContent({ businessName: e.target.value })}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Phone Number
+                        </label>
+                        <input
+                          type="tel"
+                          value={content.phoneNumber}
+                          onChange={(e) => updateContent({ phoneNumber: e.target.value })}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Email
+                        </label>
+                        <input
+                          type="email"
+                          value={content.email}
+                          onChange={(e) => updateContent({ email: e.target.value })}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Service Area
+                        </label>
+                        <input
+                          type="text"
+                          value={content.serviceArea}
+                          onChange={(e) => updateContent({ serviceArea: e.target.value })}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <h3 className="text-lg font-medium text-gray-900 mb-4">Footer</h3>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Footer Description
+                      </label>
+                      <textarea
+                        rows={3}
+                        value={content.footerDescription}
+                        onChange={(e) => updateContent({ footerDescription: e.target.value })}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      />
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="mt-6 p-4 bg-green-50 border border-green-200 rounded-lg">
+                  <p className="text-green-800 text-sm">
+                    ✅ Changes are saved automatically and appear instantly on the website!
+                  </p>
+                </div>
+              </div>
+            </motion.div>
+          )}
        </div>
      </div>
    )
