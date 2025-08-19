@@ -44,6 +44,9 @@ export default function MobileMountainPage() {
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [showSuccessMessage, setShowSuccessMessage] = useState(false)
+  const [selectedDate, setSelectedDate] = useState('')
+  const [availableTimes, setAvailableTimes] = useState<string[]>([])
+  const [currentMonth, setCurrentMonth] = useState(new Date())
 
   useEffect(() => {
     setIsVisible(true)
@@ -219,9 +222,9 @@ export default function MobileMountainPage() {
               transition={{ duration: 0.8 }}
               className="space-y-8"
             >
-              <h1 className="text-5xl lg:text-6xl font-bold text-white leading-tight">
-                Professional <span className="text-blue-400">Mobile</span> Car Detailing
-              </h1>
+                             <h1 className="text-5xl lg:text-6xl font-bold text-white leading-tight">
+                 Noah's Dube <span className="text-blue-400">Car Detailing</span>
+               </h1>
               <p className="text-xl text-gray-300 leading-relaxed">
                 We bring the mountain of quality car detailing services right to your doorstep. Professional, convenient, and guaranteed satisfaction.
               </p>
@@ -248,14 +251,14 @@ export default function MobileMountainPage() {
               className="relative"
             >
               <div className="relative">
-                <Image
-                  src="/mobile-mountain-logo.jpg"
-                  alt="Mobile Mountain Detail - Professional Car Detailing"
-                  width={600}
-                  height={400}
-                  className="w-full h-auto rounded-lg shadow-2xl"
-                  priority
-                />
+                                 <Image
+                   src="/mobile-mountain-hero.jpg"
+                   alt="Noah's Dube Car Detailing - Professional Car Detailing"
+                   width={600}
+                   height={400}
+                   className="w-full h-auto rounded-lg shadow-2xl"
+                   priority
+                 />
               </div>
             </motion.div>
           </div>

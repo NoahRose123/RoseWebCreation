@@ -13,14 +13,14 @@ export default function MobileMountainFooter() {
           <div className="md:col-span-2">
             <div className="flex items-center space-x-3 mb-6">
               <Image
-                src="/mobile-mountain-logo.jpg"
-                alt="Mobile Mountain Detail"
+                src="/mobile-mountain-logo.png"
+                alt="Noah's Dube Car Detailing"
                 width={48}
                 height={48}
                 className="rounded-lg"
               />
               <div>
-                <h3 className="text-xl font-bold">Mobile Mountain Detail</h3>
+                <h3 className="text-xl font-bold">Noah's Dube Car Detailing</h3>
                 <p className="text-gray-400">Professional Mobile Car Detailing</p>
               </div>
             </div>
@@ -93,9 +93,9 @@ export default function MobileMountainFooter() {
         <div className="border-t border-gray-800 mt-12 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <p className="text-gray-400 text-sm">
-              © 2024 Mobile Mountain Detail. All rights reserved.
+              © 2024 Noah's Dube Car Detailing. All rights reserved.
             </p>
-            <div className="flex space-x-6 mt-4 md:mt-0">
+            <div className="flex items-center space-x-6 mt-4 md:mt-0">
               <a href="#" className="text-gray-400 hover:text-white text-sm transition-colors duration-300">
                 Privacy Policy
               </a>
@@ -105,6 +105,12 @@ export default function MobileMountainFooter() {
               <a href="#" className="text-gray-400 hover:text-white text-sm transition-colors duration-300">
                 Service Areas
               </a>
+              <button 
+                onClick={() => window.location.href = '/mobile-mountain/admin'}
+                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded text-sm font-medium transition-colors duration-300"
+              >
+                Admin
+              </button>
             </div>
           </div>
         </div>
