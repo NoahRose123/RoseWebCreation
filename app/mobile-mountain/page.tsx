@@ -564,13 +564,13 @@ export default function MobileMountainPage() {
                       <Star key={i} className="h-5 w-5 text-yellow-400 fill-current" />
                     ))}
                   </div>
-                                     <Image
-                     src="/roseweb-logo.png"
-                     alt="Rose Web Creation"
-                     width={48}
-                     height={48}
-                     className="rounded-lg"
-                   />
+                                                 <Image
+              src="/rosewebc.png"
+              alt="Rose Web Creation"
+              width={48}
+              height={48}
+              className="rounded-lg"
+            />
                 </div>
                 <p className="text-gray-700 mb-6 italic">"{testimonial.content}"</p>
                 <div>
