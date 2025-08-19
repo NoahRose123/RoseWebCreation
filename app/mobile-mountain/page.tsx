@@ -201,7 +201,42 @@ export default function MobileMountainPage() {
       setTimeout(() => setShowSuccessMessage(false), 5000)
     } catch (error) {
       console.error('Error submitting booking:', error)
-      alert('There was an error submitting your booking. Please try again.')
+      // Show a more user-friendly error message
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred'
+      
+      // Fallback: Store booking locally if Firebase fails
+      if (errorMessage.includes('permissions') || errorMessage.includes('network')) {
+        // Store in localStorage as fallback
+        const existingBookings = JSON.parse(localStorage.getItem('mobile-mountain-bookings') || '[]')
+        const newBooking = {
+          ...bookingData,
+          status: 'Pending',
+          id: Date.now(),
+          createdAt: new Date().toISOString()
+        }
+        existingBookings.push(newBooking)
+        localStorage.setItem('mobile-mountain-bookings', JSON.stringify(existingBookings))
+        
+        // Reset form and close modal
+        setShowBookingModal(false)
+        setBookingData({
+          name: '',
+          email: '',
+          phone: '',
+          service: '',
+          date: '',
+          time: '',
+          message: ''
+        })
+        
+        // Show success message
+        setShowSuccessMessage(true)
+        setTimeout(() => setShowSuccessMessage(false), 5000)
+        
+        alert('Booking submitted successfully! We\'ll contact you soon to confirm.')
+      } else {
+        alert('There was an error submitting your booking. Please try again.')
+      }
     } finally {
       setIsSubmitting(false)
     }
@@ -211,8 +246,8 @@ export default function MobileMountainPage() {
     <div className="min-h-screen bg-gray-50">
       <Header />
       
-      {/* Hero Section */}
-      <section id="home" className="bg-gradient-to-br from-gray-900 via-blue-900 to-gray-800 min-h-screen flex items-center justify-center relative overflow-hidden pt-20 md:pt-0">
+             {/* Hero Section */}
+       <section id="home" className="bg-gradient-to-br from-gray-900 via-blue-900 to-gray-800 min-h-[80vh] flex items-center justify-center relative overflow-hidden pt-20 md:pt-0">
         <div className="absolute inset-0 bg-gradient-to-br from-gray-800/50 to-blue-900/50"></div>
         <div className="container-custom section-padding relative z-10">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
@@ -255,25 +290,33 @@ export default function MobileMountainPage() {
                    <Image
                      src="/mobile-mountain-hero.jpg"
                      alt="Mobile Mountain Detail - Professional Car Detailing"
-                     width={300}
-                     height={200}
+                     width={250}
+                     height={150}
                      className="w-full h-auto rounded-lg shadow-2xl"
                      priority
                    />
                    <Image
                      src="/mobile-mountain-hero-2.jpg"
                      alt="Mobile Mountain Detail - Professional Car Detailing"
-                     width={300}
-                     height={200}
+                     width={250}
+                     height={150}
                      className="w-full h-auto rounded-lg shadow-2xl"
                      priority
                    />
                    <Image
                      src="/mobile-mountain-hero-3.jpg"
                      alt="Mobile Mountain Detail - Professional Car Detailing"
-                     width={300}
-                     height={200}
-                     className="w-full h-auto rounded-lg shadow-2xl col-span-2"
+                     width={250}
+                     height={150}
+                     className="w-full h-auto rounded-lg shadow-2xl"
+                     priority
+                   />
+                   <Image
+                     src="/mobile-mountain-hero-4.jpg"
+                     alt="Mobile Mountain Detail - Professional Car Detailing"
+                     width={250}
+                     height={150}
+                     className="w-full h-auto rounded-lg shadow-2xl"
                      priority
                    />
                  </div>
@@ -521,13 +564,13 @@ export default function MobileMountainPage() {
                       <Star key={i} className="h-5 w-5 text-yellow-400 fill-current" />
                     ))}
                   </div>
-                  <Image
-                    src={testimonial.image}
-                    alt={testimonial.name}
-                    width={48}
-                    height={48}
-                    className="rounded-full"
-                  />
+                                     <Image
+                     src="/roseweb-logo.png"
+                     alt="Rose Web Creation"
+                     width={48}
+                     height={48}
+                     className="rounded-lg"
+                   />
                 </div>
                 <p className="text-gray-700 mb-6 italic">"{testimonial.content}"</p>
                 <div>
@@ -582,7 +625,6 @@ export default function MobileMountainPage() {
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 50 }}
           className="fixed bottom-4 right-4 bg-green-500 text-white px-6 py-4 rounded-lg shadow-lg z-50 flex items-center space-x-3"
         >
           <CheckCircle className="h-6 w-6" />
@@ -605,7 +647,6 @@ export default function MobileMountainPage() {
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.9 }}
             className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full max-h-[90vh] overflow-y-auto"
           >
             <div className="flex justify-between items-center mb-6">

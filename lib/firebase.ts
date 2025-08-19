@@ -24,6 +24,9 @@ export const mobileMountainBookingsCollection = collection(db, "mobile-mountain-
 // Booking functions
 export const addBooking = async (bookingData: any, collectionName: string = "bookings") => {
   try {
+    console.log("Adding booking to collection:", collectionName);
+    console.log("Booking data:", bookingData);
+    
     const targetCollection = collectionName === "mobile-mountain-bookings" 
       ? mobileMountainBookingsCollection 
       : bookingsCollection;
@@ -33,9 +36,16 @@ export const addBooking = async (bookingData: any, collectionName: string = "boo
       createdAt: new Date().toISOString(),
       id: Date.now() // Generate unique ID
     });
+    
+    console.log("Booking added successfully:", docRef.id);
     return docRef;
   } catch (error) {
     console.error("Error adding booking: ", error);
+    console.error("Error details:", {
+      code: (error as any)?.code,
+      message: (error as any)?.message,
+      stack: (error as any)?.stack
+    });
     throw error;
   }
 };

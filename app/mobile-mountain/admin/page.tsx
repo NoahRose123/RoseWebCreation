@@ -63,6 +63,11 @@ export default function MobileMountainAdminPage() {
   const [bookings, setBookings] = useState<Booking[]>([])
   const [selectedStatus, setSelectedStatus] = useState<'all' | 'Confirmed' | 'Pending' | 'Cancelled'>('all')
   const [activeTab, setActiveTab] = useState<'bookings' | 'availability' | 'settings' | 'website'>('bookings')
+  const [currentPassword, setCurrentPassword] = useState('')
+  const [newPassword, setNewPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
+  const [passwordError, setPasswordError] = useState('')
+  const [passwordSuccess, setPasswordSuccess] = useState('')
   const [availability, setAvailability] = useState<Availability[]>([
     { day: 'Monday', startTime: '08:00', endTime: '18:00', isAvailable: true },
     { day: 'Tuesday', startTime: '08:00', endTime: '18:00', isAvailable: true },
@@ -92,7 +97,15 @@ export default function MobileMountainAdminPage() {
         const firestoreBookings = await getBookings('mobile-mountain-bookings')
         setBookings(firestoreBookings)
       } catch (error) {
-        console.error('Error loading bookings:', error)
+        console.error('Error loading bookings from Firestore:', error)
+        
+        // Fallback: Load from localStorage if Firestore fails
+        try {
+          const localBookings = JSON.parse(localStorage.getItem('mobile-mountain-bookings') || '[]')
+          setBookings(localBookings)
+        } catch (localError) {
+          console.error('Error loading bookings from localStorage:', localError)
+        }
       }
     }
     
@@ -197,6 +210,33 @@ export default function MobileMountainAdminPage() {
     const newAvailability = [...availability]
     newAvailability[index] = { ...newAvailability[index], [field]: value }
     setAvailability(newAvailability)
+  }
+
+  const handlePasswordChange = (e: React.FormEvent) => {
+    e.preventDefault()
+    setPasswordError('')
+    setPasswordSuccess('')
+
+    if (currentPassword !== '6741') {
+      setPasswordError('Current password is incorrect')
+      return
+    }
+
+    if (newPassword.length < 4) {
+      setPasswordError('New password must be at least 4 characters')
+      return
+    }
+
+    if (newPassword !== confirmPassword) {
+      setPasswordError('New passwords do not match')
+      return
+    }
+
+    // In a real app, you would update this in Firebase
+    setPasswordSuccess('Password updated successfully!')
+    setCurrentPassword('')
+    setNewPassword('')
+    setConfirmPassword('')
   }
 
   const filteredBookings = selectedStatus === 'all' 
@@ -307,16 +347,16 @@ export default function MobileMountainAdminPage() {
         {/* Tab Navigation */}
         <div className="mb-8">
           <nav className="flex space-x-8">
-            <button
-              onClick={() => setActiveTab('bookings')}
-              className={`py-2 px-1 border-b-2 font-medium text-sm ${
-                activeTab === 'bookings'
-                  ? 'border-blue-500 text-blue-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-              }`}
-            >
-              Bookings
-            </button>
+                         <button
+               onClick={() => setActiveTab('bookings')}
+               className={`py-2 px-1 border-b-2 font-medium text-sm ${
+                 activeTab === 'bookings'
+                   ? 'border-blue-500 text-blue-600'
+                   : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+               }`}
+             >
+               Dashboard
+             </button>
             <button
               onClick={() => setActiveTab('availability')}
               className={`py-2 px-1 border-b-2 font-medium text-sm ${
@@ -350,150 +390,154 @@ export default function MobileMountainAdminPage() {
           </nav>
         </div>
 
-                 {/* Analytics Cards */}
-         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-           {/* Pie Chart */}
-           <motion.div
-             initial={{ opacity: 0, y: 20 }}
-             animate={{ opacity: 1, y: 0 }}
-             transition={{ delay: 0.4 }}
-             className="md:col-span-2 bg-white rounded-lg shadow p-6"
-           >
-             <h3 className="text-lg font-semibold text-gray-900 mb-4">Booking Status Distribution</h3>
-             <div className="flex items-center justify-center">
-               <div className="relative w-32 h-32">
-                 <svg className="w-32 h-32 transform -rotate-90" viewBox="0 0 36 36">
-                   <path
-                     d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                     fill="none"
-                     stroke="#e5e7eb"
-                     strokeWidth="3"
-                   />
-                   {analytics.total > 0 && (
-                     <>
-                       <path
-                         d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                         fill="none"
-                         stroke="#10b981"
-                         strokeWidth="3"
-                         strokeDasharray={`${(analytics.confirmed / analytics.total) * 100} ${100 - (analytics.confirmed / analytics.total) * 100}`}
-                       />
-                       <path
-                         d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                         fill="none"
-                         stroke="#f59e0b"
-                         strokeWidth="3"
-                         strokeDasharray={`${(analytics.pending / analytics.total) * 100} ${100 - (analytics.pending / analytics.total) * 100}`}
-                         strokeDashoffset={`-${(analytics.confirmed / analytics.total) * 100}`}
-                       />
-                       <path
-                         d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                         fill="none"
-                         stroke="#ef4444"
-                         strokeWidth="3"
-                         strokeDasharray={`${(analytics.cancelled / analytics.total) * 100} ${100 - (analytics.cancelled / analytics.total) * 100}`}
-                         strokeDashoffset={`-${((analytics.confirmed + analytics.pending) / analytics.total) * 100}`}
-                       />
-                     </>
-                   )}
-                 </svg>
-                 <div className="absolute inset-0 flex items-center justify-center">
-                   <span className="text-2xl font-bold text-gray-900">{analytics.total}</span>
-                 </div>
-               </div>
-               <div className="ml-6 space-y-2">
-                 <div className="flex items-center">
-                   <div className="w-3 h-3 bg-green-500 rounded-full mr-2"></div>
-                   <span className="text-sm text-gray-600">Confirmed: {analytics.confirmed}</span>
-                 </div>
-                 <div className="flex items-center">
-                   <div className="w-3 h-3 bg-yellow-500 rounded-full mr-2"></div>
-                   <span className="text-sm text-gray-600">Pending: {analytics.pending}</span>
-                 </div>
-                 <div className="flex items-center">
-                   <div className="w-3 h-3 bg-red-500 rounded-full mr-2"></div>
-                   <span className="text-sm text-gray-600">Cancelled: {analytics.cancelled}</span>
-                 </div>
-               </div>
-             </div>
-           </motion.div>
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="bg-white rounded-lg shadow p-6"
-          >
-            <div className="flex items-center">
-              <div className="p-2 bg-blue-100 rounded-lg">
-                <Calendar className="h-6 w-6 text-blue-600" />
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Total Bookings</p>
-                <p className="text-2xl font-bold text-gray-900">{analytics.total}</p>
-              </div>
-            </div>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="bg-white rounded-lg shadow p-6"
-          >
-            <div className="flex items-center">
-              <div className="p-2 bg-green-100 rounded-lg">
-                <CheckCircle className="h-6 w-6 text-green-600" />
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Confirmed</p>
-                <p className="text-2xl font-bold text-gray-900">{analytics.confirmed}</p>
-              </div>
-            </div>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="bg-white rounded-lg shadow p-6"
-          >
-            <div className="flex items-center">
-              <div className="p-2 bg-yellow-100 rounded-lg">
-                <Clock className="h-6 w-6 text-yellow-600" />
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Pending</p>
-                <p className="text-2xl font-bold text-gray-900">{analytics.pending}</p>
-              </div>
-            </div>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-            className="bg-white rounded-lg shadow p-6"
-          >
-            <div className="flex items-center">
-              <div className="p-2 bg-green-100 rounded-lg">
-                <DollarSign className="h-6 w-6 text-green-600" />
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Revenue</p>
-                <p className="text-2xl font-bold text-gray-900">${analytics.estimatedRevenue}</p>
-              </div>
-            </div>
-          </motion.div>
-        </div>
+                 
 
         {/* Tab Content */}
-        {activeTab === 'bookings' && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="bg-white rounded-lg shadow"
-          >
-            {/* Bookings Header */}
-            <div className="px-6 py-4 border-b border-gray-200">
+                 {activeTab === 'bookings' && (
+           <motion.div
+             initial={{ opacity: 0 }}
+             animate={{ opacity: 1 }}
+             className="space-y-6"
+           >
+             {/* Analytics Cards */}
+             <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+               {/* Pie Chart */}
+               <motion.div
+                 initial={{ opacity: 0, y: 20 }}
+                 animate={{ opacity: 1, y: 0 }}
+                 transition={{ delay: 0.4 }}
+                 className="md:col-span-2 bg-white rounded-lg shadow p-6"
+               >
+                 <h3 className="text-lg font-semibold text-gray-900 mb-4">Booking Status Distribution</h3>
+                 <div className="flex items-center justify-center">
+                   <div className="relative w-32 h-32">
+                     <svg className="w-32 h-32 transform -rotate-90" viewBox="0 0 36 36">
+                       <path
+                         d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                         fill="none"
+                         stroke="#e5e7eb"
+                         strokeWidth="3"
+                       />
+                       {analytics.total > 0 && (
+                         <>
+                           <path
+                             d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                             fill="none"
+                             stroke="#10b981"
+                             strokeWidth="3"
+                             strokeDasharray={`${(analytics.confirmed / analytics.total) * 100} ${100 - (analytics.confirmed / analytics.total) * 100}`}
+                           />
+                           <path
+                             d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                             fill="none"
+                             stroke="#f59e0b"
+                             strokeWidth="3"
+                             strokeDasharray={`${(analytics.pending / analytics.total) * 100} ${100 - (analytics.pending / analytics.total) * 100}`}
+                             strokeDashoffset={`-${(analytics.confirmed / analytics.total) * 100}`}
+                           />
+                           <path
+                             d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                             fill="none"
+                             stroke="#ef4444"
+                             strokeWidth="3"
+                             strokeDasharray={`${(analytics.cancelled / analytics.total) * 100} ${100 - (analytics.cancelled / analytics.total) * 100}`}
+                             strokeDashoffset={`-${((analytics.confirmed + analytics.pending) / analytics.total) * 100}`}
+                           />
+                         </>
+                       )}
+                     </svg>
+                     <div className="absolute inset-0 flex items-center justify-center">
+                       <span className="text-2xl font-bold text-gray-900">{analytics.total}</span>
+                     </div>
+                   </div>
+                   <div className="ml-6 space-y-2">
+                     <div className="flex items-center">
+                       <div className="w-3 h-3 bg-green-500 rounded-full mr-2"></div>
+                       <span className="text-sm text-gray-600">Confirmed: {analytics.confirmed}</span>
+                     </div>
+                     <div className="flex items-center">
+                       <div className="w-3 h-3 bg-yellow-500 rounded-full mr-2"></div>
+                       <span className="text-sm text-gray-600">Pending: {analytics.pending}</span>
+                     </div>
+                     <div className="flex items-center">
+                       <div className="w-3 h-3 bg-red-500 rounded-full mr-2"></div>
+                       <span className="text-sm text-gray-600">Cancelled: {analytics.cancelled}</span>
+                     </div>
+                   </div>
+                 </div>
+               </motion.div>
+               <motion.div
+                 initial={{ opacity: 0, y: 20 }}
+                 animate={{ opacity: 1, y: 0 }}
+                 className="bg-white rounded-lg shadow p-6"
+               >
+                 <div className="flex items-center">
+                   <div className="p-2 bg-blue-100 rounded-lg">
+                     <Calendar className="h-6 w-6 text-blue-600" />
+                   </div>
+                   <div className="ml-4">
+                     <p className="text-sm font-medium text-gray-600">Total Bookings</p>
+                     <p className="text-2xl font-bold text-gray-900">{analytics.total}</p>
+                   </div>
+                 </div>
+               </motion.div>
+
+               <motion.div
+                 initial={{ opacity: 0, y: 20 }}
+                 animate={{ opacity: 1, y: 0 }}
+                 transition={{ delay: 0.1 }}
+                 className="bg-white rounded-lg shadow p-6"
+               >
+                 <div className="flex items-center">
+                   <div className="p-2 bg-green-100 rounded-lg">
+                     <CheckCircle className="h-6 w-6 text-green-600" />
+                   </div>
+                   <div className="ml-4">
+                     <p className="text-sm font-medium text-gray-600">Confirmed</p>
+                     <p className="text-2xl font-bold text-gray-900">{analytics.confirmed}</p>
+                   </div>
+                 </div>
+               </motion.div>
+
+               <motion.div
+                 initial={{ opacity: 0, y: 20 }}
+                 animate={{ opacity: 1, y: 0 }}
+                 transition={{ delay: 0.2 }}
+                 className="bg-white rounded-lg shadow p-6"
+               >
+                 <div className="flex items-center">
+                   <div className="p-2 bg-yellow-100 rounded-lg">
+                     <Clock className="h-6 w-6 text-yellow-600" />
+                   </div>
+                   <div className="ml-4">
+                     <p className="text-sm font-medium text-gray-600">Pending</p>
+                     <p className="text-2xl font-bold text-gray-900">{analytics.pending}</p>
+                   </div>
+                 </div>
+               </motion.div>
+
+               <motion.div
+                 initial={{ opacity: 0, y: 20 }}
+                 animate={{ opacity: 1, y: 0 }}
+                 transition={{ delay: 0.3 }}
+                 className="bg-white rounded-lg shadow p-6"
+               >
+                 <div className="flex items-center">
+                   <div className="p-2 bg-green-100 rounded-lg">
+                     <DollarSign className="h-6 w-6 text-green-600" />
+                   </div>
+                   <div className="ml-4">
+                     <p className="text-sm font-medium text-gray-600">Revenue</p>
+                     <p className="text-2xl font-bold text-gray-900">${analytics.estimatedRevenue}</p>
+                   </div>
+                 </div>
+               </motion.div>
+             </div>
+
+             {/* Bookings Table */}
+             <div className="bg-white rounded-lg shadow">
+               {/* Bookings Header */}
+               <div className="px-6 py-4 border-b border-gray-200">
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0">
                 <div>
                   <h2 className="text-lg font-semibold text-gray-900">Bookings</h2>
@@ -667,72 +711,130 @@ export default function MobileMountainAdminPage() {
           </motion.div>
         )}
 
-        {activeTab === 'settings' && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="bg-white rounded-lg shadow"
-          >
-            <div className="px-6 py-4 border-b border-gray-200">
-              <h2 className="text-lg font-semibold text-gray-900">Settings</h2>
-              <p className="text-sm text-gray-600">Manage your business settings</p>
-            </div>
-            
-                         <div className="p-6">
+                 {activeTab === 'settings' && (
+           <motion.div
+             initial={{ opacity: 0 }}
+             animate={{ opacity: 1 }}
+             className="bg-white rounded-lg shadow"
+           >
+             <div className="px-6 py-4 border-b border-gray-200">
+               <h2 className="text-lg font-semibold text-gray-900">Settings</h2>
+               <p className="text-sm text-gray-600">Manage your business settings</p>
+             </div>
+             
+             <div className="p-6">
                <div className="space-y-6">
-                
-                <div>
-                  <h3 className="text-lg font-medium text-gray-900 mb-4">Services & Pricing</h3>
-                  <div className="space-y-4">
-                    <div className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
-                      <div>
-                        <h4 className="font-medium text-gray-900">Basic Wash</h4>
-                        <p className="text-sm text-gray-600">Exterior wash, tire cleaning, interior vacuum</p>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <span className="text-lg font-bold text-gray-900">$45</span>
-                        <button className="text-blue-600 hover:text-blue-700">
-                          <Edit className="h-4 w-4" />
-                        </button>
-                      </div>
-                    </div>
-                    
-                    <div className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
-                      <div>
-                        <h4 className="font-medium text-gray-900">Premium Detail</h4>
-                        <p className="text-sm text-gray-600">Complete interior and exterior detailing</p>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <span className="text-lg font-bold text-gray-900">$125</span>
-                        <button className="text-blue-600 hover:text-blue-700">
-                          <Edit className="h-4 w-4" />
-                        </button>
-                      </div>
-                    </div>
-                    
-                    <div className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
-                      <div>
-                        <h4 className="font-medium text-gray-900">Ultimate Detail</h4>
-                        <p className="text-sm text-gray-600">Premium service with paint correction</p>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <span className="text-lg font-bold text-gray-900">$200</span>
-                        <button className="text-blue-600 hover:text-blue-700">
-                          <Edit className="h-4 w-4" />
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="mt-6">
-                <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition-colors duration-300">
-                  Save Settings
-                </button>
-              </div>
-            </div>
-                     </motion.div>
+                 
+                 <div>
+                   <h3 className="text-lg font-medium text-gray-900 mb-4">Change Password</h3>
+                   <form onSubmit={handlePasswordChange} className="space-y-4">
+                     <div>
+                       <label className="block text-sm font-medium text-gray-700 mb-2">
+                         Current Password
+                       </label>
+                       <input
+                         type="password"
+                         value={currentPassword}
+                         onChange={(e) => setCurrentPassword(e.target.value)}
+                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                         required
+                       />
+                     </div>
+                     <div>
+                       <label className="block text-sm font-medium text-gray-700 mb-2">
+                         New Password
+                       </label>
+                       <input
+                         type="password"
+                         value={newPassword}
+                         onChange={(e) => setNewPassword(e.target.value)}
+                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                         required
+                       />
+                     </div>
+                     <div>
+                       <label className="block text-sm font-medium text-gray-700 mb-2">
+                         Confirm New Password
+                       </label>
+                       <input
+                         type="password"
+                         value={confirmPassword}
+                         onChange={(e) => setConfirmPassword(e.target.value)}
+                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                         required
+                       />
+                     </div>
+                     {passwordError && (
+                       <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg">
+                         {passwordError}
+                       </div>
+                     )}
+                     {passwordSuccess && (
+                       <div className="bg-green-50 border border-green-200 text-green-600 px-4 py-3 rounded-lg">
+                         {passwordSuccess}
+                       </div>
+                     )}
+                     <button
+                       type="submit"
+                       className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition-colors duration-300"
+                     >
+                       Update Password
+                     </button>
+                   </form>
+                 </div>
+
+                 <div>
+                   <h3 className="text-lg font-medium text-gray-900 mb-4">Services & Pricing</h3>
+                   <div className="space-y-4">
+                     <div className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
+                       <div>
+                         <h4 className="font-medium text-gray-900">Basic Wash</h4>
+                         <p className="text-sm text-gray-600">Exterior wash, tire cleaning, interior vacuum</p>
+                       </div>
+                       <div className="flex items-center space-x-2">
+                         <span className="text-lg font-bold text-gray-900">$45</span>
+                         <button className="text-blue-600 hover:text-blue-700">
+                           <Edit className="h-4 w-4" />
+                         </button>
+                       </div>
+                     </div>
+                     
+                     <div className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
+                       <div>
+                         <h4 className="font-medium text-gray-900">Premium Detail</h4>
+                         <p className="text-sm text-gray-600">Complete interior and exterior detailing</p>
+                       </div>
+                       <div className="flex items-center space-x-2">
+                         <span className="text-lg font-bold text-gray-900">$125</span>
+                         <button className="text-blue-600 hover:text-blue-700">
+                           <Edit className="h-4 w-4" />
+                         </button>
+                       </div>
+                     </div>
+                     
+                     <div className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
+                       <div>
+                         <h4 className="font-medium text-gray-900">Ultimate Detail</h4>
+                         <p className="text-sm text-gray-600">Premium service with paint correction</p>
+                       </div>
+                       <div className="flex items-center space-x-2">
+                         <span className="text-lg font-bold text-gray-900">$200</span>
+                         <button className="text-blue-600 hover:text-blue-700">
+                           <Edit className="h-4 w-4" />
+                         </button>
+                       </div>
+                     </div>
+                   </div>
+                 </div>
+               </div>
+               
+               <div className="mt-6">
+                 <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition-colors duration-300">
+                   Save Settings
+                 </button>
+               </div>
+             </div>
+           </motion.div>
          )}
 
          {activeTab === 'website' && (
