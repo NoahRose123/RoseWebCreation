@@ -114,20 +114,23 @@ export default function BookingsPage() {
     const pending = bookings.filter(b => b.status === 'Pending').length
     const cancelled = bookings.filter(b => b.status === 'Cancelled').length
     
-    // Calculate estimated revenue based on services
+    // Calculate estimated revenue based on services - only from confirmed bookings
     const servicePrices: { [key: string]: number } = {
       'Website Monthly': 40,
       'Website Yearly': 200,
-      'Custom Software/App': 5000, // Average custom project
-      'Website Development': 1500, // Average website project
+      'Custom Software/App': 5000,
+      'Website Development': 1500,
       'Custom Software': 5000,
-      'Mobile Apps': 3000
+      'Mobile Apps': 3000,
+      'Web Development': 1500,
+      'Custom Software Development': 5000,
+      'Mobile App Development': 3000
     }
     
     const estimatedRevenue = bookings
-      .filter(b => b.status === 'Confirmed')
+      .filter(b => b.status === 'Confirmed') // Only confirmed bookings count towards revenue
       .reduce((total, booking) => {
-        const price = servicePrices[booking.service] || 1000 // Default price
+        const price = servicePrices[booking.service] || 1000 // Default price if service not found
         return total + price
       }, 0)
     

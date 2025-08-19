@@ -21,9 +21,7 @@ export default function Header() {
   const navItems = [
     { name: 'Home', href: '#home' },
     { name: 'Services', href: '#services' },
-    { name: 'Portfolio', href: '#portfolio' },
-    { name: 'About', href: '#about' },
-    { name: 'Contact', href: '#contact' },
+    { name: 'Prices', href: '#pricing' },
   ]
 
   return (
@@ -55,21 +53,28 @@ export default function Header() {
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
             {navItems.map((item) => (
-              <motion.a
+              <motion.button
                 key={item.name}
-                href={item.href}
+                onClick={() => {
+                  if (item.name === 'Home') {
+                    window.scrollTo({ top: 0, behavior: 'smooth' })
+                  } else {
+                    document.getElementById(item.href.replace('#', ''))?.scrollIntoView({ behavior: 'smooth' })
+                  }
+                }}
                 whileHover={{ y: -2 }}
-                                 className="font-medium transition-colors duration-300 text-secondary-700 hover:text-primary-600"
+                className="font-medium transition-colors duration-300 text-secondary-700 hover:text-primary-600"
               >
                 {item.name}
-              </motion.a>
+              </motion.button>
             ))}
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className="btn-primary"
+              onClick={() => document.getElementById('booking')?.scrollIntoView({ behavior: 'smooth' })}
             >
-              Get Started
+              Contact
             </motion.button>
           </nav>
 
@@ -97,17 +102,26 @@ export default function Header() {
           >
             <nav className="flex flex-col space-y-4">
               {navItems.map((item) => (
-                <a
+                <button
                   key={item.name}
-                  href={item.href}
-                  onClick={() => setIsMenuOpen(false)}
-                  className="text-secondary-700 hover:text-primary-600 font-medium transition-colors"
+                  onClick={() => {
+                    setIsMenuOpen(false)
+                    if (item.name === 'Home') {
+                      window.scrollTo({ top: 0, behavior: 'smooth' })
+                    } else {
+                      document.getElementById(item.href.replace('#', ''))?.scrollIntoView({ behavior: 'smooth' })
+                    }
+                  }}
+                  className="text-secondary-700 hover:text-primary-600 font-medium transition-colors text-left"
                 >
                   {item.name}
-                </a>
+                </button>
               ))}
-              <button className="btn-primary w-full mt-4">
-                Get Started
+              <button 
+                className="btn-primary w-full mt-4"
+                onClick={() => document.getElementById('booking')?.scrollIntoView({ behavior: 'smooth' })}
+              >
+                Contact
               </button>
             </nav>
           </motion.div>
