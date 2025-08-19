@@ -28,6 +28,14 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <head>
+        <style>{`
+          link[rel="icon"] {
+            border-radius: 50%;
+            overflow: hidden;
+          }
+        `}</style>
+      </head>
       <body className={inter.className}>
         {children}
       </body>

@@ -12,6 +12,12 @@
   body {
     font-family: 'Inter', system-ui, sans-serif;
   }
+  
+  /* Circular favicon styling */
+  link[rel="icon"] {
+    border-radius: 50% !important;
+    overflow: hidden !important;
+  }
 }
 
 @layer components {
