@@ -116,9 +116,9 @@ export default function BookingsPage() {
     
     // Calculate estimated revenue based on services - only from confirmed bookings
     const servicePrices: { [key: string]: number } = {
-      'Website Monthly': 40,
-      'Website Yearly': 200,
-      'Custom Software/App': 5000,
+      'Website Monthly - $22': 22,
+      'Website Yearly - $165': 185,
+      'Custom Software/App - Contact': 5000,
       'Website Development': 1500,
       'Custom Software': 5000,
       'Mobile Apps': 3000,

@@ -72,7 +72,11 @@ export default function Header() {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className="btn-primary"
-              onClick={() => document.getElementById('booking')?.scrollIntoView({ behavior: 'smooth' })}
+              onClick={() => {
+                // Trigger booking modal by dispatching a custom event
+                const event = new CustomEvent('openBookingModal')
+                window.dispatchEvent(event)
+              }}
             >
               Contact
             </motion.button>
@@ -119,7 +123,11 @@ export default function Header() {
               ))}
               <button 
                 className="btn-primary w-full mt-4"
-                onClick={() => document.getElementById('booking')?.scrollIntoView({ behavior: 'smooth' })}
+                onClick={() => {
+                  // Trigger booking modal by dispatching a custom event
+                  const event = new CustomEvent('openBookingModal')
+                  window.dispatchEvent(event)
+                }}
               >
                 Contact
               </button>

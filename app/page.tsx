@@ -42,6 +42,16 @@ export default function Home() {
 
   useEffect(() => {
     setIsVisible(true)
+    
+    const handleOpenBookingModal = () => {
+      setShowBookingModal(true)
+    }
+
+    window.addEventListener('openBookingModal', handleOpenBookingModal)
+    
+    return () => {
+      window.removeEventListener('openBookingModal', handleOpenBookingModal)
+    }
   }, [])
 
   const services = [
@@ -505,67 +515,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Contact/Booking Section */}
-      <section id="booking" className="section-padding bg-white">
-        <div className="container-custom">
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-4xl font-bold text-secondary-900 mb-4">
-              Ready to Get Started?
-            </h2>
-            <p className="text-xl text-secondary-600 max-w-3xl mx-auto">
-              Contact us today to discuss your project and get a free consultation. We're here to help bring your vision to life.
-            </p>
-          </motion.div>
-          
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            viewport={{ once: true }}
-            className="max-w-2xl mx-auto"
-          >
-            <div className="bg-gradient-to-br from-primary-50 to-white rounded-2xl p-8 shadow-lg">
-              <div className="text-center mb-8">
-                <h3 className="text-2xl font-bold text-secondary-900 mb-4">Book Your Free Consultation</h3>
-                <p className="text-secondary-600">Let's discuss your project and find the perfect solution for your business.</p>
-              </div>
-              
-              <div className="grid md:grid-cols-2 gap-6 mb-8">
-                <div className="text-center">
-                  <div className="bg-primary-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Calendar className="h-8 w-8 text-primary-600" />
-                  </div>
-                  <h4 className="font-semibold text-secondary-900 mb-2">Free Consultation</h4>
-                  <p className="text-sm text-secondary-600">30-minute call to discuss your needs</p>
-                </div>
-                <div className="text-center">
-                  <div className="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <CheckCircle2 className="h-8 w-8 text-green-600" />
-                  </div>
-                  <h4 className="font-semibold text-secondary-900 mb-2">No Obligation</h4>
-                  <p className="text-sm text-secondary-600">Get a quote with no pressure to commit</p>
-                </div>
-              </div>
-              
-              <div className="text-center">
-                <button 
-                  onClick={() => setShowBookingModal(true)}
-                  className="btn-primary text-lg px-8 py-4"
-                >
-                  Book Appointment
-                  <Calendar className="ml-2 h-5 w-5" />
-                </button>
-              </div>
-            </div>
-          </motion.div>
-        </div>
-      </section>
+
 
       <Footer />
 
