@@ -41,8 +41,8 @@ export default function MobileMountainHeader() {
             <Image
               src="/mobile-mountain-logo.png"
               alt="Mobile Mountain Detail"
-              width={60}
-              height={60}
+              width={80}
+              height={80}
               className="rounded-lg"
             />
             <span className={`font-bold text-xl transition-colors duration-300 ${
