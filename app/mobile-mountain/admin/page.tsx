@@ -259,8 +259,8 @@ export default function MobileMountainAdminPage() {
                                  <Image
                    src="/mobile-mountain-logo.png"
                    alt="Mobile Mountain Detail"
-                   width={48}
-                   height={48}
+                   width={64}
+                   height={64}
                    className="rounded-lg"
                  />
                  <h1 className="text-2xl font-bold text-gray-900">Admin Access</h1>
@@ -327,8 +327,8 @@ export default function MobileMountainAdminPage() {
                              <Image
                  src="/mobile-mountain-logo.png"
                  alt="Mobile Mountain Detail"
-                 width={32}
-                 height={32}
+                 width={48}
+                 height={48}
                  className="rounded-lg"
                />
                <h1 className="text-xl font-bold text-gray-900">Admin Dashboard</h1>

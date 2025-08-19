@@ -15,8 +15,8 @@ export default function MobileMountainFooter() {
               <Image
                 src="/mobile-mountain-logo.png"
                 alt="Mobile Mountain Detail"
-                width={48}
-                height={48}
+                width={64}
+                height={64}
                 className="rounded-lg"
               />
               <div>
