@@ -196,147 +196,112 @@ export default function Home() {
       <Header />
       
       {/* Hero Section */}
-      <section className="gradient-bg min-h-screen flex items-center justify-center relative overflow-hidden">
+      <section className="gradient-bg min-h-screen flex items-center justify-center relative overflow-hidden pt-20 md:pt-0">
         <div className="absolute inset-0 bg-gradient-to-br from-primary-50/50 to-white/50"></div>
         <div className="container-custom section-padding relative z-10">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
+          <div className="text-center max-w-4xl mx-auto">
             <motion.div
-              initial={{ opacity: 0, x: -50 }}
-              animate={{ opacity: isVisible ? 1 : 0, x: isVisible ? 0 : -50 }}
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: isVisible ? 1 : 0, y: isVisible ? 0 : 30 }}
               transition={{ duration: 0.8 }}
               className="space-y-8"
             >
-              
-               <h1 className="text-5xl lg:text-6xl font-bold text-secondary-900 leading-tight">
-                 Transform Your <span className="text-primary-600">Digital Presence</span>
-               </h1>
-               <p className="text-xl text-secondary-600 leading-relaxed">
-                 We create stunning, modern websites and applications that help businesses grow and succeed in the digital world.
-               </p>
-               <div className="flex flex-col sm:flex-row gap-4">
-                                   <button 
-                    onClick={() => setShowBookingModal(true)}
-                    className="btn-primary"
-                  >
-                    Book Appointment
-                    <Calendar className="ml-2 h-5 w-5" />
-                  </button>
-                  <button 
-                    onClick={() => document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' })}
-                    className="btn-secondary"
-                  >
-                    View Pricing
-                  </button>
-               </div>
-            </motion.div>
-            <motion.div
-              initial={{ opacity: 0, x: 50 }}
-              animate={{ opacity: isVisible ? 1 : 0, x: isVisible ? 0 : 50 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="relative"
-            >
-              {/* Dashboard Mockup */}
-              <div className="relative">
-                {/* Main Dashboard */}
-                <div className="bg-white rounded-2xl shadow-2xl p-6 transform rotate-2 hover:rotate-0 transition-transform duration-500 mb-4">
-                  <div className="flex space-x-2 mb-4">
-                    <div className="w-3 h-3 bg-red-400 rounded-full"></div>
-                    <div className="w-3 h-3 bg-yellow-400 rounded-full"></div>
-                    <div className="w-3 h-3 bg-green-400 rounded-full"></div>
-                  </div>
-                  
-                  {/* Dashboard Title */}
-                  <div className="text-center mb-4">
-                    <h3 className="text-lg font-bold text-gray-800">Business Dashboard</h3>
-                    <p className="text-xs text-gray-600">Real-time Analytics & Insights</p>
-                  </div>
-                  
-                  {/* Analytics Dashboard */}
-                  <div className="grid grid-cols-2 gap-4 mb-4">
-                    <div className="bg-gradient-to-br from-blue-100 to-blue-200 rounded-lg p-4">
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <p className="text-sm font-medium text-blue-800">Revenue</p>
-                          <p className="text-xl font-bold text-blue-900">$12.5K</p>
-                        </div>
-                        <TrendingUp className="h-6 w-6 text-blue-600" />
-                      </div>
-                    </div>
-                    <div className="bg-gradient-to-br from-green-100 to-green-200 rounded-lg p-4">
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <p className="text-sm font-medium text-green-800">Users</p>
-                          <p className="text-xl font-bold text-green-900">2.4K</p>
-                        </div>
-                        <Users className="h-6 w-6 text-green-600" />
-                      </div>
-                    </div>
-                  </div>
-                  
-                  {/* Chart Placeholder */}
-                  <div className="bg-gray-100 rounded-lg p-4 h-20 flex items-center justify-center">
-                    <div className="text-center">
-                      <p className="text-xs text-gray-600 mb-2">Analytics Chart</p>
-                      <div className="flex space-x-1">
-                        <div className="w-2 bg-blue-500 rounded-t h-8"></div>
-                        <div className="w-2 bg-blue-500 rounded-t h-12"></div>
-                        <div className="w-2 bg-blue-500 rounded-t h-6"></div>
-                        <div className="w-2 bg-blue-500 rounded-t h-10"></div>
-                        <div className="w-2 bg-blue-500 rounded-t h-8"></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                
-                {/* Website Mockup */}
-                <div className="bg-white rounded-xl shadow-xl p-4 transform -rotate-1 hover:rotate-0 transition-transform duration-500 ml-8">
-                  <div className="flex space-x-2 mb-3">
-                    <div className="w-2 h-2 bg-red-400 rounded-full"></div>
-                    <div className="w-2 h-2 bg-yellow-400 rounded-full"></div>
-                    <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                  </div>
-                  <div className="text-center mb-3">
-                    <p className="text-xs font-medium text-gray-700">Modern Website</p>
-                  </div>
-                  <div className="bg-gradient-to-br from-primary-100 to-primary-200 rounded-lg p-3">
-                    <div className="h-2 bg-white rounded mb-2"></div>
-                    <div className="h-2 bg-white rounded w-3/4 mb-2"></div>
-                    <div className="h-2 bg-white rounded w-1/2"></div>
-                  </div>
-                </div>
-                
-                {/* Mobile App Mockup */}
-                <div className="bg-white rounded-xl shadow-xl p-3 transform rotate-1 hover:rotate-0 transition-transform duration-500 -ml-4 mt-4">
-                  <div className="flex space-x-1 mb-2">
-                    <div className="w-1.5 h-1.5 bg-red-400 rounded-full"></div>
-                    <div className="w-1.5 h-1.5 bg-yellow-400 rounded-full"></div>
-                    <div className="w-1.5 h-1.5 bg-green-400 rounded-full"></div>
-                  </div>
-                  <div className="text-center mb-2">
-                    <p className="text-xs font-medium text-gray-700">Mobile App</p>
-                  </div>
-                  <div className="bg-gradient-to-br from-purple-100 to-purple-200 rounded-lg p-2">
-                    <div className="h-1.5 bg-white rounded mb-1"></div>
-                    <div className="h-1.5 bg-white rounded w-2/3"></div>
-                  </div>
-                </div>
-                
-                {/* Software Development */}
-                <div className="bg-white rounded-xl shadow-xl p-3 transform -rotate-2 hover:rotate-0 transition-transform duration-500 ml-12 mt-4">
-                  <div className="flex space-x-1 mb-2">
-                    <div className="w-1.5 h-1.5 bg-red-400 rounded-full"></div>
-                    <div className="w-1.5 h-1.5 bg-yellow-400 rounded-full"></div>
-                    <div className="w-1.5 h-1.5 bg-green-400 rounded-full"></div>
-                  </div>
-                  <div className="text-center mb-2">
-                    <p className="text-xs font-medium text-gray-700">Custom Software</p>
-                  </div>
-                  <div className="bg-gradient-to-br from-orange-100 to-orange-200 rounded-lg p-2">
-                    <div className="h-1.5 bg-white rounded mb-1"></div>
-                    <div className="h-1.5 bg-white rounded w-1/2"></div>
-                  </div>
-                </div>
+              {/* Main Heading */}
+              <div className="space-y-6">
+                <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-secondary-900 leading-tight">
+                  We Build
+                  <span className="block text-primary-600">Digital Solutions</span>
+                  That Drive Growth
+                </h1>
+                <p className="text-lg md:text-xl text-secondary-600 leading-relaxed max-w-3xl mx-auto">
+                  Professional web development, custom software, and mobile applications that transform your business and deliver measurable results.
+                </p>
               </div>
+
+              {/* Service Highlights */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: isVisible ? 1 : 0, y: isVisible ? 0 : 20 }}
+                  transition={{ duration: 0.8, delay: 0.2 }}
+                  className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300"
+                >
+                  <div className="bg-primary-100 w-16 h-16 rounded-xl flex items-center justify-center mx-auto mb-4">
+                    <Monitor className="h-8 w-8 text-primary-600" />
+                  </div>
+                  <h3 className="text-xl font-semibold text-secondary-900 mb-2">Web Development</h3>
+                  <p className="text-secondary-600 text-sm">Modern, responsive websites that convert visitors into customers</p>
+                </motion.div>
+
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: isVisible ? 1 : 0, y: isVisible ? 0 : 20 }}
+                  transition={{ duration: 0.8, delay: 0.3 }}
+                  className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300"
+                >
+                  <div className="bg-green-100 w-16 h-16 rounded-xl flex items-center justify-center mx-auto mb-4">
+                    <Code className="h-8 w-8 text-green-600" />
+                  </div>
+                  <h3 className="text-xl font-semibold text-secondary-900 mb-2">Custom Software</h3>
+                  <p className="text-secondary-600 text-sm">Tailored solutions that streamline your business operations</p>
+                </motion.div>
+
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: isVisible ? 1 : 0, y: isVisible ? 0 : 20 }}
+                  transition={{ duration: 0.8, delay: 0.4 }}
+                  className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300"
+                >
+                  <div className="bg-purple-100 w-16 h-16 rounded-xl flex items-center justify-center mx-auto mb-4">
+                    <Smartphone className="h-8 w-8 text-purple-600" />
+                  </div>
+                  <h3 className="text-xl font-semibold text-secondary-900 mb-2">Mobile Apps</h3>
+                  <p className="text-secondary-600 text-sm">Native and cross-platform apps for iOS and Android</p>
+                </motion.div>
+              </div>
+
+              {/* CTA Buttons */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: isVisible ? 1 : 0, y: isVisible ? 0 : 20 }}
+                transition={{ duration: 0.8, delay: 0.5 }}
+                className="flex flex-col sm:flex-row gap-4 justify-center"
+              >
+                <button 
+                  onClick={() => setShowBookingModal(true)}
+                  className="btn-primary text-lg px-8 py-4"
+                >
+                  Start Your Project
+                  <Calendar className="ml-2 h-5 w-5" />
+                </button>
+                <button 
+                  onClick={() => document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' })}
+                  className="btn-secondary text-lg px-8 py-4"
+                >
+                  View Pricing
+                </button>
+              </motion.div>
+
+              {/* Trust Indicators */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: isVisible ? 1 : 0 }}
+                transition={{ duration: 0.8, delay: 0.6 }}
+                className="flex flex-wrap justify-center items-center gap-8 text-sm text-secondary-500"
+              >
+                <div className="flex items-center space-x-2">
+                  <CheckCircle2 className="h-5 w-5 text-green-500" />
+                  <span>100% Satisfaction</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Clock className="h-5 w-5 text-blue-500" />
+                  <span>Fast Delivery</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Star className="h-5 w-5 text-yellow-500" />
+                  <span>5-Star Reviews</span>
+                </div>
+              </motion.div>
             </motion.div>
           </div>
         </div>

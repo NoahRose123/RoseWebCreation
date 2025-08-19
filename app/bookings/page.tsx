@@ -18,7 +18,8 @@ import {
   Download,
   BarChart3,
   PieChart,
-  TrendingUp
+  TrendingUp,
+  DollarSign
 } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -113,11 +114,29 @@ export default function BookingsPage() {
     const pending = bookings.filter(b => b.status === 'Pending').length
     const cancelled = bookings.filter(b => b.status === 'Cancelled').length
     
+    // Calculate estimated revenue based on services
+    const servicePrices: { [key: string]: number } = {
+      'Website Monthly': 40,
+      'Website Yearly': 200,
+      'Custom Software/App': 5000, // Average custom project
+      'Website Development': 1500, // Average website project
+      'Custom Software': 5000,
+      'Mobile Apps': 3000
+    }
+    
+    const estimatedRevenue = bookings
+      .filter(b => b.status === 'Confirmed')
+      .reduce((total, booking) => {
+        const price = servicePrices[booking.service] || 1000 // Default price
+        return total + price
+      }, 0)
+    
     return {
       total,
       confirmed,
       pending,
       cancelled,
+      estimatedRevenue,
       confirmedPercentage: total > 0 ? (confirmed / total) * 100 : 0,
       pendingPercentage: total > 0 ? (pending / total) * 100 : 0,
       cancelledPercentage: total > 0 ? (cancelled / total) * 100 : 0
@@ -321,45 +340,61 @@ export default function BookingsPage() {
                   </div>
                 </div>
                 
-                {/* Stats Grid */}
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-lg p-4">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-sm font-medium text-green-800">Confirmed</p>
-                        <p className="text-2xl font-bold text-green-900">{getAnalytics().confirmed}</p>
-                      </div>
-                      <CheckCircle className="h-8 w-8 text-green-600" />
-                    </div>
-                  </div>
-                  <div className="bg-gradient-to-br from-yellow-50 to-yellow-100 rounded-lg p-4">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-sm font-medium text-yellow-800">Pending</p>
-                        <p className="text-2xl font-bold text-yellow-900">{getAnalytics().pending}</p>
-                      </div>
-                      <Clock className="h-8 w-8 text-yellow-600" />
-                    </div>
-                  </div>
-                  <div className="bg-gradient-to-br from-red-50 to-red-100 rounded-lg p-4">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-sm font-medium text-red-800">Cancelled</p>
-                        <p className="text-2xl font-bold text-red-900">{getAnalytics().cancelled}</p>
-                      </div>
-                      <X className="h-8 w-8 text-red-600" />
-                    </div>
-                  </div>
-                  <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg p-4">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-sm font-medium text-blue-800">Total</p>
-                        <p className="text-2xl font-bold text-blue-900">{getAnalytics().total}</p>
-                      </div>
-                      <TrendingUp className="h-8 w-8 text-blue-600" />
-                    </div>
-                  </div>
-                                 </div>
+                                 {/* Stats Grid */}
+                 <div className="grid grid-cols-2 gap-4">
+                   <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-lg p-4">
+                     <div className="flex items-center justify-between">
+                       <div>
+                         <p className="text-sm font-medium text-green-800">Confirmed</p>
+                         <p className="text-2xl font-bold text-green-900">{getAnalytics().confirmed}</p>
+                       </div>
+                       <CheckCircle className="h-8 w-8 text-green-600" />
+                     </div>
+                   </div>
+                   <div className="bg-gradient-to-br from-yellow-50 to-yellow-100 rounded-lg p-4">
+                     <div className="flex items-center justify-between">
+                       <div>
+                         <p className="text-sm font-medium text-yellow-800">Pending</p>
+                         <p className="text-2xl font-bold text-yellow-900">{getAnalytics().pending}</p>
+                       </div>
+                       <Clock className="h-8 w-8 text-yellow-600" />
+                     </div>
+                   </div>
+                   <div className="bg-gradient-to-br from-red-50 to-red-100 rounded-lg p-4">
+                     <div className="flex items-center justify-between">
+                       <div>
+                         <p className="text-sm font-medium text-red-800">Cancelled</p>
+                         <p className="text-2xl font-bold text-red-900">{getAnalytics().cancelled}</p>
+                       </div>
+                       <X className="h-8 w-8 text-red-600" />
+                     </div>
+                   </div>
+                   <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg p-4">
+                     <div className="flex items-center justify-between">
+                       <div>
+                         <p className="text-sm font-medium text-blue-800">Total</p>
+                         <p className="text-2xl font-bold text-blue-900">{getAnalytics().total}</p>
+                       </div>
+                       <TrendingUp className="h-8 w-8 text-blue-600" />
+                     </div>
+                   </div>
+                 </div>
+                 
+                 {/* Revenue Section */}
+                 <div className="mt-6">
+                   <div className="bg-gradient-to-br from-emerald-50 to-emerald-100 rounded-lg p-6">
+                     <div className="flex items-center justify-between">
+                       <div>
+                         <p className="text-sm font-medium text-emerald-800">Estimated Revenue</p>
+                         <p className="text-3xl font-bold text-emerald-900">
+                           ${getAnalytics().estimatedRevenue.toLocaleString()}
+                         </p>
+                         <p className="text-xs text-emerald-700 mt-1">From confirmed bookings only</p>
+                       </div>
+                       <DollarSign className="h-10 w-10 text-emerald-600" />
+                     </div>
+                   </div>
+                 </div>
                </div>
            </div>
 
@@ -517,58 +552,58 @@ export default function BookingsPage() {
               </div>
                          )}
              
-             {/* Download Section - Only show when there are bookings */}
-             {filteredBookings.length > 0 && (
-               <div className="p-6 border-t bg-gray-50">
-                 <h3 className="text-lg font-semibold text-secondary-900 mb-4 flex items-center">
-                   <Download className="h-5 w-5 mr-2" />
-                   Download Data
-                 </h3>
-                 <div className="flex flex-wrap gap-3">
-                   <button
-                     onClick={() => downloadBookings()}
-                     className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-                   >
-                     <Download className="h-4 w-4" />
-                     <span>Download All Bookings</span>
-                   </button>
-                   {selectedStatus === 'all' && (
-                     <>
-                       <button
-                         onClick={() => downloadBookings('Confirmed')}
-                         className="flex items-center space-x-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
-                       >
-                         <Download className="h-4 w-4" />
-                         <span>Download Confirmed Only</span>
-                       </button>
-                       <button
-                         onClick={() => downloadBookings('Pending')}
-                         className="flex items-center space-x-2 px-4 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition-colors"
-                       >
-                         <Download className="h-4 w-4" />
-                         <span>Download Pending Only</span>
-                       </button>
-                       <button
-                         onClick={() => downloadBookings('Cancelled')}
-                         className="flex items-center space-x-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
-                       >
-                         <Download className="h-4 w-4" />
-                         <span>Download Cancelled Only</span>
-                       </button>
-                     </>
-                   )}
-                   {selectedStatus !== 'all' && (
-                     <button
-                       onClick={() => downloadBookings(selectedStatus)}
-                       className="flex items-center space-x-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
-                     >
-                       <Download className="h-4 w-4" />
-                       <span>Download {selectedStatus} Bookings</span>
-                     </button>
-                   )}
-                 </div>
-               </div>
-             )}
+                           {/* Download Section - Only show when there are bookings */}
+              {filteredBookings.length > 0 && (
+                <div className="p-6 border-t bg-gray-50">
+                  <h3 className="text-lg font-semibold text-secondary-900 mb-4 flex items-center">
+                    <Download className="h-5 w-5 mr-2" />
+                    Download Data
+                  </h3>
+                  <div className="flex flex-wrap gap-3">
+                    <button
+                      onClick={() => downloadBookings()}
+                      className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                    >
+                      <Download className="h-4 w-4" />
+                      <span>Download All Bookings</span>
+                    </button>
+                    {selectedStatus === 'all' && (
+                      <>
+                        <button
+                          onClick={() => downloadBookings('Confirmed')}
+                          className="flex items-center space-x-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+                        >
+                          <Download className="h-4 w-4" />
+                          <span>Download Confirmed Only</span>
+                        </button>
+                        <button
+                          onClick={() => downloadBookings('Pending')}
+                          className="flex items-center space-x-2 px-4 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition-colors"
+                        >
+                          <Download className="h-4 w-4" />
+                          <span>Download Pending Only</span>
+                        </button>
+                        <button
+                          onClick={() => downloadBookings('Cancelled')}
+                          className="flex items-center space-x-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+                        >
+                          <Download className="h-4 w-4" />
+                          <span>Download Cancelled Only</span>
+                        </button>
+                      </>
+                    )}
+                    {selectedStatus !== 'all' && selectedStatus !== 'Confirmed' && (
+                      <button
+                        onClick={() => downloadBookings(selectedStatus)}
+                        className="flex items-center space-x-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
+                      >
+                        <Download className="h-4 w-4" />
+                        <span>Download {selectedStatus} Bookings</span>
+                      </button>
+                    )}
+                  </div>
+                </div>
+              )}
            </div>
          </motion.div>
        </div>
