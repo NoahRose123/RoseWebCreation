@@ -9,6 +9,11 @@ export const metadata: Metadata = {
   description: 'Transform your business with stunning, modern websites. Professional web development services with cutting-edge technology and beautiful user experiences.',
   keywords: 'web development, custom software, mobile apps, responsive design, modern websites',
   authors: [{ name: 'RoseWeb Creation' }],
+  icons: {
+    icon: '/rosewebc.png',
+    shortcut: '/rosewebc.png',
+    apple: '/rosewebc.png',
+  },
   openGraph: {
     title: 'RoseWeb Creation - Professional Web Development Services',
     description: 'Transform your business with stunning, modern websites.',
