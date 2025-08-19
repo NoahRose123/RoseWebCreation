@@ -235,16 +235,74 @@ export default function Home() {
               transition={{ duration: 0.8, delay: 0.2 }}
               className="relative"
             >
-              <div className="bg-white rounded-2xl shadow-2xl p-8 transform rotate-3 hover:rotate-0 transition-transform duration-500">
-                <div className="space-y-4">
-                  <div className="flex space-x-2">
+              {/* Dashboard Mockup */}
+              <div className="relative">
+                {/* Main Dashboard */}
+                <div className="bg-white rounded-2xl shadow-2xl p-6 transform rotate-2 hover:rotate-0 transition-transform duration-500 mb-4">
+                  <div className="flex space-x-2 mb-4">
                     <div className="w-3 h-3 bg-red-400 rounded-full"></div>
                     <div className="w-3 h-3 bg-yellow-400 rounded-full"></div>
                     <div className="w-3 h-3 bg-green-400 rounded-full"></div>
                   </div>
-                  <div className="bg-gradient-to-br from-primary-100 to-primary-200 rounded-lg p-6">
-                    <h3 className="text-xl font-semibold text-primary-800 mb-2">Modern Design</h3>
-                    <p className="text-primary-700">Beautiful, responsive websites that convert</p>
+                  
+                  {/* Analytics Dashboard */}
+                  <div className="grid grid-cols-2 gap-4 mb-4">
+                    <div className="bg-gradient-to-br from-blue-100 to-blue-200 rounded-lg p-4">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-sm font-medium text-blue-800">Revenue</p>
+                          <p className="text-xl font-bold text-blue-900">$12.5K</p>
+                        </div>
+                        <TrendingUp className="h-6 w-6 text-blue-600" />
+                      </div>
+                    </div>
+                    <div className="bg-gradient-to-br from-green-100 to-green-200 rounded-lg p-4">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-sm font-medium text-green-800">Users</p>
+                          <p className="text-xl font-bold text-green-900">2.4K</p>
+                        </div>
+                        <Users className="h-6 w-6 text-green-600" />
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* Chart Placeholder */}
+                  <div className="bg-gray-100 rounded-lg p-4 h-20 flex items-center justify-center">
+                    <div className="flex space-x-1">
+                      <div className="w-2 bg-blue-500 rounded-t h-8"></div>
+                      <div className="w-2 bg-blue-500 rounded-t h-12"></div>
+                      <div className="w-2 bg-blue-500 rounded-t h-6"></div>
+                      <div className="w-2 bg-blue-500 rounded-t h-10"></div>
+                      <div className="w-2 bg-blue-500 rounded-t h-8"></div>
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Website Mockup */}
+                <div className="bg-white rounded-xl shadow-xl p-4 transform -rotate-1 hover:rotate-0 transition-transform duration-500 ml-8">
+                  <div className="flex space-x-2 mb-3">
+                    <div className="w-2 h-2 bg-red-400 rounded-full"></div>
+                    <div className="w-2 h-2 bg-yellow-400 rounded-full"></div>
+                    <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+                  </div>
+                  <div className="bg-gradient-to-br from-primary-100 to-primary-200 rounded-lg p-3">
+                    <div className="h-2 bg-white rounded mb-2"></div>
+                    <div className="h-2 bg-white rounded w-3/4 mb-2"></div>
+                    <div className="h-2 bg-white rounded w-1/2"></div>
+                  </div>
+                </div>
+                
+                {/* Mobile App Mockup */}
+                <div className="bg-white rounded-xl shadow-xl p-3 transform rotate-1 hover:rotate-0 transition-transform duration-500 -ml-4 mt-4">
+                  <div className="flex space-x-1 mb-2">
+                    <div className="w-1.5 h-1.5 bg-red-400 rounded-full"></div>
+                    <div className="w-1.5 h-1.5 bg-yellow-400 rounded-full"></div>
+                    <div className="w-1.5 h-1.5 bg-green-400 rounded-full"></div>
+                  </div>
+                  <div className="bg-gradient-to-br from-purple-100 to-purple-200 rounded-lg p-2">
+                    <div className="h-1.5 bg-white rounded mb-1"></div>
+                    <div className="h-1.5 bg-white rounded w-2/3"></div>
                   </div>
                 </div>
               </div>

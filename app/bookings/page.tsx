@@ -14,7 +14,11 @@ import {
   EyeOff,
   ArrowLeft,
   CheckCircle,
-  X
+  X,
+  Download,
+  BarChart3,
+  PieChart,
+  TrendingUp
 } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -38,6 +42,8 @@ export default function BookingsPage() {
   const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState('')
   const [bookings, setBookings] = useState<Booking[]>([])
+  const [selectedStatus, setSelectedStatus] = useState<'all' | 'Confirmed' | 'Pending' | 'Cancelled'>('all')
+  const [showAnalytics, setShowAnalytics] = useState(false)
 
   // Load bookings from localStorage on component mount
   useEffect(() => {
@@ -70,6 +76,58 @@ export default function BookingsPage() {
     setBookings(updatedBookings)
     localStorage.setItem('bookings', JSON.stringify(updatedBookings))
   }
+
+  const downloadBookings = (status?: 'Confirmed' | 'Pending' | 'Cancelled') => {
+    const filteredBookings = status 
+      ? bookings.filter(booking => booking.status === status)
+      : bookings
+    
+    const csvContent = [
+      ['Name', 'Email', 'Phone', 'Service', 'Date', 'Time', 'Status', 'Message', 'Created At'],
+      ...filteredBookings.map(booking => [
+        booking.name,
+        booking.email,
+        booking.phone,
+        booking.service,
+        booking.date,
+        booking.time,
+        booking.status,
+        booking.message || '',
+        booking.createdAt
+      ])
+    ].map(row => row.map(field => `"${field}"`).join(',')).join('\n')
+    
+    const blob = new Blob([csvContent], { type: 'text/csv' })
+    const url = window.URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `bookings-${status || 'all'}-${new Date().toISOString().split('T')[0]}.csv`
+    document.body.appendChild(a)
+    a.click()
+    document.body.removeChild(a)
+    window.URL.revokeObjectURL(url)
+  }
+
+  const getAnalytics = () => {
+    const total = bookings.length
+    const confirmed = bookings.filter(b => b.status === 'Confirmed').length
+    const pending = bookings.filter(b => b.status === 'Pending').length
+    const cancelled = bookings.filter(b => b.status === 'Cancelled').length
+    
+    return {
+      total,
+      confirmed,
+      pending,
+      cancelled,
+      confirmedPercentage: total > 0 ? (confirmed / total) * 100 : 0,
+      pendingPercentage: total > 0 ? (pending / total) * 100 : 0,
+      cancelledPercentage: total > 0 ? (cancelled / total) * 100 : 0
+    }
+  }
+
+  const filteredBookings = selectedStatus === 'all' 
+    ? bookings 
+    : bookings.filter(booking => booking.status === selectedStatus)
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
@@ -183,8 +241,24 @@ export default function BookingsPage() {
                 <span className="font-bold text-lg text-secondary-900">Bookings Dashboard</span>
               </div>
             </div>
-            <div className="text-sm text-secondary-600">
-              {bookings.length} total bookings
+            <div className="flex items-center space-x-4">
+              <button
+                onClick={() => setShowAnalytics(!showAnalytics)}
+                className="flex items-center space-x-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
+              >
+                <BarChart3 className="h-4 w-4" />
+                <span>Analytics</span>
+              </button>
+              <button
+                onClick={() => downloadBookings()}
+                className="flex items-center space-x-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+              >
+                <Download className="h-4 w-4" />
+                <span>Download All</span>
+              </button>
+              <div className="text-sm text-secondary-600">
+                {bookings.length} total bookings
+              </div>
             </div>
           </div>
         </div>
@@ -197,49 +271,201 @@ export default function BookingsPage() {
           animate={{ opacity: 1, y: 0 }}
           className="space-y-6"
         >
-          {/* Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-            <div className="bg-white rounded-xl p-6 shadow-sm border">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-secondary-600 font-medium">Total Bookings</p>
-                  <p className="text-3xl font-bold text-secondary-900">{bookings.length}</p>
+          {/* Analytics Section */}
+          {showAnalytics && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              className="bg-white rounded-xl shadow-sm border p-6 mb-6"
+            >
+              <h3 className="text-xl font-semibold text-secondary-900 mb-6 flex items-center">
+                <PieChart className="h-5 w-5 mr-2" />
+                Analytics Overview
+              </h3>
+              
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                {/* Pie Chart */}
+                <div className="space-y-4">
+                  <h4 className="font-medium text-secondary-700">Booking Status Distribution</h4>
+                  <div className="relative w-48 h-48 mx-auto">
+                    <svg className="w-48 h-48 transform -rotate-90" viewBox="0 0 36 36">
+                      <path
+                        d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                        fill="none"
+                        stroke="#e5e7eb"
+                        strokeWidth="2"
+                      />
+                      <path
+                        d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                        fill="none"
+                        stroke="#10b981"
+                        strokeWidth="2"
+                        strokeDasharray={`${getAnalytics().confirmedPercentage}, 100`}
+                      />
+                      <path
+                        d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                        fill="none"
+                        stroke="#f59e0b"
+                        strokeWidth="2"
+                        strokeDasharray={`${getAnalytics().pendingPercentage}, 100`}
+                        strokeDashoffset={`-${getAnalytics().confirmedPercentage}`}
+                      />
+                      <path
+                        d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                        fill="none"
+                        stroke="#ef4444"
+                        strokeWidth="2"
+                        strokeDasharray={`${getAnalytics().cancelledPercentage}, 100`}
+                        strokeDashoffset={`-${getAnalytics().confirmedPercentage + getAnalytics().pendingPercentage}`}
+                      />
+                    </svg>
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="text-center">
+                        <div className="text-2xl font-bold text-secondary-900">{getAnalytics().total}</div>
+                        <div className="text-sm text-secondary-600">Total</div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="flex justify-center space-x-6">
+                    <div className="flex items-center space-x-2">
+                      <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                      <span className="text-sm">Confirmed ({getAnalytics().confirmedPercentage.toFixed(1)}%)</span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                      <span className="text-sm">Pending ({getAnalytics().pendingPercentage.toFixed(1)}%)</span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+                      <span className="text-sm">Cancelled ({getAnalytics().cancelledPercentage.toFixed(1)}%)</span>
+                    </div>
+                  </div>
                 </div>
-                <Calendar className="h-8 w-8 text-primary-600" />
+                
+                {/* Stats Grid */}
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-lg p-4">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-sm font-medium text-green-800">Confirmed</p>
+                        <p className="text-2xl font-bold text-green-900">{getAnalytics().confirmed}</p>
+                      </div>
+                      <CheckCircle className="h-8 w-8 text-green-600" />
+                    </div>
+                  </div>
+                  <div className="bg-gradient-to-br from-yellow-50 to-yellow-100 rounded-lg p-4">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-sm font-medium text-yellow-800">Pending</p>
+                        <p className="text-2xl font-bold text-yellow-900">{getAnalytics().pending}</p>
+                      </div>
+                      <Clock className="h-8 w-8 text-yellow-600" />
+                    </div>
+                  </div>
+                  <div className="bg-gradient-to-br from-red-50 to-red-100 rounded-lg p-4">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-sm font-medium text-red-800">Cancelled</p>
+                        <p className="text-2xl font-bold text-red-900">{getAnalytics().cancelled}</p>
+                      </div>
+                      <X className="h-8 w-8 text-red-600" />
+                    </div>
+                  </div>
+                  <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg p-4">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-sm font-medium text-blue-800">Total</p>
+                        <p className="text-2xl font-bold text-blue-900">{getAnalytics().total}</p>
+                      </div>
+                      <TrendingUp className="h-8 w-8 text-blue-600" />
+                    </div>
+                  </div>
+                </div>
               </div>
+            </motion.div>
+          )}
+
+          {/* Clickable Status Headers */}
+          <div className="bg-white rounded-xl shadow-sm border p-6 mb-6">
+            <div className="flex flex-wrap gap-4">
+              <button
+                onClick={() => setSelectedStatus('all')}
+                className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-colors ${
+                  selectedStatus === 'all' 
+                    ? 'bg-primary-600 text-white' 
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                <Calendar className="h-4 w-4" />
+                <span>All ({bookings.length})</span>
+              </button>
+              <button
+                onClick={() => setSelectedStatus('Confirmed')}
+                className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-colors ${
+                  selectedStatus === 'Confirmed' 
+                    ? 'bg-green-600 text-white' 
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                <CheckCircle className="h-4 w-4" />
+                <span>Confirmed ({bookings.filter(b => b.status === 'Confirmed').length})</span>
+              </button>
+              <button
+                onClick={() => setSelectedStatus('Pending')}
+                className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-colors ${
+                  selectedStatus === 'Pending' 
+                    ? 'bg-yellow-600 text-white' 
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                <Clock className="h-4 w-4" />
+                <span>Pending ({bookings.filter(b => b.status === 'Pending').length})</span>
+              </button>
+              <button
+                onClick={() => setSelectedStatus('Cancelled')}
+                className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-colors ${
+                  selectedStatus === 'Cancelled' 
+                    ? 'bg-red-600 text-white' 
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                <X className="h-4 w-4" />
+                <span>Cancelled ({bookings.filter(b => b.status === 'Cancelled').length})</span>
+              </button>
             </div>
-            <div className="bg-white rounded-xl p-6 shadow-sm border">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-secondary-600 font-medium">Confirmed</p>
-                  <p className="text-3xl font-bold text-green-600">
-                    {bookings.filter(b => b.status === 'Confirmed').length}
-                  </p>
-                </div>
-                <CheckCircle className="h-8 w-8 text-green-600" />
-              </div>
-            </div>
-            <div className="bg-white rounded-xl p-6 shadow-sm border">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-secondary-600 font-medium">Pending</p>
-                  <p className="text-3xl font-bold text-yellow-600">
-                    {bookings.filter(b => b.status === 'Pending').length}
-                  </p>
-                </div>
-                <Clock className="h-8 w-8 text-yellow-600" />
-              </div>
-            </div>
-            <div className="bg-white rounded-xl p-6 shadow-sm border">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-secondary-600 font-medium">Cancelled</p>
-                  <p className="text-3xl font-bold text-red-600">
-                    {bookings.filter(b => b.status === 'Cancelled').length}
-                  </p>
-                </div>
-                <X className="h-8 w-8 text-red-600" />
-              </div>
+            
+            {/* Download buttons for each status */}
+            <div className="flex flex-wrap gap-2 mt-4">
+              <button
+                onClick={() => downloadBookings()}
+                className="flex items-center space-x-2 px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700 transition-colors"
+              >
+                <Download className="h-3 w-3" />
+                <span>Download All</span>
+              </button>
+              <button
+                onClick={() => downloadBookings('Confirmed')}
+                className="flex items-center space-x-2 px-3 py-1 bg-green-600 text-white text-sm rounded hover:bg-green-700 transition-colors"
+              >
+                <Download className="h-3 w-3" />
+                <span>Download Confirmed</span>
+              </button>
+              <button
+                onClick={() => downloadBookings('Pending')}
+                className="flex items-center space-x-2 px-3 py-1 bg-yellow-600 text-white text-sm rounded hover:bg-yellow-700 transition-colors"
+              >
+                <Download className="h-3 w-3" />
+                <span>Download Pending</span>
+              </button>
+              <button
+                onClick={() => downloadBookings('Cancelled')}
+                className="flex items-center space-x-2 px-3 py-1 bg-red-600 text-white text-sm rounded hover:bg-red-700 transition-colors"
+              >
+                <Download className="h-3 w-3" />
+                <span>Download Cancelled</span>
+              </button>
             </div>
           </div>
 
@@ -249,15 +475,22 @@ export default function BookingsPage() {
               <h2 className="text-xl font-semibold text-secondary-900">Recent Bookings</h2>
             </div>
             
-            {bookings.length === 0 ? (
+            {filteredBookings.length === 0 ? (
               <div className="p-12 text-center">
                 <Calendar className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                <h3 className="text-lg font-medium text-secondary-900 mb-2">No bookings yet</h3>
-                <p className="text-secondary-600">Bookings will appear here once customers submit them.</p>
+                <h3 className="text-lg font-medium text-secondary-900 mb-2">
+                  {selectedStatus === 'all' ? 'No bookings yet' : `No ${selectedStatus.toLowerCase()} bookings`}
+                </h3>
+                <p className="text-secondary-600">
+                  {selectedStatus === 'all' 
+                    ? 'Bookings will appear here once customers submit them.'
+                    : `No ${selectedStatus.toLowerCase()} bookings found.`
+                  }
+                </p>
               </div>
             ) : (
               <div className="divide-y divide-gray-200">
-                {bookings.map((booking) => (
+                {filteredBookings.map((booking) => (
                   <motion.div
                     key={booking.id}
                     initial={{ opacity: 0 }}
