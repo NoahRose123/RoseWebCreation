@@ -44,4 +44,17 @@
   .card-hover {
     @apply transition-all duration-300 transform hover:scale-105 hover:shadow-xl;
   }
+  
+  /* Mobile Mountain Detailing specific styles */
+  .mobile-mountain-gradient {
+    @apply bg-gradient-to-br from-gray-900 via-blue-900 to-gray-800;
+  }
+  
+  .mobile-mountain-card {
+    @apply bg-white rounded-xl shadow-lg p-8 border border-gray-200;
+  }
+  
+  .mobile-mountain-button {
+    @apply bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl;
+  }
 }

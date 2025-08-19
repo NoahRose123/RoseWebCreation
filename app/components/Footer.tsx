@@ -163,15 +163,27 @@ export default function Footer() {
                © {currentYear} RoseWeb Creation. All rights reserved.
              </p>
              
-                           {/* View Bookings Button */}
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => window.location.href = '/bookings'}
-                className="bg-gray-600 hover:bg-gray-700 text-white px-3 py-1 rounded text-xs transition-colors duration-300 opacity-60 hover:opacity-100"
-              >
-                Admin
-              </motion.button>
+             <div className="flex space-x-2">
+               {/* Mobile Mountain Detailing Button */}
+               <motion.button
+                 whileHover={{ scale: 1.05 }}
+                 whileTap={{ scale: 0.95 }}
+                 onClick={() => window.location.href = '/mobile-mountain'}
+                 className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded text-sm font-medium transition-colors duration-300"
+               >
+                 Mobile Mountain Detailing
+               </motion.button>
+               
+               {/* View Bookings Button */}
+               <motion.button
+                 whileHover={{ scale: 1.05 }}
+                 whileTap={{ scale: 0.95 }}
+                 onClick={() => window.location.href = '/bookings'}
+                 className="bg-gray-600 hover:bg-gray-700 text-white px-3 py-1 rounded text-xs transition-colors duration-300 opacity-60 hover:opacity-100"
+               >
+                 Admin
+               </motion.button>
+             </div>
            </div>
         </motion.div>
       </div>

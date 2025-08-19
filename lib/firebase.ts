@@ -19,11 +19,16 @@ export const db = getFirestore(app);
 
 // Collection references
 export const bookingsCollection = collection(db, "bookings");
+export const mobileMountainBookingsCollection = collection(db, "mobile-mountain-bookings");
 
 // Booking functions
-export const addBooking = async (bookingData: any) => {
+export const addBooking = async (bookingData: any, collectionName: string = "bookings") => {
   try {
-    const docRef = await addDoc(bookingsCollection, {
+    const targetCollection = collectionName === "mobile-mountain-bookings" 
+      ? mobileMountainBookingsCollection 
+      : bookingsCollection;
+      
+    const docRef = await addDoc(targetCollection, {
       ...bookingData,
       createdAt: new Date().toISOString(),
       id: Date.now() // Generate unique ID
@@ -35,9 +40,13 @@ export const addBooking = async (bookingData: any) => {
   }
 };
 
-export const getBookings = async () => {
+export const getBookings = async (collectionName: string = "bookings") => {
   try {
-    const q = query(bookingsCollection, orderBy("createdAt", "desc"));
+    const targetCollection = collectionName === "mobile-mountain-bookings" 
+      ? mobileMountainBookingsCollection 
+      : bookingsCollection;
+      
+    const q = query(targetCollection, orderBy("createdAt", "desc"));
     const querySnapshot = await getDocs(q);
     const bookings = querySnapshot.docs.map(doc => {
       const data = doc.data();
@@ -61,14 +70,18 @@ export const getBookings = async () => {
   }
 };
 
-export const updateBooking = async (id: number, status: string) => {
+export const updateBooking = async (id: number, status: string, collectionName: string = "bookings") => {
   try {
-    const q = query(bookingsCollection);
+    const targetCollection = collectionName === "mobile-mountain-bookings" 
+      ? mobileMountainBookingsCollection 
+      : bookingsCollection;
+      
+    const q = query(targetCollection);
     const querySnapshot = await getDocs(q);
     const bookingDoc = querySnapshot.docs.find(doc => doc.data().id === id);
     
     if (bookingDoc) {
-      await updateDoc(doc(db, "bookings", bookingDoc.id), {
+      await updateDoc(doc(db, collectionName, bookingDoc.id), {
         status: status
       });
     }
@@ -78,14 +91,18 @@ export const updateBooking = async (id: number, status: string) => {
   }
 };
 
-export const deleteBooking = async (id: number) => {
+export const deleteBooking = async (id: number, collectionName: string = "bookings") => {
   try {
-    const q = query(bookingsCollection);
+    const targetCollection = collectionName === "mobile-mountain-bookings" 
+      ? mobileMountainBookingsCollection 
+      : bookingsCollection;
+      
+    const q = query(targetCollection);
     const querySnapshot = await getDocs(q);
     const bookingDoc = querySnapshot.docs.find(doc => doc.data().id === id);
     
     if (bookingDoc) {
-      await deleteDoc(doc(db, "bookings", bookingDoc.id));
+      await deleteDoc(doc(db, collectionName, bookingDoc.id));
     }
   } catch (error) {
     console.error("Error deleting booking: ", error);
