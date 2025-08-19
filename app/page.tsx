@@ -199,109 +199,51 @@ export default function Home() {
       <section className="gradient-bg min-h-screen flex items-center justify-center relative overflow-hidden pt-20 md:pt-0">
         <div className="absolute inset-0 bg-gradient-to-br from-primary-50/50 to-white/50"></div>
         <div className="container-custom section-padding relative z-10">
-          <div className="text-center max-w-4xl mx-auto">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
             <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: isVisible ? 1 : 0, y: isVisible ? 0 : 30 }}
+              initial={{ opacity: 0, x: -50 }}
+              animate={{ opacity: isVisible ? 1 : 0, x: isVisible ? 0 : -50 }}
               transition={{ duration: 0.8 }}
               className="space-y-8"
             >
-              {/* Main Heading */}
-              <div className="space-y-6">
-                <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-secondary-900 leading-tight">
-                  We Build
-                  <span className="block text-primary-600">Digital Solutions</span>
-                  That Drive Growth
-                </h1>
-                <p className="text-lg md:text-xl text-secondary-600 leading-relaxed max-w-3xl mx-auto">
-                  Professional web development, custom software, and mobile applications that transform your business and deliver measurable results.
-                </p>
-              </div>
-
-              {/* Service Highlights */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: isVisible ? 1 : 0, y: isVisible ? 0 : 20 }}
-                  transition={{ duration: 0.8, delay: 0.2 }}
-                  className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300"
-                >
-                  <div className="bg-primary-100 w-16 h-16 rounded-xl flex items-center justify-center mx-auto mb-4">
-                    <Monitor className="h-8 w-8 text-primary-600" />
-                  </div>
-                  <h3 className="text-xl font-semibold text-secondary-900 mb-2">Web Development</h3>
-                  <p className="text-secondary-600 text-sm">Modern, responsive websites that convert visitors into customers</p>
-                </motion.div>
-
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: isVisible ? 1 : 0, y: isVisible ? 0 : 20 }}
-                  transition={{ duration: 0.8, delay: 0.3 }}
-                  className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300"
-                >
-                  <div className="bg-green-100 w-16 h-16 rounded-xl flex items-center justify-center mx-auto mb-4">
-                    <Code className="h-8 w-8 text-green-600" />
-                  </div>
-                  <h3 className="text-xl font-semibold text-secondary-900 mb-2">Custom Software</h3>
-                  <p className="text-secondary-600 text-sm">Tailored solutions that streamline your business operations</p>
-                </motion.div>
-
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: isVisible ? 1 : 0, y: isVisible ? 0 : 20 }}
-                  transition={{ duration: 0.8, delay: 0.4 }}
-                  className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300"
-                >
-                  <div className="bg-purple-100 w-16 h-16 rounded-xl flex items-center justify-center mx-auto mb-4">
-                    <Smartphone className="h-8 w-8 text-purple-600" />
-                  </div>
-                  <h3 className="text-xl font-semibold text-secondary-900 mb-2">Mobile Apps</h3>
-                  <p className="text-secondary-600 text-sm">Native and cross-platform apps for iOS and Android</p>
-                </motion.div>
-              </div>
-
-              {/* CTA Buttons */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: isVisible ? 1 : 0, y: isVisible ? 0 : 20 }}
-                transition={{ duration: 0.8, delay: 0.5 }}
-                className="flex flex-col sm:flex-row gap-4 justify-center"
-              >
+              <h1 className="text-5xl lg:text-6xl font-bold text-secondary-900 leading-tight">
+                Transform Your <span className="text-primary-600">Digital Presence</span>
+              </h1>
+              <p className="text-xl text-secondary-600 leading-relaxed">
+                We create stunning, modern websites and applications that help businesses grow and succeed in the digital world.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4">
                 <button 
                   onClick={() => setShowBookingModal(true)}
-                  className="btn-primary text-lg px-8 py-4"
+                  className="btn-primary"
                 >
-                  Start Your Project
+                  Book Appointment
                   <Calendar className="ml-2 h-5 w-5" />
                 </button>
                 <button 
                   onClick={() => document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' })}
-                  className="btn-secondary text-lg px-8 py-4"
+                  className="btn-secondary"
                 >
                   View Pricing
                 </button>
-              </motion.div>
-
-              {/* Trust Indicators */}
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: isVisible ? 1 : 0 }}
-                transition={{ duration: 0.8, delay: 0.6 }}
-                className="flex flex-wrap justify-center items-center gap-8 text-sm text-secondary-500"
-              >
-                <div className="flex items-center space-x-2">
-                  <CheckCircle2 className="h-5 w-5 text-green-500" />
-                  <span>100% Satisfaction</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Clock className="h-5 w-5 text-blue-500" />
-                  <span>Fast Delivery</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Star className="h-5 w-5 text-yellow-500" />
-                  <span>5-Star Reviews</span>
-                </div>
-              </motion.div>
+              </div>
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, x: 50 }}
+              animate={{ opacity: isVisible ? 1 : 0, x: isVisible ? 0 : 50 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="relative"
+            >
+              <div className="relative">
+                <Image
+                  src="/hero.svg"
+                  alt="Digital Solutions Illustration"
+                  width={600}
+                  height={400}
+                  className="w-full h-auto"
+                  priority
+                />
+              </div>
             </motion.div>
           </div>
         </div>
