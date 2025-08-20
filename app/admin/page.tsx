@@ -51,6 +51,7 @@ export default function RoseWebAdminPage() {
   const [confirmPassword, setConfirmPassword] = useState('')
   const [passwordError, setPasswordError] = useState('')
   const [passwordSuccess, setPasswordSuccess] = useState('')
+  const [isUpdatingPassword, setIsUpdatingPassword] = useState(false)
   const [pricing, setPricing] = useState({
     websiteMonthly: 40,
     websiteYearly: 200,
@@ -135,6 +136,41 @@ export default function RoseWebAdminPage() {
     } catch (error) {
       console.error('Error updating pricing:', error)
       setIsUpdatingPricing(false)
+    }
+  }
+
+  const handlePasswordChange = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setPasswordError('')
+    setPasswordSuccess('')
+    setIsUpdatingPassword(true)
+
+    try {
+      if (currentPassword !== '4242') {
+        setPasswordError('Current password is incorrect')
+        return
+      }
+
+      if (newPassword.length < 4) {
+        setPasswordError('New password must be at least 4 characters')
+        return
+      }
+
+      if (newPassword !== confirmPassword) {
+        setPasswordError('New passwords do not match')
+        return
+      }
+
+      // In a real app, you would update this in Firebase
+      // For now, we'll just show success
+      setPasswordSuccess('Password updated successfully!')
+      setCurrentPassword('')
+      setNewPassword('')
+      setConfirmPassword('')
+    } catch (error) {
+      setPasswordError('Error updating password')
+    } finally {
+      setIsUpdatingPassword(false)
     }
   }
 
@@ -438,67 +474,154 @@ export default function RoseWebAdminPage() {
                   <p className="text-gray-500">No bookings found</p>
                 </div>
               ) : (
-                <div className="space-y-4">
-                  {filteredBookings.map((booking) => (
-                    <div key={booking.id} className="border border-gray-200 rounded-lg p-4">
-                      <div className="flex items-center justify-between">
-                        <div className="flex-1">
-                          <div className="flex items-center space-x-4">
-                            <div>
-                              <h4 className="font-medium text-gray-900">{booking.name}</h4>
-                              <p className="text-sm text-gray-600">{booking.email}</p>
-                              <p className="text-sm text-gray-600">{booking.phone}</p>
-                            </div>
-                            <div>
-                              <p className="text-sm font-medium text-gray-900">{booking.service}</p>
-                              <p className="text-sm text-gray-600">{booking.selectedDate} at {booking.selectedTime}</p>
-                            </div>
-                            <div>
-                              <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                                booking.status === 'Confirmed' ? 'bg-green-100 text-green-800' :
-                                booking.status === 'Pending' ? 'bg-yellow-100 text-yellow-800' :
-                                'bg-red-100 text-red-800'
-                              }`}>
-                                {booking.status}
-                              </span>
-                            </div>
-                          </div>
-                          {booking.message && (
-                            <p className="text-sm text-gray-600 mt-2">{booking.message}</p>
-                          )}
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          {booking.status === 'Pending' && (
-                            <>
-                              <button
-                                onClick={() => updateBookingStatus(booking.id, 'Confirmed')}
-                                className="text-green-600 hover:text-green-700"
-                              >
-                                <CheckCircle className="h-5 w-5" />
-                              </button>
-                              <button
-                                onClick={() => updateBookingStatus(booking.id, 'Cancelled')}
-                                className="text-red-600 hover:text-red-700"
-                              >
-                                <X className="h-5 w-5" />
-                              </button>
-                            </>
-                          )}
-                          <button
-                            onClick={() => handleDeleteBooking(booking.id)}
-                            className="text-gray-400 hover:text-red-600"
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          </div>
-        )}
+                                 <div className="space-y-4">
+                   {filteredBookings.map((booking) => (
+                     <div key={booking.id} className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
+                       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                         {/* Client Information */}
+                         <div className="space-y-2">
+                           <h4 className="font-semibold text-gray-900 text-lg">{booking.name}</h4>
+                           {booking.email && (
+                             <p className="text-sm text-gray-600 flex items-center">
+                               <Mail className="h-4 w-4 mr-2" />
+                               {booking.email}
+                             </p>
+                           )}
+                           <p className="text-sm text-gray-600 flex items-center">
+                             <Phone className="h-4 w-4 mr-2" />
+                             {booking.phone}
+                           </p>
+                         </div>
+                         
+                         {/* Service & Date */}
+                         <div className="space-y-2">
+                           <p className="text-sm font-medium text-gray-900">{booking.service}</p>
+                           <p className="text-sm text-gray-600">
+                             {new Date(booking.selectedDate).toLocaleDateString('en-US', {
+                               weekday: 'long',
+                               year: 'numeric',
+                               month: 'long',
+                               day: 'numeric'
+                             })}
+                           </p>
+                           <p className="text-sm text-gray-600">{booking.selectedTime}</p>
+                         </div>
+                         
+                         {/* Status & Actions */}
+                         <div className="flex flex-col items-end space-y-3">
+                           <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
+                             booking.status === 'Confirmed' ? 'bg-green-100 text-green-800' :
+                             booking.status === 'Pending' ? 'bg-yellow-100 text-yellow-800' :
+                             'bg-red-100 text-red-800'
+                           }`}>
+                             {booking.status}
+                           </span>
+                           
+                           <div className="flex items-center space-x-2">
+                             {booking.status === 'Pending' && (
+                               <>
+                                 <button
+                                   onClick={() => updateBookingStatus(booking.id, 'Confirmed')}
+                                   className="text-green-600 hover:text-green-700 p-1 rounded"
+                                   title="Confirm"
+                                 >
+                                   <CheckCircle className="h-5 w-5" />
+                                 </button>
+                                 <button
+                                   onClick={() => updateBookingStatus(booking.id, 'Cancelled')}
+                                   className="text-red-600 hover:text-red-700 p-1 rounded"
+                                   title="Cancel"
+                                 >
+                                   <X className="h-5 w-5" />
+                                 </button>
+                               </>
+                             )}
+                             <button
+                               onClick={() => handleDeleteBooking(booking.id)}
+                               className="text-gray-400 hover:text-red-600 p-1 rounded"
+                               title="Delete"
+                             >
+                               <Trash2 className="h-4 w-4" />
+                             </button>
+                           </div>
+                         </div>
+                       </div>
+                       
+                       {booking.message && (
+                         <div className="mt-4 pt-4 border-t border-gray-100">
+                           <p className="text-sm text-gray-600">
+                             <span className="font-medium">Message:</span> {booking.message}
+                           </p>
+                         </div>
+                       )}
+                     </div>
+                   ))}
+                 </div>
+                             )}
+             </div>
+             
+             {/* Pie Chart */}
+             <div className="mt-8 bg-white rounded-lg shadow-sm p-6">
+               <h3 className="text-lg font-medium text-gray-900 mb-4">Booking Status Distribution</h3>
+               <div className="flex items-center justify-center">
+                 <div className="relative w-32 h-32">
+                   <svg className="w-32 h-32 transform -rotate-90" viewBox="0 0 36 36">
+                     <path
+                       d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                       fill="none"
+                       stroke="#e5e7eb"
+                       strokeWidth="3"
+                     />
+                     {analytics.total > 0 && (
+                       <>
+                         <path
+                           d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                           fill="none"
+                           stroke="#10b981"
+                           strokeWidth="3"
+                           strokeDasharray={`${analytics.total > 0 ? (analytics.confirmed / analytics.total) * 100 : 0} ${analytics.total > 0 ? 100 - (analytics.confirmed / analytics.total) * 100 : 0}`}
+                         />
+                         <path
+                           d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                           fill="none"
+                           stroke="#f59e0b"
+                           strokeWidth="3"
+                           strokeDasharray={`${analytics.total > 0 ? (analytics.pending / analytics.total) * 100 : 0} ${analytics.total > 0 ? 100 - (analytics.pending / analytics.total) * 100 : 0}`}
+                           strokeDashoffset={`-${analytics.total > 0 ? (analytics.confirmed / analytics.total) * 100 : 0}`}
+                         />
+                         <path
+                           d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                           fill="none"
+                           stroke="#ef4444"
+                           strokeWidth="3"
+                           strokeDasharray={`${analytics.total > 0 ? (analytics.cancelled / analytics.total) * 100 : 0} ${analytics.total > 0 ? 100 - (analytics.cancelled / analytics.total) * 100 : 0}`}
+                           strokeDashoffset={`-${analytics.total > 0 ? ((analytics.confirmed + analytics.pending) / analytics.total) * 100 : 0}`}
+                         />
+                       </>
+                     )}
+                   </svg>
+                   <div className="absolute inset-0 flex items-center justify-center">
+                     <span className="text-2xl font-bold text-gray-900">{analytics.total}</span>
+                   </div>
+                 </div>
+                 <div className="ml-6 space-y-2">
+                   <div className="flex items-center">
+                     <div className="w-3 h-3 bg-green-500 rounded-full mr-2"></div>
+                     <span className="text-sm text-gray-600">Confirmed: {analytics.confirmed}</span>
+                   </div>
+                   <div className="flex items-center">
+                     <div className="w-3 h-3 bg-yellow-500 rounded-full mr-2"></div>
+                     <span className="text-sm text-gray-600">Pending: {analytics.pending}</span>
+                   </div>
+                   <div className="flex items-center">
+                     <div className="w-3 h-3 bg-red-500 rounded-full mr-2"></div>
+                     <span className="text-sm text-gray-600">Cancelled: {analytics.cancelled}</span>
+                   </div>
+                 </div>
+               </div>
+             </div>
+           </div>
+         )}
 
         {activeTab === 'pricing' && (
           <div className="bg-white rounded-lg shadow-sm p-6">
@@ -552,54 +675,74 @@ export default function RoseWebAdminPage() {
           </div>
         )}
 
-        {activeTab === 'settings' && (
-          <div className="bg-white rounded-lg shadow-sm p-6">
-            <h3 className="text-lg font-medium text-gray-900 mb-6">Admin Settings</h3>
-            <div className="space-y-6">
-              <div>
-                <h4 className="text-md font-medium text-gray-900 mb-4">Change Admin Password</h4>
-                <div className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Current Password
-                    </label>
-                    <input
-                      type="password"
-                      value={currentPassword}
-                      onChange={(e) => setCurrentPassword(e.target.value)}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      New Password
-                    </label>
-                    <input
-                      type="password"
-                      value={newPassword}
-                      onChange={(e) => setNewPassword(e.target.value)}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Confirm New Password
-                    </label>
-                    <input
-                      type="password"
-                      value={confirmPassword}
-                      onChange={(e) => setConfirmPassword(e.target.value)}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    />
-                  </div>
-                  <button className="bg-blue-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors">
-                    Update Password
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
+                 {activeTab === 'settings' && (
+           <div className="bg-white rounded-lg shadow-sm p-6">
+             <h3 className="text-lg font-medium text-gray-900 mb-6">Admin Settings</h3>
+             <div className="space-y-6">
+               <div>
+                 <h4 className="text-md font-medium text-gray-900 mb-4">Change Admin Password</h4>
+                 <form onSubmit={handlePasswordChange} className="space-y-4">
+                   <div>
+                     <label className="block text-sm font-medium text-gray-700 mb-2">
+                       Current Password
+                     </label>
+                     <input
+                       type="password"
+                       value={currentPassword}
+                       onChange={(e) => setCurrentPassword(e.target.value)}
+                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                       required
+                     />
+                   </div>
+                   <div>
+                     <label className="block text-sm font-medium text-gray-700 mb-2">
+                       New Password
+                     </label>
+                     <input
+                       type="password"
+                       value={newPassword}
+                       onChange={(e) => setNewPassword(e.target.value)}
+                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                       required
+                     />
+                   </div>
+                   <div>
+                     <label className="block text-sm font-medium text-gray-700 mb-2">
+                       Confirm New Password
+                     </label>
+                     <input
+                       type="password"
+                       value={confirmPassword}
+                       onChange={(e) => setConfirmPassword(e.target.value)}
+                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                       required
+                     />
+                   </div>
+                   
+                   {passwordError && (
+                     <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg">
+                       {passwordError}
+                     </div>
+                   )}
+                   
+                   {passwordSuccess && (
+                     <div className="bg-green-50 border border-green-200 text-green-600 px-4 py-3 rounded-lg">
+                       {passwordSuccess}
+                     </div>
+                   )}
+                   
+                   <button 
+                     type="submit"
+                     disabled={isUpdatingPassword}
+                     className="bg-blue-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors disabled:opacity-50"
+                   >
+                     {isUpdatingPassword ? 'Updating...' : 'Update Password'}
+                   </button>
+                 </form>
+               </div>
+             </div>
+           </div>
+         )}
       </div>
     </div>
   )

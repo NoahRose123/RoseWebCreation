@@ -25,6 +25,8 @@ import Image from 'next/image'
 import RoseWebHeader from './components/RoseWebHeader'
 import RoseWebFooter from './components/RoseWebFooter'
 import { addBooking } from '../lib/firebase'
+import { doc, getDoc } from 'firebase/firestore'
+import { db } from '../lib/firebase'
 
 export default function Home() {
   const [isVisible, setIsVisible] = useState(false)
@@ -41,6 +43,11 @@ export default function Home() {
     selectedTime: '',
     message: ''
   })
+  const [pricing, setPricing] = useState({
+    websiteMonthly: 40,
+    websiteYearly: 200,
+    customSoftware: 'Contact'
+  })
 
   useEffect(() => {
     setIsVisible(true)
@@ -54,6 +61,27 @@ export default function Home() {
     return () => {
       window.removeEventListener('openBookingModal', handleOpenBookingModal)
     }
+  }, [])
+
+  // Load pricing from Firebase
+  useEffect(() => {
+    const loadPricing = async () => {
+      try {
+        const pricingDoc = await getDoc(doc(db, 'roseweb-settings', 'pricing'))
+        if (pricingDoc.exists()) {
+          const data = pricingDoc.data()
+          setPricing({
+            websiteMonthly: data.websiteMonthly || 40,
+            websiteYearly: data.websiteYearly || 200,
+            customSoftware: data.customSoftware || 'Contact'
+          })
+        }
+      } catch (error) {
+        console.error('Error loading pricing:', error)
+      }
+    }
+    
+    loadPricing()
   }, [])
 
   const services = [
@@ -80,7 +108,7 @@ export default function Home() {
   const pricingPlans = [
     {
       name: 'Website Monthly',
-      price: '$40',
+      price: `$${pricing.websiteMonthly}`,
       period: 'per month',
       features: [
         'Responsive Design',
@@ -93,7 +121,7 @@ export default function Home() {
     },
     {
       name: 'Website Yearly',
-      price: '$200',
+      price: `$${pricing.websiteYearly}`,
       period: 'per year',
       features: [
         'Everything in Monthly',
@@ -107,7 +135,7 @@ export default function Home() {
     },
     {
       name: 'Custom Software/App',
-      price: 'Contact',
+      price: pricing.customSoftware,
       period: 'for quote',
       features: [
         'Custom Development',

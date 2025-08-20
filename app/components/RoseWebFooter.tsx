@@ -65,11 +65,16 @@ export default function RoseWebFooter() {
                   Contact
                 </Link>
               </li>
-              <li>
-                <Link href="/bookings" className="text-gray-300 hover:text-white transition-colors text-sm">
-                  Get Started
-                </Link>
-              </li>
+                             <li>
+                 <Link href="/bookings" className="text-gray-300 hover:text-white transition-colors text-sm">
+                   Get Started
+                 </Link>
+               </li>
+               <li>
+                 <Link href="/admin" className="text-gray-300 hover:text-white transition-colors text-sm">
+                   Admin
+                 </Link>
+               </li>
             </ul>
           </div>
 

@@ -53,9 +53,6 @@ export default function RoseWebHeader() {
             <Link href="/bookings" className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
               Book Appointment
             </Link>
-            <Link href="/admin" className="text-gray-700 hover:text-blue-600 font-medium transition-colors">
-              Admin
-            </Link>
           </nav>
 
           {/* Contact Info - Desktop */}
@@ -63,10 +60,6 @@ export default function RoseWebHeader() {
             <div className="flex items-center space-x-2 text-sm text-gray-600">
               <Phone className="h-4 w-4" />
               <span>(289) 213-0256</span>
-            </div>
-            <div className="flex items-center space-x-2 text-sm text-gray-600">
-              <Mail className="h-4 w-4" />
-              <span>rosewebc@gmail.com</span>
             </div>
           </div>
 
@@ -122,13 +115,7 @@ export default function RoseWebHeader() {
               >
                 Book Appointment
               </Link>
-              <Link 
-                href="/admin" 
-                className="block text-gray-700 hover:text-blue-600 font-medium"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                Admin
-              </Link>
+
             </div>
           </motion.div>
         )}

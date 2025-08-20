@@ -328,8 +328,7 @@ export default function MobileMountainPage() {
                   ))}
                 </div>
                 
-                {/* Subtle Glow Effect */}
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-green-500/20 rounded-full blur-3xl -z-10"></div>
+
               </motion.div>
             </motion.div>
           </div>
