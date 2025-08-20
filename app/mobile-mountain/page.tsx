@@ -5,13 +5,27 @@ import { motion } from 'framer-motion'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Star, Check, Phone, Mail, MapPin, Clock, Shield, Award, Car, Sparkles, Zap } from 'lucide-react'
-import { useWebsiteContent } from '../../lib/websiteContent'
 import { addBooking } from '../../lib/firebase'
 import Footer from '../components/Footer'
 import Header from '../components/Header'
 
 export default function MobileMountainPage() {
-  const { content } = useWebsiteContent()
+  // Default content for Mobile Mountain
+  const content = {
+    heroTitle: 'Professional Mobile Car Detailing',
+    heroSubtitle: 'We bring the detailing service to you. Professional, convenient, and exceptional results every time.',
+    servicesTitle: 'Our Premium Services',
+    servicesSubtitle: 'Professional car detailing services delivered right to your doorstep. We use premium products and techniques to restore your vehicle\'s beauty.',
+    pricingTitle: 'Transparent Pricing',
+    pricingSubtitle: 'No hidden fees, no surprises. Our pricing is clear and competitive for professional mobile detailing services.',
+    testimonialsTitle: 'What Our Customers Say',
+    testimonialsSubtitle: 'Don\'t just take our word for it. Here\'s what our satisfied customers have to say about our mobile detailing services.',
+    businessName: 'Mobile Mountain Detail',
+    phoneNumber: '(555) 123-4567',
+    email: 'info@mobilemountain.com',
+    serviceArea: 'Greater Denver Metro Area',
+    footerDescription: 'Professional mobile car detailing services. We bring the detailing to you with premium quality and convenience.'
+  }
   const [isBookingModalOpen, setIsBookingModalOpen] = useState(false)
   const [bookingForm, setBookingForm] = useState({
     name: '',

@@ -82,6 +82,7 @@ export default function MobileMountainAdminPage() {
         setBookings(firestoreBookings)
       } catch (error) {
         console.error('Error loading bookings:', error)
+        setBookings([]) // Set empty array if there's an error
       }
     }
     
@@ -162,7 +163,7 @@ export default function MobileMountainAdminPage() {
   }
 
   // Filtered bookings
-  const filteredBookings = React.useMemo(() => {
+  const filteredBookings = useMemo(() => {
     return bookingTab === 'all' 
       ? bookings 
       : bookingTab === 'pending'
@@ -173,7 +174,7 @@ export default function MobileMountainAdminPage() {
   }, [bookings, bookingTab])
 
   // Analytics calculation
-  const analytics = React.useMemo(() => {
+  const analytics = useMemo(() => {
     const total = bookings.length
     const confirmed = bookings.filter(b => b.status === 'Confirmed').length
     const pending = bookings.filter(b => b.status === 'Pending').length

@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import { motion } from 'framer-motion'
 import { 
   Calendar, 
@@ -66,6 +66,7 @@ export default function RoseWebAdminPage() {
         setBookings(firestoreBookings)
       } catch (error) {
         console.error('Error loading bookings:', error)
+        setBookings([]) // Set empty array if there's an error
       }
     }
     
@@ -78,10 +79,16 @@ export default function RoseWebAdminPage() {
       try {
         const pricingDoc = await getDoc(doc(db, 'roseweb-settings', 'pricing'))
         if (pricingDoc.exists()) {
-          setPricing(pricingDoc.data())
+          const data = pricingDoc.data()
+          setPricing({
+            websiteMonthly: data.websiteMonthly || 40,
+            websiteYearly: data.websiteYearly || 200,
+            customSoftware: data.customSoftware || 'Contact'
+          })
         }
       } catch (error) {
         console.error('Error loading pricing:', error)
+        // Keep default pricing if there's an error
       }
     }
     
@@ -161,7 +168,7 @@ export default function RoseWebAdminPage() {
   }
 
   // Filtered bookings
-  const filteredBookings = React.useMemo(() => {
+  const filteredBookings = useMemo(() => {
     return bookingTab === 'all' 
       ? bookings 
       : bookingTab === 'pending'
@@ -172,7 +179,7 @@ export default function RoseWebAdminPage() {
   }, [bookings, bookingTab])
 
   // Analytics calculation
-  const analytics = React.useMemo(() => {
+  const analytics = useMemo(() => {
     const total = bookings.length
     const confirmed = bookings.filter(b => b.status === 'Confirmed').length
     const pending = bookings.filter(b => b.status === 'Pending').length
