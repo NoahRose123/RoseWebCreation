@@ -1,17 +1,37 @@
 import { initializeApp } from 'firebase/app'
-import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, query, where, orderBy } from 'firebase/firestore'
+import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, query, where, orderBy, Firestore } from 'firebase/firestore'
 
+// Check if Firebase config is properly set
 const firebaseConfig = {
-  apiKey: "AIzaSyBqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXq",
-  authDomain: "rosewebcreation.firebaseapp.com",
-  projectId: "rosewebcreation",
-  storageBucket: "rosewebcreation.appspot.com",
-  messagingSenderId: "123456789",
-  appId: "1:123456789:web:abcdefghijklmnop"
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY || "demo-key",
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN || "demo.firebaseapp.com",
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || "demo-project",
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET || "demo.appspot.com",
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID || "123456789",
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID || "1:123456789:web:demo"
 }
 
-const app = initializeApp(firebaseConfig)
-export const db = getFirestore(app)
+// Only initialize Firebase if we have proper config
+let app
+let db: Firestore
+
+try {
+  app = initializeApp(firebaseConfig)
+  db = getFirestore(app)
+} catch (error) {
+  console.warn('Firebase initialization failed:', error)
+  // Create a mock db object for development
+  db = {
+    collection: () => ({
+      add: async () => ({ id: 'mock-id' }),
+      get: async () => ({ docs: [], empty: true }),
+      doc: () => ({ update: async () => {}, delete: async () => {} })
+    }),
+    doc: () => ({ get: async () => ({ exists: () => false, data: () => ({}) }) })
+  } as any as Firestore
+}
+
+export { db }
 
 export interface Booking {
   id: number

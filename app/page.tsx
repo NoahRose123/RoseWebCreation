@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { motion } from 'framer-motion'
 import { 
   ChevronDown, 
@@ -48,6 +48,7 @@ export default function Home() {
     websiteYearly: 200,
     customSoftware: 'Contact'
   })
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     setIsVisible(true)
@@ -63,10 +64,17 @@ export default function Home() {
     }
   }, [])
 
-  // Load pricing from Firebase
+  // Load pricing from Firebase with proper error handling
   useEffect(() => {
     const loadPricing = async () => {
       try {
+        // Check if db is properly initialized
+        if (!db || typeof db.doc !== 'function') {
+          console.log('Firebase not properly initialized, using default pricing')
+          setIsLoading(false)
+          return
+        }
+
         const pricingDoc = await getDoc(doc(db, 'roseweb-settings', 'pricing'))
         if (pricingDoc.exists()) {
           const data = pricingDoc.data()
@@ -76,12 +84,13 @@ export default function Home() {
             customSoftware: data.customSoftware || 'Contact'
           })
         } else {
-          // If document doesn't exist, create it with default values
           console.log('Pricing document not found, using default values')
         }
       } catch (error) {
-        console.error('Error loading pricing:', error)
+        console.warn('Error loading pricing, using defaults:', error)
         // Keep default pricing if there's an error
+      } finally {
+        setIsLoading(false)
       }
     }
     
@@ -231,6 +240,18 @@ export default function Home() {
       console.error('Error submitting booking:', error)
       alert('There was an error submitting your booking. Please try again.')
     }
+  }
+
+  // Prevent hydration mismatch by not rendering until loaded
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading...</p>
+        </div>
+      </div>
+    )
   }
 
   return (
