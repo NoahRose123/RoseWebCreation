@@ -75,9 +75,13 @@ export default function Home() {
             websiteYearly: data.websiteYearly || 200,
             customSoftware: data.customSoftware || 'Contact'
           })
+        } else {
+          // If document doesn't exist, create it with default values
+          console.log('Pricing document not found, using default values')
         }
       } catch (error) {
         console.error('Error loading pricing:', error)
+        // Keep default pricing if there's an error
       }
     }
     
@@ -206,7 +210,7 @@ export default function Home() {
       }
       
       // Add booking to Firestore
-      await addBooking(newBooking)
+      await addBooking(newBooking, 'roseweb-bookings')
       
       // Reset form and close modal
       setShowBookingModal(false)
@@ -605,9 +609,9 @@ export default function Home() {
                  required
                >
                  <option value="">Select Service</option>
-                 <option value="Website Monthly - $22">Website Monthly - $22</option>
-                 <option value="Website Yearly - $165">Website Yearly - $165</option>
-                 <option value="Custom Software/App - Contact">Custom Software/App - Contact</option>
+                 <option value={`Website Monthly - $${pricing.websiteMonthly}`}>Website Monthly - ${pricing.websiteMonthly}</option>
+                 <option value={`Website Yearly - $${pricing.websiteYearly}`}>Website Yearly - ${pricing.websiteYearly}</option>
+                 <option value={`Custom Software/App - ${pricing.customSoftware}`}>Custom Software/App - {pricing.customSoftware}</option>
                </select>
                                <div>
                   <label className="block text-sm font-medium text-secondary-700 mb-2">

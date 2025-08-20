@@ -50,9 +50,12 @@ export default function RoseWebHeader() {
             <Link href="#pricing" className="text-gray-700 hover:text-blue-600 font-medium transition-colors">
               Prices
             </Link>
-            <Link href="/bookings" className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+            <button 
+              onClick={() => window.dispatchEvent(new CustomEvent('openBookingModal'))}
+              className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors"
+            >
               Book Appointment
-            </Link>
+            </button>
           </nav>
 
           {/* Contact Info - Desktop */}
@@ -108,13 +111,15 @@ export default function RoseWebHeader() {
               >
                 Prices
               </Link>
-              <Link 
-                href="/bookings" 
-                className="block bg-blue-600 text-white px-4 py-2 rounded-lg font-medium text-center"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                Book Appointment
-              </Link>
+                             <button 
+                 onClick={() => {
+                   setIsMobileMenuOpen(false)
+                   window.dispatchEvent(new CustomEvent('openBookingModal'))
+                 }}
+                 className="block bg-blue-600 text-white px-4 py-2 rounded-lg font-medium text-center w-full"
+               >
+                 Book Appointment
+               </button>
 
             </div>
           </motion.div>

@@ -66,9 +66,12 @@ export default function RoseWebFooter() {
                 </Link>
               </li>
                              <li>
-                 <Link href="/bookings" className="text-gray-300 hover:text-white transition-colors text-sm">
+                 <button 
+                   onClick={() => window.dispatchEvent(new CustomEvent('openBookingModal'))}
+                   className="text-gray-300 hover:text-white transition-colors text-sm"
+                 >
                    Get Started
-                 </Link>
+                 </button>
                </li>
                <li>
                  <Link href="/admin" className="text-gray-300 hover:text-white transition-colors text-sm">
@@ -130,14 +133,7 @@ export default function RoseWebFooter() {
             <div className="text-gray-400 text-sm">
               © {currentYear} Rose Web Creation. All rights reserved.
             </div>
-            <div className="flex space-x-6 mt-4 md:mt-0">
-              <Link href="/privacy" className="text-gray-400 hover:text-white text-sm transition-colors">
-                Privacy Policy
-              </Link>
-              <Link href="/terms" className="text-gray-400 hover:text-white text-sm transition-colors">
-                Terms of Service
-              </Link>
-            </div>
+
           </div>
           
           {/* Mobile Mountain Link */}
