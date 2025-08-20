@@ -25,20 +25,7 @@ import {
 } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { getBookings, updateBooking, deleteBooking } from '../../../lib/firebase'
-
-interface Booking {
-  id: number
-  name: string
-  email: string
-  phone: string
-  service: string
-  date: string
-  time: string
-  message: string
-  status: 'Confirmed' | 'Pending' | 'Cancelled'
-  createdAt: string
-}
+import { getBookings, updateBooking, deleteBooking, Booking } from '../../../lib/firebase'
 
 export default function MobileMountainBookingsPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
@@ -106,8 +93,8 @@ export default function MobileMountainBookingsPage() {
         booking.email,
         booking.phone,
         booking.service,
-        booking.date,
-        booking.time,
+        booking.selectedDate,
+        booking.selectedTime,
         booking.status,
         booking.message || '',
         booking.createdAt
@@ -516,11 +503,11 @@ export default function MobileMountainBookingsPage() {
                           </div>
                           <div className="flex items-center space-x-2">
                             <Calendar className="h-4 w-4 text-gray-400" />
-                            <span className="text-gray-600">{formatDate(booking.date)}</span>
+                            <span className="text-gray-600">{formatDate(booking.selectedDate)}</span>
                           </div>
                           <div className="flex items-center space-x-2">
                             <Clock className="h-4 w-4 text-gray-400" />
-                            <span className="text-gray-600">{formatTime(booking.time)}</span>
+                            <span className="text-gray-600">{formatTime(booking.selectedTime)}</span>
                           </div>
                         </div>
                         

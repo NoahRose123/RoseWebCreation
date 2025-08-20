@@ -33,21 +33,8 @@ import {
 } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { getBookings, updateBooking, deleteBooking } from '../../../lib/firebase'
+import { getBookings, updateBooking, deleteBooking, Booking } from '../../../lib/firebase'
 import { useWebsiteContent } from '../../../lib/websiteContent'
-
-interface Booking {
-  id: number
-  name: string
-  email: string
-  phone: string
-  service: string
-  date: string
-  time: string
-  message: string
-  status: 'Confirmed' | 'Pending' | 'Cancelled'
-  createdAt: string
-}
 
 interface Availability {
   day: string
@@ -255,8 +242,8 @@ export default function MobileMountainAdminPage() {
         booking.email,
         booking.phone,
         booking.service,
-        booking.date,
-        booking.time,
+        booking.selectedDate,
+        booking.selectedTime,
         booking.status,
         booking.message || '',
         booking.createdAt
@@ -640,8 +627,8 @@ export default function MobileMountainAdminPage() {
                           )}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm text-gray-900">{booking.date}</div>
-                          <div className="text-sm text-gray-500">{booking.time}</div>
+                                                     <div className="text-sm text-gray-900">{booking.selectedDate}</div>
+                           <div className="text-sm text-gray-500">{booking.selectedTime}</div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${

@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Star, Check, Phone, Mail, MapPin, Clock, Shield, Award } from 'lucide-react'
+import { Star, Check, Phone, Mail, MapPin, Clock, Shield, Award, Car, Sparkles, Zap } from 'lucide-react'
 import { useWebsiteContent } from '../../lib/websiteContent'
 import { addBooking } from '../../lib/firebase'
 import Footer from '../components/Footer'
@@ -17,13 +17,15 @@ export default function MobileMountainPage() {
     name: '',
     email: '',
     phone: '',
+    address: '',
     service: 'Basic Wash - $45',
-    date: '',
-    time: '',
+    selectedDate: '',
+    selectedTime: '',
     message: ''
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitSuccess, setSubmitSuccess] = useState(false)
+  const [availableSlots, setAvailableSlots] = useState<Array<{date: string, times: string[]}>>([])
 
   const testimonials = [
     {
@@ -42,6 +44,35 @@ export default function MobileMountainPage() {
     }
   ]
 
+  // Generate available slots for next 30 days
+  useEffect(() => {
+    const generateSlots = () => {
+      const slots = []
+      const today = new Date()
+      
+      for (let i = 0; i < 30; i++) {
+        const date = new Date(today)
+        date.setDate(today.getDate() + i)
+        const dateStr = date.toISOString().split('T')[0]
+        
+        // Generate time slots from 8 AM to 6 PM
+        const times = []
+        for (let hour = 8; hour <= 18; hour++) {
+          times.push(`${hour.toString().padStart(2, '0')}:00`)
+        }
+        
+        slots.push({
+          date: dateStr,
+          times: times
+        })
+      }
+      
+      setAvailableSlots(slots)
+    }
+    
+    generateSlots()
+  }, [])
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
@@ -58,9 +89,10 @@ export default function MobileMountainPage() {
         name: '',
         email: '',
         phone: '',
+        address: '',
         service: 'Basic Wash - $45',
-        date: '',
-        time: '',
+        selectedDate: '',
+        selectedTime: '',
         message: ''
       })
       
@@ -79,9 +111,50 @@ export default function MobileMountainPage() {
     <div className="min-h-screen bg-gray-50">
       <Header />
       
-      {/* Hero Section */}
-      <section id="home" className="bg-gradient-to-br from-gray-800 via-gray-700 to-gray-900 min-h-[40vh] flex items-center justify-center relative overflow-hidden pt-20 md:pt-0">
+      {/* Hero Section - New Design with Custom Car Styling */}
+      <section id="home" className="bg-gradient-to-br from-gray-800 via-gray-700 to-gray-900 min-h-[60vh] flex items-center justify-center relative overflow-hidden pt-20 md:pt-0">
         <div className="absolute inset-0 bg-black/20"></div>
+        
+        {/* Custom Car Animation */}
+        <div className="absolute inset-0 flex items-center justify-center opacity-10">
+          <motion.div
+            initial={{ x: -100, opacity: 0 }}
+            animate={{ x: 0, opacity: 0.1 }}
+            transition={{ duration: 2, delay: 0.5 }}
+            className="relative"
+          >
+            {/* Car Body */}
+            <div className="w-96 h-24 bg-gradient-to-r from-gray-300 to-gray-400 rounded-full relative">
+              {/* Car Windows */}
+              <div className="absolute top-2 left-8 w-16 h-8 bg-blue-200 rounded-lg"></div>
+              <div className="absolute top-2 right-8 w-16 h-8 bg-blue-200 rounded-lg"></div>
+              
+              {/* Car Wheels */}
+              <div className="absolute -bottom-2 left-8 w-8 h-8 bg-gray-800 rounded-full border-2 border-gray-600"></div>
+              <div className="absolute -bottom-2 right-8 w-8 h-8 bg-gray-800 rounded-full border-2 border-gray-600"></div>
+              
+              {/* Car Details */}
+              <div className="absolute top-4 left-1/2 transform -translate-x-1/2 w-2 h-2 bg-red-500 rounded-full"></div>
+            </div>
+            
+            {/* Sparkles around car */}
+            <motion.div
+              animate={{ rotate: 360 }}
+              transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+              className="absolute -top-4 -left-4"
+            >
+              <Sparkles className="h-6 w-6 text-yellow-400" />
+            </motion.div>
+            <motion.div
+              animate={{ rotate: -360 }}
+              transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+              className="absolute -bottom-4 -right-4"
+            >
+              <Zap className="h-6 w-6 text-blue-400" />
+            </motion.div>
+          </motion.div>
+        </div>
+        
         <div className="container-custom relative z-10">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <motion.div
@@ -90,9 +163,12 @@ export default function MobileMountainPage() {
               transition={{ duration: 0.8 }}
               className="text-center lg:text-left"
             >
-              <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
-                {content?.heroTitle || 'Professional Mobile Car Detailing'}
-              </h1>
+              <div className="flex items-center justify-center lg:justify-start mb-6">
+                <Car className="h-12 w-12 text-blue-400 mr-4" />
+                <h1 className="text-5xl md:text-7xl font-bold text-white leading-tight">
+                  {content?.heroTitle || 'Professional Mobile Car Detailing'}
+                </h1>
+              </div>
               <p className="text-xl text-gray-200 mb-8 leading-relaxed">
                 {content?.heroSubtitle || 'We bring the detailing service to you. Professional, convenient, and exceptional results every time.'}
               </p>
@@ -121,40 +197,51 @@ export default function MobileMountainPage() {
               transition={{ duration: 0.8, delay: 0.2 }}
               className="relative"
             >
-              {/* Hero Image Collage - Smaller height */}
-              <div className="grid grid-cols-2 gap-3">
-                <Image
-                  src="/mobile-mountain-hero.jpg"
-                  alt="Mobile Mountain Detail - Professional Car Detailing"
-                  width={150}
-                  height={90}
-                  className="w-full h-auto rounded-lg shadow-2xl"
-                  priority
-                />
-                <Image
-                  src="/mobile-mountain-hero-2.jpg"
-                  alt="Mobile Mountain Detail - Professional Car Detailing"
-                  width={150}
-                  height={90}
-                  className="w-full h-auto rounded-lg shadow-2xl"
-                  priority
-                />
-                <Image
-                  src="/mobile-mountain-hero-5.jpg"
-                  alt="Mobile Mountain Detail - Professional Car Detailing"
-                  width={150}
-                  height={90}
-                  className="w-full h-auto rounded-lg shadow-2xl"
-                  priority
-                />
-                <Image
-                  src="/mobile-mountain-hero-7.jpg"
-                  alt="Mobile Mountain Detail - Professional Car Detailing"
-                  width={150}
-                  height={90}
-                  className="w-full h-auto rounded-lg shadow-2xl"
-                  priority
-                />
+              {/* Custom Car Detail Icons */}
+              <div className="grid grid-cols-2 gap-6">
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3 }}
+                  className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center"
+                >
+                  <Shield className="h-12 w-12 text-blue-400 mx-auto mb-4" />
+                  <h3 className="text-white font-semibold mb-2">Premium Protection</h3>
+                  <p className="text-gray-300 text-sm">Advanced paint protection and ceramic coatings</p>
+                </motion.div>
+                
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.4 }}
+                  className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center"
+                >
+                  <Sparkles className="h-12 w-12 text-yellow-400 mx-auto mb-4" />
+                  <h3 className="text-white font-semibold mb-2">Showroom Finish</h3>
+                  <p className="text-gray-300 text-sm">Professional detailing that exceeds expectations</p>
+                </motion.div>
+                
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.5 }}
+                  className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center"
+                >
+                  <Clock className="h-12 w-12 text-green-400 mx-auto mb-4" />
+                  <h3 className="text-white font-semibold mb-2">Convenient Service</h3>
+                  <p className="text-gray-300 text-sm">We come to you at your preferred time</p>
+                </motion.div>
+                
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.6 }}
+                  className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center"
+                >
+                  <Award className="h-12 w-12 text-purple-400 mx-auto mb-4" />
+                  <h3 className="text-white font-semibold mb-2">Guaranteed Quality</h3>
+                  <p className="text-gray-300 text-sm">100% satisfaction guaranteed on every detail</p>
+                </motion.div>
               </div>
             </motion.div>
           </div>
@@ -542,14 +629,14 @@ export default function MobileMountainPage() {
 
       <Footer />
 
-      {/* Booking Modal */}
+      {/* New Booking Modal with Calendar Interface */}
       {isBookingModalOpen && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.9 }}
-            className="bg-white rounded-2xl p-8 max-w-md w-full max-h-[90vh] overflow-y-auto"
+            className="bg-white rounded-2xl p-8 max-w-4xl w-full max-h-[90vh] overflow-y-auto"
           >
             <div className="flex justify-between items-center mb-6">
               <h3 className="text-2xl font-bold text-gray-900">Book Your Detail</h3>
@@ -572,37 +659,54 @@ export default function MobileMountainPage() {
                 <p className="text-gray-600">We'll contact you soon to confirm your appointment.</p>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
-                  <input
-                    type="text"
-                    required
-                    value={bookingForm.name}
-                    onChange={(e) => setBookingForm({ ...bookingForm, name: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
+              <form onSubmit={handleSubmit} className="space-y-6">
+                {/* Personal Information */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Name *</label>
+                    <input
+                      type="text"
+                      required
+                      value={bookingForm.name}
+                      onChange={(e) => setBookingForm({ ...bookingForm, name: e.target.value })}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      placeholder="Your full name"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Phone *</label>
+                    <input
+                      type="tel"
+                      required
+                      value={bookingForm.phone}
+                      onChange={(e) => setBookingForm({ ...bookingForm, phone: e.target.value })}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      placeholder="(555) 123-4567"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Email (Optional)</label>
+                    <input
+                      type="email"
+                      value={bookingForm.email}
+                      onChange={(e) => setBookingForm({ ...bookingForm, email: e.target.value })}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      placeholder="your@email.com"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Service Address *</label>
+                    <input
+                      type="text"
+                      required
+                      value={bookingForm.address}
+                      onChange={(e) => setBookingForm({ ...bookingForm, address: e.target.value })}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      placeholder="Enter your address"
+                    />
+                  </div>
                 </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                  <input
-                    type="email"
-                    required
-                    value={bookingForm.email}
-                    onChange={(e) => setBookingForm({ ...bookingForm, email: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Phone</label>
-                  <input
-                    type="tel"
-                    required
-                    value={bookingForm.phone}
-                    onChange={(e) => setBookingForm({ ...bookingForm, phone: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
-                </div>
+
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Service</label>
                   <select
@@ -615,26 +719,55 @@ export default function MobileMountainPage() {
                     <option value="Ultimate Detail - $200">Ultimate Detail - $200</option>
                   </select>
                 </div>
+
+                {/* Calendar Interface */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Preferred Date</label>
-                  <input
-                    type="date"
-                    required
-                    value={bookingForm.date}
-                    onChange={(e) => setBookingForm({ ...bookingForm, date: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
+                  <label className="block text-sm font-medium text-gray-700 mb-3">Select Date & Time</label>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-600 mb-2">Date</label>
+                      <select
+                        required
+                        value={bookingForm.selectedDate}
+                        onChange={(e) => setBookingForm({ ...bookingForm, selectedDate: e.target.value })}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      >
+                        <option value="">Select a date</option>
+                        {availableSlots.map((slot) => (
+                          <option key={slot.date} value={slot.date}>
+                            {new Date(slot.date).toLocaleDateString('en-US', { 
+                              weekday: 'short', 
+                              month: 'short', 
+                              day: 'numeric' 
+                            })}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-600 mb-2">Time</label>
+                      <select
+                        required
+                        value={bookingForm.selectedTime}
+                        onChange={(e) => setBookingForm({ ...bookingForm, selectedTime: e.target.value })}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        disabled={!bookingForm.selectedDate}
+                      >
+                        <option value="">Select a time</option>
+                        {bookingForm.selectedDate && 
+                          availableSlots
+                            .find(slot => slot.date === bookingForm.selectedDate)
+                            ?.times.map((time) => (
+                              <option key={time} value={time}>
+                                {time}
+                              </option>
+                            ))
+                        }
+                      </select>
+                    </div>
+                  </div>
                 </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Preferred Time</label>
-                  <input
-                    type="time"
-                    required
-                    value={bookingForm.time}
-                    onChange={(e) => setBookingForm({ ...bookingForm, time: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
-                </div>
+
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Additional Notes</label>
                   <textarea
@@ -645,6 +778,7 @@ export default function MobileMountainPage() {
                     placeholder="Any special requests or vehicle details..."
                   />
                 </div>
+
                 <button
                   type="submit"
                   disabled={isSubmitting}

@@ -1,88 +1,75 @@
 'use client'
 
-import { createContext, useContext, useState, useEffect } from 'react'
-import { getWebsiteContent, updateWebsiteContent } from './firebase'
+import React, { createContext, useContext, useState, useEffect } from 'react'
+import { getWebsiteContent, saveWebsiteContent, WebsiteContent } from './firebase'
 
-export interface WebsiteContent {
-  // Hero Section
-  heroTitle: string
-  heroSubtitle: string
-  
-  // Services Section
-  servicesTitle: string
-  servicesSubtitle: string
-  
-  // Pricing Section
-  pricingTitle: string
-  pricingSubtitle: string
-  
-  // Testimonials Section
-  testimonialsTitle: string
-  testimonialsSubtitle: string
-  
-  // Contact Section
-  contactTitle: string
-  contactSubtitle: string
-  
-  // Footer
-  footerDescription: string
-  
-  // Business Info
-  businessName: string
-  phoneNumber: string
-  email: string
-  serviceArea: string
-}
-
-const defaultContent: WebsiteContent = {
-  heroTitle: "Mobile Mountain Detail",
-  heroSubtitle: "We bring the mountain of quality car detailing services right to your doorstep. Professional, convenient, and guaranteed satisfaction.",
-  
-  servicesTitle: "Our Detailing Services",
-  servicesSubtitle: "Professional mobile car detailing services that bring the mountain of quality right to your location.",
-  
-  pricingTitle: "Pricing Plans",
-  pricingSubtitle: "Choose the perfect detailing package for your vehicle. All prices include travel to your location.",
-  
-  testimonialsTitle: "What Our Customers Say",
-  testimonialsSubtitle: "Don't just take our word for it. Here's what our satisfied customers have to say about our services.",
-  
-  contactTitle: "Get In Touch",
-  contactSubtitle: "Ready to give your vehicle the attention it deserves? Contact us today to schedule your appointment.",
-  
-  footerDescription: "We bring the mountain of quality car detailing services right to your doorstep. Professional, convenient, and guaranteed satisfaction.",
-  
-  businessName: "Mobile Mountain Detail",
-  phoneNumber: "(555) 123-4567",
-  email: "info@mobilemountaindetail.com",
-  serviceArea: "25-mile radius"
-}
-
-const WebsiteContentContext = createContext<{
-  content: WebsiteContent
+interface WebsiteContentContextType {
+  content: WebsiteContent | null
   updateContent: (updates: Partial<WebsiteContent>) => void
-  resetContent: () => void
-}>({
-  content: defaultContent,
-  updateContent: () => {},
-  resetContent: () => {}
-})
+  saveContent: () => Promise<void>
+  loading: boolean
+}
 
-export const useWebsiteContent = () => useContext(WebsiteContentContext)
+const WebsiteContentContext = createContext<WebsiteContentContextType | undefined>(undefined)
 
-export const WebsiteContentProvider = ({ children }: { children: React.ReactNode }) => {
-  const [content, setContent] = useState<WebsiteContent>(defaultContent)
+export const useWebsiteContent = () => {
+  const context = useContext(WebsiteContentContext)
+  if (context === undefined) {
+    throw new Error('useWebsiteContent must be used within a WebsiteContentProvider')
+  }
+  return context
+}
+
+export const WebsiteContentProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [content, setContent] = useState<WebsiteContent | null>(null)
   const [loading, setLoading] = useState(true)
+  const [pendingUpdates, setPendingUpdates] = useState<Partial<WebsiteContent>>({})
 
-  // Load content from Firebase on mount
+  // Load content from Firestore on mount
   useEffect(() => {
     const loadContent = async () => {
       try {
         const firebaseContent = await getWebsiteContent()
-        setContent(firebaseContent as WebsiteContent)
+        if (firebaseContent) {
+          setContent(firebaseContent as WebsiteContent)
+        } else {
+          // Set default content if none exists
+          const defaultContent: WebsiteContent = {
+            heroTitle: 'Professional Mobile Car Detailing',
+            heroSubtitle: 'We bring the detailing service to you. Professional, convenient, and exceptional results every time.',
+            servicesTitle: 'Our Premium Services',
+            servicesSubtitle: 'Professional car detailing services delivered right to your doorstep. We use premium products and techniques to restore your vehicle\'s beauty.',
+            pricingTitle: 'Transparent Pricing',
+            pricingSubtitle: 'No hidden fees, no surprises. Our pricing is clear and competitive for professional mobile detailing services.',
+            testimonialsTitle: 'What Our Customers Say',
+            testimonialsSubtitle: 'Don\'t just take our word for it. Here\'s what our satisfied customers have to say about our mobile detailing services.',
+            businessName: 'Mobile Mountain Detail',
+            phoneNumber: '(555) 123-4567',
+            email: 'info@mobilemountain.com',
+            serviceArea: 'Greater Denver Metro Area',
+            footerDescription: 'Professional mobile car detailing services. We bring the detailing to you with premium quality and convenience.'
+          }
+          setContent(defaultContent)
+        }
       } catch (error) {
         console.error('Error loading website content:', error)
-        // Keep default content if Firebase fails
+        // Set default content on error
+        const defaultContent: WebsiteContent = {
+          heroTitle: 'Professional Mobile Car Detailing',
+          heroSubtitle: 'We bring the detailing service to you. Professional, convenient, and exceptional results every time.',
+          servicesTitle: 'Our Premium Services',
+          servicesSubtitle: 'Professional car detailing services delivered right to your doorstep. We use premium products and techniques to restore your vehicle\'s beauty.',
+          pricingTitle: 'Transparent Pricing',
+          pricingSubtitle: 'No hidden fees, no surprises. Our pricing is clear and competitive for professional mobile detailing services.',
+          testimonialsTitle: 'What Our Customers Say',
+          testimonialsSubtitle: 'Don\'t just take our word for it. Here\'s what our satisfied customers have to say about our mobile detailing services.',
+          businessName: 'Mobile Mountain Detail',
+          phoneNumber: '(555) 123-4567',
+          email: 'info@mobilemountain.com',
+          serviceArea: 'Greater Denver Metro Area',
+          footerDescription: 'Professional mobile car detailing services. We bring the detailing to you with premium quality and convenience.'
+        }
+        setContent(defaultContent)
       } finally {
         setLoading(false)
       }
@@ -91,40 +78,38 @@ export const WebsiteContentProvider = ({ children }: { children: React.ReactNode
     loadContent()
   }, [])
 
-  const updateContent = async (updates: Partial<WebsiteContent>) => {
-    try {
-      const newContent = { ...content, ...updates }
-      setContent(newContent)
-      await updateWebsiteContent(newContent)
-    } catch (error) {
-      console.error('Error updating website content:', error)
-      // Revert to previous content if update fails
-      setContent(content)
+  const updateContent = (updates: Partial<WebsiteContent>) => {
+    setPendingUpdates(prev => ({ ...prev, ...updates }))
+    
+    // Update local state immediately for real-time preview
+    if (content) {
+      setContent({ ...content, ...updates })
     }
   }
 
-  const resetContent = async () => {
+  const saveContent = async () => {
+    if (!content) return
+    
     try {
-      setContent(defaultContent)
-      await updateWebsiteContent(defaultContent)
+      const contentToSave = { ...content, ...pendingUpdates }
+      await saveWebsiteContent(contentToSave)
+      setPendingUpdates({})
+      console.log('Website content saved successfully')
     } catch (error) {
-      console.error('Error resetting website content:', error)
+      console.error('Error saving website content:', error)
+      throw error
     }
   }
 
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading website content...</p>
-        </div>
-      </div>
-    )
+  const value: WebsiteContentContextType = {
+    content,
+    updateContent,
+    saveContent,
+    loading
   }
 
   return (
-    <WebsiteContentContext.Provider value={{ content, updateContent, resetContent }}>
+    <WebsiteContentContext.Provider value={value}>
       {children}
     </WebsiteContentContext.Provider>
   )

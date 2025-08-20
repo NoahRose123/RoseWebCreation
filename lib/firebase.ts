@@ -1,183 +1,218 @@
-import { initializeApp } from "firebase/app";
-import { getFirestore, collection, addDoc, getDocs, updateDoc, deleteDoc, doc, query, orderBy } from "firebase/firestore";
+import { initializeApp } from 'firebase/app'
+import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, query, where, orderBy } from 'firebase/firestore'
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAYFVAMd2lzqNLKekuTE2Mt404tuOq2mnk",
+  apiKey: "AIzaSyBqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXqXq",
   authDomain: "rosewebcreation.firebaseapp.com",
   projectId: "rosewebcreation",
-  storageBucket: "rosewebcreation.firebasestorage.app",
-  messagingSenderId: "901821617734",
-  appId: "1:901821617734:web:2d2698126bde404f849c47",
-  measurementId: "G-XX9ERZJ5W7"
-};
+  storageBucket: "rosewebcreation.appspot.com",
+  messagingSenderId: "123456789",
+  appId: "1:123456789:web:abcdefghijklmnop"
+}
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig)
+const db = getFirestore(app)
 
-// Initialize Firestore
-export const db = getFirestore(app);
+export interface Booking {
+  id: number
+  name: string
+  email: string
+  phone: string
+  address: string
+  service: string
+  selectedDate: string
+  selectedTime: string
+  message: string
+  status: 'Confirmed' | 'Pending' | 'Cancelled'
+  createdAt: string
+}
 
-// Collection references
-export const bookingsCollection = collection(db, "bookings");
-export const mobileMountainBookingsCollection = collection(db, "mobile-mountain-bookings");
-export const mobileMountainContentCollection = collection(db, "mobile-mountain-content");
+export interface Availability {
+  date: string
+  times: string[]
+  isAvailable: boolean
+}
+
+export interface WebsiteContent {
+  heroTitle: string
+  heroSubtitle: string
+  servicesTitle: string
+  servicesSubtitle: string
+  pricingTitle: string
+  pricingSubtitle: string
+  testimonialsTitle: string
+  testimonialsSubtitle: string
+  businessName: string
+  phoneNumber: string
+  email: string
+  serviceArea: string
+  footerDescription: string
+}
 
 // Booking functions
-export const addBooking = async (bookingData: any, collectionName: string = "bookings") => {
+export const addBooking = async (bookingData: Omit<Booking, 'id'>, collectionName: string = 'bookings') => {
   try {
-    console.log("Adding booking to collection:", collectionName);
-    console.log("Booking data:", bookingData);
+    console.log(`Adding booking to collection: ${collectionName}`)
+    console.log('Booking data:', bookingData)
     
-    const targetCollection = collectionName === "mobile-mountain-bookings" 
-      ? mobileMountainBookingsCollection 
-      : bookingsCollection;
-      
-    const docRef = await addDoc(targetCollection, {
+    const docRef = await addDoc(collection(db, collectionName), {
       ...bookingData,
-      createdAt: new Date().toISOString(),
-      id: Date.now() // Generate unique ID
-    });
+      id: Date.now() // Generate a unique ID
+    })
     
-    console.log("Booking added successfully:", docRef.id);
-    return docRef;
+    console.log('Booking added successfully:', docRef.id)
+    return docRef
   } catch (error) {
-    console.error("Error adding booking: ", error);
-    console.error("Error details:", {
-      code: (error as any)?.code,
-      message: (error as any)?.message,
-      stack: (error as any)?.stack
-    });
-    throw error;
+    console.error('Error adding booking:', error)
+    throw error
   }
-};
+}
 
-export const getBookings = async (collectionName: string = "bookings") => {
+export const getBookings = async (collectionName: string = 'bookings'): Promise<Booking[]> => {
   try {
-    const targetCollection = collectionName === "mobile-mountain-bookings" 
-      ? mobileMountainBookingsCollection 
-      : bookingsCollection;
-      
-    const q = query(targetCollection, orderBy("createdAt", "desc"));
-    const querySnapshot = await getDocs(q);
-    const bookings = querySnapshot.docs.map(doc => {
-      const data = doc.data();
-      return {
+    const querySnapshot = await getDocs(collection(db, collectionName))
+    const bookings: Booking[] = []
+    
+    querySnapshot.forEach((doc) => {
+      const data = doc.data()
+      bookings.push({
         id: data.id,
         name: data.name,
         email: data.email,
         phone: data.phone,
+        address: data.address,
         service: data.service,
-        date: data.date,
-        time: data.time,
+        selectedDate: data.selectedDate || data.date,
+        selectedTime: data.selectedTime || data.time,
         message: data.message,
         status: data.status,
         createdAt: data.createdAt
-      };
-    });
-    return bookings;
-  } catch (error) {
-    console.error("Error getting bookings: ", error);
-    throw error;
-  }
-};
-
-export const updateBooking = async (id: number, status: string, collectionName: string = "bookings") => {
-  try {
-    const targetCollection = collectionName === "mobile-mountain-bookings" 
-      ? mobileMountainBookingsCollection 
-      : bookingsCollection;
-      
-    const q = query(targetCollection);
-    const querySnapshot = await getDocs(q);
-    const bookingDoc = querySnapshot.docs.find(doc => doc.data().id === id);
+      })
+    })
     
-    if (bookingDoc) {
-      await updateDoc(doc(db, collectionName, bookingDoc.id), {
-        status: status
-      });
+    return bookings.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+  } catch (error) {
+    console.error('Error getting bookings:', error)
+    throw error
+  }
+}
+
+export const updateBooking = async (id: number, status: string, collectionName: string = 'bookings') => {
+  try {
+    const q = query(collection(db, collectionName), where('id', '==', id))
+    const querySnapshot = await getDocs(q)
+    
+    if (!querySnapshot.empty) {
+      const docRef = doc(db, collectionName, querySnapshot.docs[0].id)
+      await updateDoc(docRef, { status })
     }
   } catch (error) {
-    console.error("Error updating booking: ", error);
-    throw error;
+    console.error('Error updating booking:', error)
+    throw error
   }
-};
+}
 
-export const deleteBooking = async (id: number, collectionName: string = "bookings") => {
+export const deleteBooking = async (id: number, collectionName: string = 'bookings') => {
   try {
-    const targetCollection = collectionName === "mobile-mountain-bookings" 
-      ? mobileMountainBookingsCollection 
-      : bookingsCollection;
-      
-    const q = query(targetCollection);
-    const querySnapshot = await getDocs(q);
-    const bookingDoc = querySnapshot.docs.find(doc => doc.data().id === id);
+    const q = query(collection(db, collectionName), where('id', '==', id))
+    const querySnapshot = await getDocs(q)
     
-    if (bookingDoc) {
-      await deleteDoc(doc(db, collectionName, bookingDoc.id));
+    if (!querySnapshot.empty) {
+      const docRef = doc(db, collectionName, querySnapshot.docs[0].id)
+      await deleteDoc(docRef)
     }
   } catch (error) {
-    console.error("Error deleting booking: ", error);
-    throw error;
+    console.error('Error deleting booking:', error)
+    throw error
   }
-};
+}
 
-// Website Content functions
-export const getWebsiteContent = async () => {
+// Availability functions
+export const saveAvailability = async (availability: Availability[]) => {
   try {
-    const q = query(mobileMountainContentCollection);
-    const querySnapshot = await getDocs(q);
+    // Clear existing availability
+    const existingQuery = await getDocs(collection(db, 'availability'))
+    const deletePromises = existingQuery.docs.map(doc => deleteDoc(doc.ref))
+    await Promise.all(deletePromises)
     
-    if (querySnapshot.empty) {
-      // Return default content if no content exists
+    // Save new availability
+    const savePromises = availability.map(day => 
+      addDoc(collection(db, 'availability'), day)
+    )
+    await Promise.all(savePromises)
+    
+    console.log('Availability saved successfully')
+  } catch (error) {
+    console.error('Error saving availability:', error)
+    throw error
+  }
+}
+
+export const getAvailability = async (): Promise<Availability[]> => {
+  try {
+    const querySnapshot = await getDocs(collection(db, 'availability'))
+    const availability: Availability[] = []
+    
+    querySnapshot.forEach((doc) => {
+      const data = doc.data()
+      availability.push({
+        date: data.date,
+        times: data.times || [],
+        isAvailable: data.isAvailable
+      })
+    })
+    
+    return availability.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+  } catch (error) {
+    console.error('Error getting availability:', error)
+    throw error
+  }
+}
+
+// Website content functions
+export const saveWebsiteContent = async (content: WebsiteContent) => {
+  try {
+    // Clear existing content
+    const existingQuery = await getDocs(collection(db, 'website-content'))
+    const deletePromises = existingQuery.docs.map(doc => deleteDoc(doc.ref))
+    await Promise.all(deletePromises)
+    
+    // Save new content
+    await addDoc(collection(db, 'website-content'), content)
+    
+    console.log('Website content saved successfully')
+  } catch (error) {
+    console.error('Error saving website content:', error)
+    throw error
+  }
+}
+
+export const getWebsiteContent = async (): Promise<WebsiteContent | null> => {
+  try {
+    const querySnapshot = await getDocs(collection(db, 'website-content'))
+    
+    if (!querySnapshot.empty) {
+      const data = querySnapshot.docs[0].data()
       return {
-        heroTitle: "Mobile Mountain Detail",
-        heroSubtitle: "We bring the mountain of quality car detailing services right to your doorstep. Professional, convenient, and guaranteed satisfaction.",
-        servicesTitle: "Our Detailing Services",
-        servicesSubtitle: "Professional mobile car detailing services that bring the mountain of quality right to your location.",
-        pricingTitle: "Pricing Plans",
-        pricingSubtitle: "Choose the perfect detailing package for your vehicle. All prices include travel to your location.",
-        testimonialsTitle: "What Our Customers Say",
-        testimonialsSubtitle: "Don't just take our word for it. Here's what our satisfied customers have to say about our services.",
-        contactTitle: "Get In Touch",
-        contactSubtitle: "Ready to give your vehicle the attention it deserves? Contact us today to schedule your appointment.",
-        footerDescription: "We bring the mountain of quality car detailing services right to your doorstep. Professional, convenient, and guaranteed satisfaction.",
-        businessName: "Mobile Mountain Detail",
-        phoneNumber: "(555) 123-4567",
-        email: "info@mobilemountaindetail.com",
-        serviceArea: "25-mile radius"
-      };
+        heroTitle: data.heroTitle || '',
+        heroSubtitle: data.heroSubtitle || '',
+        servicesTitle: data.servicesTitle || '',
+        servicesSubtitle: data.servicesSubtitle || '',
+        pricingTitle: data.pricingTitle || '',
+        pricingSubtitle: data.pricingSubtitle || '',
+        testimonialsTitle: data.testimonialsTitle || '',
+        testimonialsSubtitle: data.testimonialsSubtitle || '',
+        businessName: data.businessName || '',
+        phoneNumber: data.phoneNumber || '',
+        email: data.email || '',
+        serviceArea: data.serviceArea || '',
+        footerDescription: data.footerDescription || ''
+      }
     }
     
-    // Return the first document (we'll only have one content document)
-    const contentDoc = querySnapshot.docs[0];
-    return contentDoc.data();
+    return null
   } catch (error) {
-    console.error("Error getting website content: ", error);
-    throw error;
+    console.error('Error getting website content:', error)
+    throw error
   }
-};
-
-export const updateWebsiteContent = async (updates: any) => {
-  try {
-    const q = query(mobileMountainContentCollection);
-    const querySnapshot = await getDocs(q);
-    
-    if (querySnapshot.empty) {
-      // Create new content document if none exists
-      await addDoc(mobileMountainContentCollection, {
-        ...updates,
-        updatedAt: new Date().toISOString()
-      });
-    } else {
-      // Update existing content document
-      const contentDoc = querySnapshot.docs[0];
-      await updateDoc(doc(db, "mobile-mountain-content", contentDoc.id), {
-        ...updates,
-        updatedAt: new Date().toISOString()
-      });
-    }
-  } catch (error) {
-    console.error("Error updating website content: ", error);
-    throw error;
-  }
-};
+}

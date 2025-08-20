@@ -35,9 +35,10 @@ export default function Home() {
     name: '',
     email: '',
     phone: '',
+    address: '',
     service: '',
-    date: '',
-    time: '',
+    selectedDate: '',
+    selectedTime: '',
     message: ''
   })
 
@@ -172,7 +173,8 @@ export default function Home() {
       // Create new booking data
       const newBooking = {
         ...bookingData,
-        status: 'Pending' as const
+        status: 'Pending' as const,
+        createdAt: new Date().toISOString()
       }
       
       // Add booking to Firestore
@@ -184,9 +186,10 @@ export default function Home() {
         name: '',
         email: '',
         phone: '',
+        address: '',
         service: '',
-        date: '',
-        time: '',
+        selectedDate: '',
+        selectedTime: '',
         message: ''
       })
       
@@ -585,15 +588,15 @@ export default function Home() {
                   <div className="grid grid-cols-2 gap-4">
                     <input
                       type="date"
-                      value={bookingData.date}
-                      onChange={(e) => setBookingData({...bookingData, date: e.target.value})}
+                                          value={bookingData.selectedDate}
+                    onChange={(e) => setBookingData({...bookingData, selectedDate: e.target.value})}
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                       required
                     />
                     <input
                       type="time"
-                      value={bookingData.time}
-                      onChange={(e) => setBookingData({...bookingData, time: e.target.value})}
+                                          value={bookingData.selectedTime}
+                    onChange={(e) => setBookingData({...bookingData, selectedTime: e.target.value})}
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                       required
                     />
