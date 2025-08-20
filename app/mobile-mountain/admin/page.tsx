@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { 
   Calendar, 
@@ -59,17 +59,27 @@ interface Availability {
 export default function MobileMountainAdminPage() {
   const { content, updateContent } = useWebsiteContent()
   
-  // Add safety check for content
-  const safeContent = content || {
-    heroTitle: '',
-    heroSubtitle: '',
-    servicesTitle: '',
-    servicesSubtitle: '',
-    pricingTitle: '',
-    pricingSubtitle: '',
-    testimonialsTitle: '',
-    testimonialsSubtitle: ''
-  }
+  // Add safety check for content with proper error handling
+  const safeContent = React.useMemo(() => {
+    if (!content) {
+      return {
+        heroTitle: '',
+        heroSubtitle: '',
+        servicesTitle: '',
+        servicesSubtitle: '',
+        pricingTitle: '',
+        pricingSubtitle: '',
+        testimonialsTitle: '',
+        testimonialsSubtitle: '',
+        businessName: '',
+        phoneNumber: '',
+        email: '',
+        serviceArea: '',
+        footerDescription: ''
+      }
+    }
+    return content
+  }, [content])
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [code, setCode] = useState('')
   const [showPassword, setShowPassword] = useState(false)
@@ -249,30 +259,52 @@ export default function MobileMountainAdminPage() {
     ? bookings 
     : bookings.filter(booking => booking.status === selectedStatus)
 
-  // Calculate analytics only when needed
-  const analytics = {
-    total: bookings.length,
-    confirmed: bookings.filter(b => b.status === 'Confirmed').length,
-    pending: bookings.filter(b => b.status === 'Pending').length,
-    cancelled: bookings.filter(b => b.status === 'Cancelled').length,
-    estimatedRevenue: bookings
-      .filter(b => b.status === 'Confirmed')
-      .reduce((total, booking) => {
-        const servicePrices: { [key: string]: number } = {
-          'Basic Wash - $45': 45,
-          'Premium Detail - $125': 125,
-          'Ultimate Detail - $200': 200
-        }
-        const price = servicePrices[booking.service] || 100
-        return total + price
-      }, 0)
-  }
+  // Calculate analytics only when needed with error handling
+  const analytics = React.useMemo(() => {
+    try {
+      const total = bookings.length
+      const confirmed = bookings.filter(b => b.status === 'Confirmed').length
+      const pending = bookings.filter(b => b.status === 'Pending').length
+      const cancelled = bookings.filter(b => b.status === 'Cancelled').length
+      
+      const servicePrices: { [key: string]: number } = {
+        'Basic Wash - $45': 45,
+        'Premium Detail - $125': 125,
+        'Ultimate Detail - $200': 200
+      }
+      
+      const estimatedRevenue = bookings
+        .filter(b => b.status === 'Confirmed')
+        .reduce((total, booking) => {
+          const price = servicePrices[booking.service] || 100
+          return total + price
+        }, 0)
+      
+      return {
+        total,
+        confirmed,
+        pending,
+        cancelled,
+        estimatedRevenue
+      }
+    } catch (error) {
+      console.error('Error calculating analytics:', error)
+      return {
+        total: 0,
+        confirmed: 0,
+        pending: 0,
+        cancelled: 0,
+        estimatedRevenue: 0
+      }
+    }
+  }, [bookings])
 
   if (!isAuthenticated) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="max-w-md w-full">
           <motion.div
+            key="login-form"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="bg-white rounded-2xl shadow-xl p-8"
@@ -340,10 +372,11 @@ export default function MobileMountainAdminPage() {
     )
   }
 
-  return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white shadow-sm border-b">
+  try {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        {/* Header */}
+        <header className="bg-white shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center space-x-3">
@@ -964,45 +997,45 @@ export default function MobileMountainAdminPage() {
                         <label className="block text-sm font-medium text-gray-700 mb-2">
                           Business Name
                         </label>
-                        <input
-                          type="text"
-                          value={content.businessName}
-                          onChange={(e) => updateContent({ businessName: e.target.value })}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                        />
+                                                 <input
+                           type="text"
+                           value={safeContent.businessName}
+                           onChange={(e) => updateContent({ businessName: e.target.value })}
+                           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                         />
                       </div>
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">
                           Phone Number
                         </label>
-                        <input
-                          type="tel"
-                          value={content.phoneNumber}
-                          onChange={(e) => updateContent({ phoneNumber: e.target.value })}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                        />
+                                                 <input
+                           type="tel"
+                           value={safeContent.phoneNumber}
+                           onChange={(e) => updateContent({ phoneNumber: e.target.value })}
+                           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                         />
                       </div>
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">
                           Email
                         </label>
-                        <input
-                          type="email"
-                          value={content.email}
-                          onChange={(e) => updateContent({ email: e.target.value })}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                        />
+                                                 <input
+                           type="email"
+                           value={safeContent.email}
+                           onChange={(e) => updateContent({ email: e.target.value })}
+                           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                         />
                       </div>
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">
                           Service Area
                         </label>
-                        <input
-                          type="text"
-                          value={content.serviceArea}
-                          onChange={(e) => updateContent({ serviceArea: e.target.value })}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                        />
+                                                 <input
+                           type="text"
+                           value={safeContent.serviceArea}
+                           onChange={(e) => updateContent({ serviceArea: e.target.value })}
+                           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                         />
                       </div>
                     </div>
                   </div>
@@ -1013,12 +1046,12 @@ export default function MobileMountainAdminPage() {
                       <label className="block text-sm font-medium text-gray-700 mb-2">
                         Footer Description
                       </label>
-                      <textarea
-                        rows={3}
-                        value={content.footerDescription}
-                        onChange={(e) => updateContent({ footerDescription: e.target.value })}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      />
+                                             <textarea
+                         rows={3}
+                         value={safeContent.footerDescription}
+                         onChange={(e) => updateContent({ footerDescription: e.target.value })}
+                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                       />
                     </div>
                   </div>
                 </div>
@@ -1034,4 +1067,23 @@ export default function MobileMountainAdminPage() {
        </div>
      </div>
    )
+   } catch (error) {
+     console.error('Error rendering admin page:', error)
+     return (
+       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+         <div className="max-w-md w-full text-center">
+           <div className="bg-white rounded-2xl shadow-xl p-8">
+             <h1 className="text-2xl font-bold text-gray-900 mb-4">Error Loading Admin Dashboard</h1>
+             <p className="text-gray-600 mb-6">There was an error loading the admin dashboard. Please try refreshing the page.</p>
+             <button 
+               onClick={() => window.location.reload()} 
+               className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-300"
+             >
+               Refresh Page
+             </button>
+           </div>
+         </div>
+       </div>
+     )
+   }
  }
