@@ -52,7 +52,7 @@ export default function MobileMountainAdminPage() {
   const [error, setError] = useState('')
   const [bookings, setBookings] = useState<Booking[]>([])
   const [bookingTab, setBookingTab] = useState<'all' | 'pending' | 'confirmed' | 'cancelled'>('all')
-  const [activeTab, setActiveTab] = useState<'bookings' | 'availability' | 'settings' | 'pricing'>('bookings')
+  const [activeTab, setActiveTab] = useState<'bookings' | 'availability' | 'pricing' | 'settings'>('bookings')
   const [currentPassword, setCurrentPassword] = useState('')
   const [newPassword, setNewPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
@@ -73,6 +73,8 @@ export default function MobileMountainAdminPage() {
     ultimateDetail: 200
   })
   const [isUpdatingPricing, setIsUpdatingPricing] = useState(false)
+  const [isUpdatingAvailability, setIsUpdatingAvailability] = useState(false)
+
 
   // Load bookings from Firestore on component mount
   useEffect(() => {
@@ -130,6 +132,17 @@ export default function MobileMountainAdminPage() {
     } catch (error) {
       console.error('Error updating pricing:', error)
       setIsUpdatingPricing(false)
+    }
+  }
+
+  const updateAvailability = async () => {
+    setIsUpdatingAvailability(true)
+    try {
+      await updateDoc(doc(db, 'mobile-mountain-settings', 'availability'), { availability })
+      setIsUpdatingAvailability(false)
+    } catch (error) {
+      console.error('Error updating availability:', error)
+      setIsUpdatingAvailability(false)
     }
   }
 
@@ -220,15 +233,16 @@ export default function MobileMountainAdminPage() {
                 Admin Code
               </label>
               <div className="relative">
-                <input
-                  type={showPassword ? 'text' : 'password'}
-                  id="code"
-                  value={code}
-                  onChange={(e) => setCode(e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="Enter admin code"
-                  required
-                />
+                                 <input
+                   type={showPassword ? 'text' : 'password'}
+                   id="code"
+                   value={code}
+                   onChange={(e) => setCode(e.target.value)}
+                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                   placeholder="Enter admin code"
+                   required
+                   autoComplete="current-password"
+                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
@@ -325,60 +339,63 @@ export default function MobileMountainAdminPage() {
           </button>
         </div>
 
-        {/* Analytics Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <div className="bg-white rounded-lg shadow-sm p-6">
-            <div className="flex items-center">
-              <div className="p-2 bg-blue-100 rounded-lg">
-                <Calendar className="h-6 w-6 text-blue-600" />
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Total Bookings</p>
-                <p className="text-2xl font-bold text-gray-900">{analytics.total}</p>
-              </div>
-            </div>
-          </div>
-          
-          <div className="bg-white rounded-lg shadow-sm p-6">
-            <div className="flex items-center">
-              <div className="p-2 bg-green-100 rounded-lg">
-                <CheckCircle className="h-6 w-6 text-green-600" />
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Confirmed</p>
-                <p className="text-2xl font-bold text-gray-900">{analytics.confirmed}</p>
-              </div>
-            </div>
-          </div>
-          
-          <div className="bg-white rounded-lg shadow-sm p-6">
-            <div className="flex items-center">
-              <div className="p-2 bg-yellow-100 rounded-lg">
-                <Clock className="h-6 w-6 text-yellow-600" />
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Pending</p>
-                <p className="text-2xl font-bold text-gray-900">{analytics.pending}</p>
-              </div>
-            </div>
-          </div>
-          
-          <div className="bg-white rounded-lg shadow-sm p-6">
-            <div className="flex items-center">
-              <div className="p-2 bg-purple-100 rounded-lg">
-                <DollarSign className="h-6 w-6 text-purple-600" />
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Est. Revenue</p>
-                <p className="text-2xl font-bold text-gray-900">${analytics.estimatedRevenue}</p>
-              </div>
-            </div>
-          </div>
-        </div>
+        
 
         {/* Content based on active tab */}
-        {activeTab === 'bookings' && (
-          <div className="bg-white rounded-lg shadow-sm">
+                 {activeTab === 'bookings' && (
+           <div>
+             {/* Analytics Cards */}
+             <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+               <div className="bg-white rounded-lg shadow-sm p-6">
+                 <div className="flex items-center">
+                   <div className="p-2 bg-blue-100 rounded-lg">
+                     <Calendar className="h-6 w-6 text-blue-600" />
+                   </div>
+                   <div className="ml-4">
+                     <p className="text-sm font-medium text-gray-600">Total Bookings</p>
+                     <p className="text-2xl font-bold text-gray-900">{analytics.total}</p>
+                   </div>
+                 </div>
+               </div>
+               
+               <div className="bg-white rounded-lg shadow-sm p-6">
+                 <div className="flex items-center">
+                   <div className="p-2 bg-green-100 rounded-lg">
+                     <CheckCircle className="h-6 w-6 text-green-600" />
+                   </div>
+                   <div className="ml-4">
+                     <p className="text-sm font-medium text-gray-600">Confirmed</p>
+                     <p className="text-2xl font-bold text-gray-900">{analytics.confirmed}</p>
+                   </div>
+                 </div>
+               </div>
+               
+               <div className="bg-white rounded-lg shadow-sm p-6">
+                 <div className="flex items-center">
+                   <div className="p-2 bg-yellow-100 rounded-lg">
+                     <Clock className="h-6 w-6 text-yellow-600" />
+                   </div>
+                   <div className="ml-4">
+                     <p className="text-sm font-medium text-gray-600">Pending</p>
+                     <p className="text-2xl font-bold text-gray-900">{analytics.pending}</p>
+                   </div>
+                 </div>
+               </div>
+               
+               <div className="bg-white rounded-lg shadow-sm p-6">
+                 <div className="flex items-center">
+                   <div className="p-2 bg-purple-100 rounded-lg">
+                     <DollarSign className="h-6 w-6 text-purple-600" />
+                   </div>
+                   <div className="ml-4">
+                     <p className="text-sm font-medium text-gray-600">Est. Revenue</p>
+                     <p className="text-2xl font-bold text-gray-900">${analytics.estimatedRevenue}</p>
+                   </div>
+                 </div>
+               </div>
+             </div>
+
+             <div className="bg-white rounded-lg shadow-sm">
             {/* Booking Tabs */}
             <div className="border-b border-gray-200">
               <nav className="flex space-x-8 px-6">
@@ -503,6 +520,7 @@ export default function MobileMountainAdminPage() {
               )}
             </div>
           </div>
+        </div>
         )}
 
         {activeTab === 'pricing' && (
@@ -556,6 +574,76 @@ export default function MobileMountainAdminPage() {
           </div>
         )}
 
+        {activeTab === 'availability' && (
+          <div className="bg-white rounded-lg shadow-sm p-6">
+            <h3 className="text-lg font-medium text-gray-900 mb-6">Availability Settings</h3>
+            <div className="space-y-6">
+              {availability.map((day, index) => (
+                <div key={day.day} className="border border-gray-200 rounded-lg p-4">
+                  <div className="flex items-center justify-between mb-4">
+                    <label className="flex items-center">
+                      <input
+                        type="checkbox"
+                        checked={day.isAvailable}
+                        onChange={(e) => {
+                          const newAvailability = [...availability]
+                          newAvailability[index] = { ...newAvailability[index], isAvailable: e.target.checked }
+                          setAvailability(newAvailability)
+                        }}
+                        className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                      />
+                      <span className="ml-2 text-sm font-medium text-gray-900">{day.day}</span>
+                    </label>
+                  </div>
+                  
+                  {day.isAvailable && (
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Start Time
+                        </label>
+                        <input
+                          type="time"
+                          value={day.startTime}
+                          onChange={(e) => {
+                            const newAvailability = [...availability]
+                            newAvailability[index] = { ...newAvailability[index], startTime: e.target.value }
+                            setAvailability(newAvailability)
+                          }}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          End Time
+                        </label>
+                        <input
+                          type="time"
+                          value={day.endTime}
+                          onChange={(e) => {
+                            const newAvailability = [...availability]
+                            newAvailability[index] = { ...newAvailability[index], endTime: e.target.value }
+                            setAvailability(newAvailability)
+                          }}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        />
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ))}
+              
+              <button
+                onClick={updateAvailability}
+                disabled={isUpdatingAvailability}
+                className="bg-blue-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors disabled:opacity-50"
+              >
+                {isUpdatingAvailability ? 'Updating...' : 'Update Availability'}
+              </button>
+            </div>
+          </div>
+        )}
+
         {activeTab === 'settings' && (
           <div className="bg-white rounded-lg shadow-sm p-6">
             <h3 className="text-lg font-medium text-gray-900 mb-6">Admin Settings</h3>
@@ -572,6 +660,7 @@ export default function MobileMountainAdminPage() {
                       value={currentPassword}
                       onChange={(e) => setCurrentPassword(e.target.value)}
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      autoComplete="current-password"
                     />
                   </div>
                   <div>
@@ -583,6 +672,7 @@ export default function MobileMountainAdminPage() {
                       value={newPassword}
                       onChange={(e) => setNewPassword(e.target.value)}
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      autoComplete="new-password"
                     />
                   </div>
                   <div>
@@ -594,6 +684,7 @@ export default function MobileMountainAdminPage() {
                       value={confirmPassword}
                       onChange={(e) => setConfirmPassword(e.target.value)}
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      autoComplete="new-password"
                     />
                   </div>
                   <button className="bg-blue-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors">

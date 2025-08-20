@@ -59,35 +59,57 @@ export default function MobileMountainPage() {
   ]
 
   // Generate available slots for next 30 days
-  useEffect(() => {
-    const generateSlots = () => {
-      const slots = []
-      const today = new Date()
-      
-      for (let i = 0; i < 30; i++) {
-        const date = new Date(today)
-        date.setDate(today.getDate() + i)
-        const dateStr = date.toISOString().split('T')[0]
-        
-        // Generate time slots from 8 AM to 6 PM in 12-hour format
-        const times = []
-        for (let hour = 8; hour <= 18; hour++) {
-          const displayHour = hour > 12 ? hour - 12 : hour
-          const ampm = hour >= 12 ? 'PM' : 'AM'
-          times.push(`${displayHour}:00 ${ampm}`)
-        }
-        
-        slots.push({
-          date: dateStr,
-          times: times
-        })
-      }
-      
-      setAvailableSlots(slots)
+  const generateCalendarDays = () => {
+    const days = []
+    const today = new Date()
+    const currentMonth = today.getMonth()
+    const currentYear = today.getFullYear()
+    
+    // Get first day of current month
+    const firstDay = new Date(currentYear, currentMonth, 1)
+    const lastDay = new Date(currentYear, currentMonth + 1, 0)
+    
+    // Add empty days for padding
+    for (let i = 0; i < firstDay.getDay(); i++) {
+      days.push(null)
     }
     
-    generateSlots()
-  }, [])
+    // Add days of the month
+    for (let day = 1; day <= lastDay.getDate(); day++) {
+      const date = new Date(currentYear, currentMonth, day)
+      const isToday = date.toDateString() === today.toDateString()
+      const isPast = date < today
+      const dayOfWeek = date.getDay()
+      const isWeekend = dayOfWeek === 0 || dayOfWeek === 6
+      
+      days.push({
+        day,
+        date: date.toISOString().split('T')[0],
+        isAvailable: !isPast && !isWeekend,
+        isToday
+      })
+    }
+    
+    return days
+  }
+
+  const generateTimeSlots = (selectedDate: string) => {
+    const date = new Date(selectedDate)
+    const dayOfWeek = date.getDay()
+    const dayName = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][dayOfWeek]
+    
+    // Default times for weekdays
+    const defaultTimes = ['8:00 AM', '9:00 AM', '10:00 AM', '11:00 AM', '12:00 PM', '1:00 PM', '2:00 PM', '3:00 PM', '4:00 PM', '5:00 PM']
+    
+    // Weekend times
+    if (dayOfWeek === 0) { // Sunday
+      return ['10:00 AM', '11:00 AM', '12:00 PM', '1:00 PM', '2:00 PM', '3:00 PM']
+    } else if (dayOfWeek === 6) { // Saturday
+      return ['9:00 AM', '10:00 AM', '11:00 AM', '12:00 PM', '1:00 PM', '2:00 PM', '3:00 PM', '4:00 PM']
+    }
+    
+    return defaultTimes
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -127,79 +149,41 @@ export default function MobileMountainPage() {
     <div className="min-h-screen bg-gray-50">
       <Header />
       
-      {/* Hero Section - New Design with Custom Car Styling */}
-      <section id="home" className="bg-gradient-to-br from-gray-800 via-gray-700 to-gray-900 min-h-[80vh] md:min-h-[60vh] flex items-center justify-center relative overflow-hidden pt-20 md:pt-0">
+      {/* Hero Section - Mobile Responsive Design */}
+      <section id="home" className="bg-gradient-to-br from-gray-800 via-gray-700 to-gray-900 min-h-[90vh] md:min-h-[70vh] flex items-center justify-center relative overflow-hidden pt-20 md:pt-0">
         <div className="absolute inset-0 bg-black/20"></div>
         
-        {/* Custom Car Animation */}
-        <div className="absolute inset-0 flex items-center justify-center opacity-10">
-          <motion.div
-            initial={{ x: -100, opacity: 0 }}
-            animate={{ x: 0, opacity: 0.1 }}
-            transition={{ duration: 2, delay: 0.5 }}
-            className="relative"
-          >
-            {/* Car Body */}
-            <div className="w-96 h-24 bg-gradient-to-r from-gray-300 to-gray-400 rounded-full relative">
-              {/* Car Windows */}
-              <div className="absolute top-2 left-8 w-16 h-8 bg-blue-200 rounded-lg"></div>
-              <div className="absolute top-2 right-8 w-16 h-8 bg-blue-200 rounded-lg"></div>
-              
-              {/* Car Wheels */}
-              <div className="absolute -bottom-2 left-8 w-8 h-8 bg-gray-800 rounded-full border-2 border-gray-600"></div>
-              <div className="absolute -bottom-2 right-8 w-8 h-8 bg-gray-800 rounded-full border-2 border-gray-600"></div>
-              
-              {/* Car Details */}
-              <div className="absolute top-4 left-1/2 transform -translate-x-1/2 w-2 h-2 bg-red-500 rounded-full"></div>
-            </div>
-            
-            {/* Sparkles around car */}
-            <motion.div
-              animate={{ rotate: 360 }}
-              transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-              className="absolute -top-4 -left-4"
-            >
-              <Sparkles className="h-6 w-6 text-yellow-400" />
-            </motion.div>
-            <motion.div
-              animate={{ rotate: -360 }}
-              transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-              className="absolute -bottom-4 -right-4"
-            >
-              <Zap className="h-6 w-6 text-blue-400" />
-            </motion.div>
-          </motion.div>
-        </div>
+
         
         <div className="container-custom relative z-10 px-4">
-          <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+          <div className="grid lg:grid-cols-2 gap-6 lg:gap-12 items-center">
             <motion.div
               initial={{ opacity: 0, x: -50 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8 }}
               className="text-center lg:text-left"
             >
-              <div className="text-center lg:text-left mb-6">
-                <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white leading-tight">
+              <div className="text-center lg:text-left mb-4 md:mb-6">
+                <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white leading-tight">
                   {content?.heroTitle || 'Professional Mobile Car Detailing'}
                 </h1>
               </div>
-              <p className="text-lg md:text-xl text-gray-200 mb-8 leading-relaxed">
+              <p className="text-base sm:text-lg md:text-xl text-gray-200 mb-6 md:mb-8 leading-relaxed">
                 {content?.heroSubtitle || 'We bring the detailing service to you. Professional, convenient, and exceptional results every time.'}
               </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center lg:justify-start">
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={() => setIsBookingModalOpen(true)}
-                  className="bg-white text-gray-900 px-6 md:px-8 py-3 md:py-4 rounded-lg font-semibold text-base md:text-lg hover:bg-gray-100 transition-colors"
+                  className="bg-white text-gray-900 px-4 sm:px-6 md:px-8 py-2.5 sm:py-3 md:py-4 rounded-lg font-semibold text-sm sm:text-base md:text-lg hover:bg-gray-100 transition-colors"
                 >
                   Book Your Detail
                 </motion.button>
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="border-2 border-white text-white px-6 md:px-8 py-3 md:py-4 rounded-lg font-semibold text-base md:text-lg hover:bg-white hover:text-gray-900 transition-colors"
+                  className="border-2 border-white text-white px-4 sm:px-6 md:px-8 py-2.5 sm:py-3 md:py-4 rounded-lg font-semibold text-sm sm:text-base md:text-lg hover:bg-white hover:text-gray-900 transition-colors"
                 >
                   View Services
                 </motion.button>
@@ -811,49 +795,63 @@ export default function MobileMountainPage() {
                 {/* Calendar Interface */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-3">Select Date & Time</label>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-600 mb-2">Date</label>
-                      <select
-                        required
-                        value={bookingForm.selectedDate}
-                        onChange={(e) => setBookingForm({ ...bookingForm, selectedDate: e.target.value })}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      >
-                        <option value="">Select a date</option>
-                        {availableSlots.map((slot) => (
-                          <option key={slot.date} value={slot.date}>
-                            {new Date(slot.date).toLocaleDateString('en-US', { 
-                              weekday: 'short', 
-                              month: 'short', 
-                              day: 'numeric' 
-                            })}
-                          </option>
-                        ))}
-                      </select>
+                  
+                  {/* Simple Calendar */}
+                  <div className="mb-4">
+                    <div className="grid grid-cols-7 gap-1 mb-2">
+                      {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
+                        <div key={day} className="text-center text-xs font-medium text-gray-600 py-2">
+                          {day}
+                        </div>
+                      ))}
                     </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-600 mb-2">Time</label>
-                      <select
-                        required
-                        value={bookingForm.selectedTime}
-                        onChange={(e) => setBookingForm({ ...bookingForm, selectedTime: e.target.value })}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                        disabled={!bookingForm.selectedDate}
-                      >
-                        <option value="">Select a time</option>
-                        {bookingForm.selectedDate && 
-                          availableSlots
-                            .find(slot => slot.date === bookingForm.selectedDate)
-                            ?.times.map((time) => (
-                              <option key={time} value={time}>
-                                {time}
-                              </option>
-                            ))
-                        }
-                      </select>
+                    <div className="grid grid-cols-7 gap-1">
+                      {generateCalendarDays().map((day, index) => (
+                        <button
+                          key={index}
+                          type="button"
+                          onClick={() => {
+                            if (day && day.isAvailable) {
+                              setBookingForm({ ...bookingForm, selectedDate: day.date, selectedTime: '' })
+                            }
+                          }}
+                          disabled={!day || !day.isAvailable}
+                          className={`p-2 text-sm rounded-lg transition-colors ${
+                            day && day.isAvailable
+                              ? bookingForm.selectedDate === day.date
+                                ? 'bg-blue-600 text-white'
+                                : 'bg-gray-100 hover:bg-gray-200 text-gray-900'
+                              : 'bg-gray-50 text-gray-400 cursor-not-allowed'
+                          }`}
+                        >
+                          {day ? day.day : ''}
+                        </button>
+                      ))}
                     </div>
                   </div>
+
+                  {/* Time Selection */}
+                  {bookingForm.selectedDate && (
+                    <div>
+                      <label className="block text-sm font-medium text-gray-600 mb-2">Available Times</label>
+                      <div className="grid grid-cols-3 gap-2">
+                        {generateTimeSlots(bookingForm.selectedDate).map((time) => (
+                          <button
+                            key={time}
+                            type="button"
+                            onClick={() => setBookingForm({ ...bookingForm, selectedTime: time })}
+                            className={`p-2 text-sm rounded-lg border transition-colors ${
+                              bookingForm.selectedTime === time
+                                ? 'bg-blue-600 text-white border-blue-600'
+                                : 'bg-white text-gray-700 border-gray-300 hover:border-blue-500'
+                            }`}
+                          >
+                            {time}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 <div>
