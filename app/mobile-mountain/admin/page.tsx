@@ -58,6 +58,18 @@ interface Availability {
 
 export default function MobileMountainAdminPage() {
   const { content, updateContent } = useWebsiteContent()
+  
+  // Add safety check for content
+  const safeContent = content || {
+    heroTitle: '',
+    heroSubtitle: '',
+    servicesTitle: '',
+    servicesSubtitle: '',
+    pricingTitle: '',
+    pricingSubtitle: '',
+    testimonialsTitle: '',
+    testimonialsSubtitle: ''
+  }
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [code, setCode] = useState('')
   const [showPassword, setShowPassword] = useState(false)
@@ -164,7 +176,7 @@ export default function MobileMountainAdminPage() {
     const url = window.URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
-    a.download = `noahs-dube-bookings-${status || 'all'}-${new Date().toISOString().split('T')[0]}.csv`
+    a.download = `mobile-mountain-bookings-${status || 'all'}-${new Date().toISOString().split('T')[0]}.csv`
     document.body.appendChild(a)
     a.click()
     document.body.removeChild(a)
@@ -237,7 +249,24 @@ export default function MobileMountainAdminPage() {
     ? bookings 
     : bookings.filter(booking => booking.status === selectedStatus)
 
-  const analytics = getAnalytics()
+  // Calculate analytics only when needed
+  const analytics = {
+    total: bookings.length,
+    confirmed: bookings.filter(b => b.status === 'Confirmed').length,
+    pending: bookings.filter(b => b.status === 'Pending').length,
+    cancelled: bookings.filter(b => b.status === 'Cancelled').length,
+    estimatedRevenue: bookings
+      .filter(b => b.status === 'Confirmed')
+      .reduce((total, booking) => {
+        const servicePrices: { [key: string]: number } = {
+          'Basic Wash - $45': 45,
+          'Premium Detail - $125': 125,
+          'Ultimate Detail - $200': 200
+        }
+        const price = servicePrices[booking.service] || 100
+        return total + price
+      }, 0)
+  }
 
   if (!isAuthenticated) {
     return (
@@ -389,6 +418,7 @@ export default function MobileMountainAdminPage() {
         {/* Tab Content */}
                  {activeTab === 'bookings' && (
            <motion.div
+             key="bookings-tab"
              initial={{ opacity: 0 }}
              animate={{ opacity: 1 }}
              className="space-y-6"
@@ -593,23 +623,23 @@ export default function MobileMountainAdminPage() {
                           fill="none"
                           stroke="#10b981"
                           strokeWidth="3"
-                          strokeDasharray={`${(analytics.confirmed / analytics.total) * 100} ${100 - (analytics.confirmed / analytics.total) * 100}`}
+                          strokeDasharray={`${analytics.total > 0 ? (analytics.confirmed / analytics.total) * 100 : 0} ${analytics.total > 0 ? 100 - (analytics.confirmed / analytics.total) * 100 : 100}`}
                         />
                         <path
                           d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
                           fill="none"
                           stroke="#f59e0b"
                           strokeWidth="3"
-                          strokeDasharray={`${(analytics.pending / analytics.total) * 100} ${100 - (analytics.pending / analytics.total) * 100}`}
-                          strokeDashoffset={`-${(analytics.confirmed / analytics.total) * 100}`}
+                          strokeDasharray={`${analytics.total > 0 ? (analytics.pending / analytics.total) * 100 : 0} ${analytics.total > 0 ? 100 - (analytics.pending / analytics.total) * 100 : 100}`}
+                          strokeDashoffset={`-${analytics.total > 0 ? (analytics.confirmed / analytics.total) * 100 : 0}`}
                         />
                         <path
                           d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
                           fill="none"
                           stroke="#ef4444"
                           strokeWidth="3"
-                          strokeDasharray={`${(analytics.cancelled / analytics.total) * 100} ${100 - (analytics.cancelled / analytics.total) * 100}`}
-                          strokeDashoffset={`-${((analytics.confirmed + analytics.pending) / analytics.total) * 100}`}
+                          strokeDasharray={`${analytics.total > 0 ? (analytics.cancelled / analytics.total) * 100 : 0} ${analytics.total > 0 ? 100 - (analytics.cancelled / analytics.total) * 100 : 100}`}
+                          strokeDashoffset={`-${analytics.total > 0 ? ((analytics.confirmed + analytics.pending) / analytics.total) * 100 : 0}`}
                         />
                       </>
                     )}
@@ -639,6 +669,7 @@ export default function MobileMountainAdminPage() {
 
         {activeTab === 'availability' && (
           <motion.div
+            key="availability-tab"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             className="bg-white rounded-lg shadow"
@@ -703,6 +734,7 @@ export default function MobileMountainAdminPage() {
 
                  {activeTab === 'settings' && (
            <motion.div
+             key="settings-tab"
              initial={{ opacity: 0 }}
              animate={{ opacity: 1 }}
              className="bg-white rounded-lg shadow"
@@ -829,6 +861,7 @@ export default function MobileMountainAdminPage() {
 
                    {activeTab === 'website' && (
             <motion.div
+              key="website-tab"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               className="bg-white rounded-lg shadow"
@@ -849,7 +882,7 @@ export default function MobileMountainAdminPage() {
                         </label>
                         <input
                           type="text"
-                          value={content.heroTitle}
+                          value={safeContent.heroTitle}
                           onChange={(e) => updateContent({ heroTitle: e.target.value })}
                           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                         />
@@ -860,7 +893,7 @@ export default function MobileMountainAdminPage() {
                         </label>
                         <textarea
                           rows={3}
-                          value={content.heroSubtitle}
+                          value={safeContent.heroSubtitle}
                           onChange={(e) => updateContent({ heroSubtitle: e.target.value })}
                           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                         />
@@ -877,7 +910,7 @@ export default function MobileMountainAdminPage() {
                         </label>
                         <input
                           type="text"
-                          value={content.servicesTitle}
+                          value={safeContent.servicesTitle}
                           onChange={(e) => updateContent({ servicesTitle: e.target.value })}
                           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                         />
@@ -888,7 +921,7 @@ export default function MobileMountainAdminPage() {
                         </label>
                         <textarea
                           rows={2}
-                          value={content.servicesSubtitle}
+                          value={safeContent.servicesSubtitle}
                           onChange={(e) => updateContent({ servicesSubtitle: e.target.value })}
                           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                         />
@@ -905,7 +938,7 @@ export default function MobileMountainAdminPage() {
                         </label>
                         <input
                           type="text"
-                          value={content.pricingTitle}
+                          value={safeContent.pricingTitle}
                           onChange={(e) => updateContent({ pricingTitle: e.target.value })}
                           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                         />
@@ -916,7 +949,7 @@ export default function MobileMountainAdminPage() {
                         </label>
                         <textarea
                           rows={2}
-                          value={content.pricingSubtitle}
+                          value={safeContent.pricingSubtitle}
                           onChange={(e) => updateContent({ pricingSubtitle: e.target.value })}
                           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                         />
