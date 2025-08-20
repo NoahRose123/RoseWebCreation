@@ -1,3 +1,5 @@
+'use client'
+
 import { createContext, useContext, useState, useEffect } from 'react'
 import { getWebsiteContent, updateWebsiteContent } from './firebase'
 
@@ -77,7 +79,7 @@ export const WebsiteContentProvider = ({ children }: { children: React.ReactNode
     const loadContent = async () => {
       try {
         const firebaseContent = await getWebsiteContent()
-        setContent(firebaseContent)
+        setContent(firebaseContent as WebsiteContent)
       } catch (error) {
         console.error('Error loading website content:', error)
         // Keep default content if Firebase fails

@@ -1,4 +1,5 @@
 import { WebsiteContentProvider } from '../../lib/websiteContent'
+import ErrorBoundary from '../components/ErrorBoundary'
 
 export default function MobileMountainLayout({
   children,
@@ -6,8 +7,10 @@ export default function MobileMountainLayout({
   children: React.ReactNode
 }) {
   return (
-    <WebsiteContentProvider>
-      {children}
-    </WebsiteContentProvider>
+    <ErrorBoundary>
+      <WebsiteContentProvider>
+        {children}
+      </WebsiteContentProvider>
+    </ErrorBoundary>
   )
 }

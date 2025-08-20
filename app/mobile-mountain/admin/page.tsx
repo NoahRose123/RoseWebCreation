@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import { motion } from 'framer-motion'
 import { 
   Calendar, 
@@ -57,29 +57,10 @@ interface Availability {
 }
 
 export default function MobileMountainAdminPage() {
+  // Always call hooks at the top level
   const { content, updateContent } = useWebsiteContent()
   
-  // Add safety check for content with proper error handling
-  const safeContent = React.useMemo(() => {
-    if (!content) {
-      return {
-        heroTitle: '',
-        heroSubtitle: '',
-        servicesTitle: '',
-        servicesSubtitle: '',
-        pricingTitle: '',
-        pricingSubtitle: '',
-        testimonialsTitle: '',
-        testimonialsSubtitle: '',
-        businessName: '',
-        phoneNumber: '',
-        email: '',
-        serviceArea: '',
-        footerDescription: ''
-      }
-    }
-    return content
-  }, [content])
+  // State declarations
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [code, setCode] = useState('')
   const [showPassword, setShowPassword] = useState(false)
@@ -102,6 +83,75 @@ export default function MobileMountainAdminPage() {
     { day: 'Sunday', startTime: '10:00', endTime: '16:00', isAvailable: false }
   ])
 
+  // Safe content with proper error handling
+  const safeContent = useMemo(() => {
+    if (!content) {
+      return {
+        heroTitle: '',
+        heroSubtitle: '',
+        servicesTitle: '',
+        servicesSubtitle: '',
+        pricingTitle: '',
+        pricingSubtitle: '',
+        testimonialsTitle: '',
+        testimonialsSubtitle: '',
+        businessName: '',
+        phoneNumber: '',
+        email: '',
+        serviceArea: '',
+        footerDescription: ''
+      }
+    }
+    return content
+  }, [content])
+
+  // Filtered bookings
+  const filteredBookings = useMemo(() => {
+    return selectedStatus === 'all' 
+      ? bookings 
+      : bookings.filter(booking => booking.status === selectedStatus)
+  }, [bookings, selectedStatus])
+
+  // Analytics calculation with error handling
+  const analytics = useMemo(() => {
+    try {
+      const total = bookings.length
+      const confirmed = bookings.filter(b => b.status === 'Confirmed').length
+      const pending = bookings.filter(b => b.status === 'Pending').length
+      const cancelled = bookings.filter(b => b.status === 'Cancelled').length
+      
+      const servicePrices: { [key: string]: number } = {
+        'Basic Wash - $45': 45,
+        'Premium Detail - $125': 125,
+        'Ultimate Detail - $200': 200
+      }
+      
+      const estimatedRevenue = bookings
+        .filter(b => b.status === 'Confirmed')
+        .reduce((total, booking) => {
+          const price = servicePrices[booking.service] || 100
+          return total + price
+        }, 0)
+      
+      return {
+        total,
+        confirmed,
+        pending,
+        cancelled,
+        estimatedRevenue
+      }
+    } catch (error) {
+      console.error('Error calculating analytics:', error)
+      return {
+        total: 0,
+        confirmed: 0,
+        pending: 0,
+        cancelled: 0,
+        estimatedRevenue: 0
+      }
+    }
+  }, [bookings])
+
   // Function to get the actual date for a day of the week
   const getDateForDay = (dayName: string) => {
     const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
@@ -120,9 +170,9 @@ export default function MobileMountainAdminPage() {
       try {
         const firestoreBookings = await getBookings('mobile-mountain-bookings')
         setBookings(firestoreBookings)
-             } catch (error) {
-         console.error('Error loading bookings from Firestore:', error)
-       }
+      } catch (error) {
+        console.error('Error loading bookings from Firestore:', error)
+      }
     }
     
     if (isAuthenticated) {
@@ -193,35 +243,6 @@ export default function MobileMountainAdminPage() {
     window.URL.revokeObjectURL(url)
   }
 
-  const getAnalytics = () => {
-    const total = bookings.length
-    const confirmed = bookings.filter(b => b.status === 'Confirmed').length
-    const pending = bookings.filter(b => b.status === 'Pending').length
-    const cancelled = bookings.filter(b => b.status === 'Cancelled').length
-    
-    // Calculate estimated revenue based on services - only from confirmed bookings
-    const servicePrices: { [key: string]: number } = {
-      'Basic Wash - $45': 45,
-      'Premium Detail - $125': 125,
-      'Ultimate Detail - $200': 200
-    }
-    
-    const estimatedRevenue = bookings
-      .filter(b => b.status === 'Confirmed') // Only confirmed bookings count towards revenue
-      .reduce((total, booking) => {
-        const price = servicePrices[booking.service] || 100 // Default price if service not found
-        return total + price
-      }, 0)
-    
-    return {
-      total,
-      confirmed,
-      pending,
-      cancelled,
-      estimatedRevenue
-    }
-  }
-
   const updateAvailability = (index: number, field: keyof Availability, value: any) => {
     const newAvailability = [...availability]
     newAvailability[index] = { ...newAvailability[index], [field]: value }
@@ -255,50 +276,7 @@ export default function MobileMountainAdminPage() {
     setConfirmPassword('')
   }
 
-  const filteredBookings = selectedStatus === 'all' 
-    ? bookings 
-    : bookings.filter(booking => booking.status === selectedStatus)
-
-  // Calculate analytics only when needed with error handling
-  const analytics = React.useMemo(() => {
-    try {
-      const total = bookings.length
-      const confirmed = bookings.filter(b => b.status === 'Confirmed').length
-      const pending = bookings.filter(b => b.status === 'Pending').length
-      const cancelled = bookings.filter(b => b.status === 'Cancelled').length
-      
-      const servicePrices: { [key: string]: number } = {
-        'Basic Wash - $45': 45,
-        'Premium Detail - $125': 125,
-        'Ultimate Detail - $200': 200
-      }
-      
-      const estimatedRevenue = bookings
-        .filter(b => b.status === 'Confirmed')
-        .reduce((total, booking) => {
-          const price = servicePrices[booking.service] || 100
-          return total + price
-        }, 0)
-      
-      return {
-        total,
-        confirmed,
-        pending,
-        cancelled,
-        estimatedRevenue
-      }
-    } catch (error) {
-      console.error('Error calculating analytics:', error)
-      return {
-        total: 0,
-        confirmed: 0,
-        pending: 0,
-        cancelled: 0,
-        estimatedRevenue: 0
-      }
-    }
-  }, [bookings])
-
+  // Render login form if not authenticated
   if (!isAuthenticated) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -311,14 +289,14 @@ export default function MobileMountainAdminPage() {
           >
             <div className="text-center mb-8">
               <div className="flex items-center justify-center space-x-3 mb-4">
-                                 <Image
-                   src="/mobile-mountain-logo-new.png"
-                   alt="Mobile Mountain Detail"
-                   width={120}
-                   height={120}
-                   className="rounded-lg"
-                 />
-                 <h1 className="text-2xl font-bold text-gray-900">Admin Access</h1>
+                <Image
+                  src="/mobile-mountain-logo-new.png"
+                  alt="Mobile Mountain Detail"
+                  width={120}
+                  height={120}
+                  className="rounded-lg"
+                />
+                <h1 className="text-2xl font-bold text-gray-900">Admin Access</h1>
               </div>
               <p className="text-gray-600">Enter the admin code to access the dashboard</p>
             </div>
@@ -372,22 +350,22 @@ export default function MobileMountainAdminPage() {
     )
   }
 
-  try {
-    return (
-      <div className="min-h-screen bg-gray-50">
-        {/* Header */}
-        <header className="bg-white shadow-sm border-b">
+  // Main dashboard render
+  return (
+    <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <header className="bg-white shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center space-x-3">
-                             <Image
-                 src="/mobile-mountain-logo-new.png"
-                 alt="Mobile Mountain Detail"
-                 width={96}
-                 height={96}
-                 className="rounded-lg"
-               />
-               <h1 className="text-xl font-bold text-gray-900">Admin Dashboard</h1>
+              <Image
+                src="/mobile-mountain-logo-new.png"
+                alt="Mobile Mountain Detail"
+                width={96}
+                height={96}
+                className="rounded-lg"
+              />
+              <h1 className="text-xl font-bold text-gray-900">Admin Dashboard</h1>
             </div>
             <Link 
               href="/mobile-mountain"
@@ -403,16 +381,16 @@ export default function MobileMountainAdminPage() {
         {/* Tab Navigation */}
         <div className="mb-8">
           <nav className="flex space-x-8">
-                         <button
-               onClick={() => setActiveTab('bookings')}
-               className={`py-2 px-1 border-b-2 font-medium text-sm ${
-                 activeTab === 'bookings'
-                   ? 'border-blue-500 text-blue-600'
-                   : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-               }`}
-             >
-               Dashboard
-             </button>
+            <button
+              onClick={() => setActiveTab('bookings')}
+              className={`py-2 px-1 border-b-2 font-medium text-sm ${
+                activeTab === 'bookings'
+                  ? 'border-blue-500 text-blue-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              Dashboard
+            </button>
             <button
               onClick={() => setActiveTab('availability')}
               className={`py-2 px-1 border-b-2 font-medium text-sm ${
@@ -423,282 +401,281 @@ export default function MobileMountainAdminPage() {
             >
               Availability
             </button>
-                         <button
-               onClick={() => setActiveTab('settings')}
-               className={`py-2 px-1 border-b-2 font-medium text-sm ${
-                 activeTab === 'settings'
-                   ? 'border-blue-500 text-blue-600'
-                   : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-               }`}
-             >
-               Settings
-             </button>
-             <button
-               onClick={() => setActiveTab('website')}
-               className={`py-2 px-1 border-b-2 font-medium text-sm ${
-                 activeTab === 'website'
-                   ? 'border-blue-500 text-blue-600'
-                   : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-               }`}
-             >
-               Website
-             </button>
+            <button
+              onClick={() => setActiveTab('settings')}
+              className={`py-2 px-1 border-b-2 font-medium text-sm ${
+                activeTab === 'settings'
+                  ? 'border-blue-500 text-blue-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              Settings
+            </button>
+            <button
+              onClick={() => setActiveTab('website')}
+              className={`py-2 px-1 border-b-2 font-medium text-sm ${
+                activeTab === 'website'
+                  ? 'border-blue-500 text-blue-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              Website
+            </button>
           </nav>
         </div>
 
-                 
-
         {/* Tab Content */}
-                 {activeTab === 'bookings' && (
-           <motion.div
-             key="bookings-tab"
-             initial={{ opacity: 0 }}
-             animate={{ opacity: 1 }}
-             className="space-y-6"
-           >
-             {/* Analytics Cards */}
-             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-               <motion.div
-                 initial={{ opacity: 0, y: 20 }}
-                 animate={{ opacity: 1, y: 0 }}
-                 className="bg-white rounded-lg shadow p-6"
-               >
-                 <div className="flex items-center">
-                   <div className="p-2 bg-blue-100 rounded-lg">
-                     <Calendar className="h-6 w-6 text-blue-600" />
-                   </div>
-                   <div className="ml-4">
-                     <p className="text-sm font-medium text-gray-600">Total Bookings</p>
-                     <p className="text-2xl font-bold text-gray-900">{analytics.total}</p>
-                   </div>
-                 </div>
-               </motion.div>
-
-               <motion.div
-                 initial={{ opacity: 0, y: 20 }}
-                 animate={{ opacity: 1, y: 0 }}
-                 transition={{ delay: 0.1 }}
-                 className="bg-white rounded-lg shadow p-6"
-               >
-                 <div className="flex items-center">
-                   <div className="p-2 bg-green-100 rounded-lg">
-                     <CheckCircle className="h-6 w-6 text-green-600" />
-                   </div>
-                   <div className="ml-4">
-                     <p className="text-sm font-medium text-gray-600">Confirmed</p>
-                     <p className="text-2xl font-bold text-gray-900">{analytics.confirmed}</p>
-                   </div>
-                 </div>
-               </motion.div>
-
-               <motion.div
-                 initial={{ opacity: 0, y: 20 }}
-                 animate={{ opacity: 1, y: 0 }}
-                 transition={{ delay: 0.2 }}
-                 className="bg-white rounded-lg shadow p-6"
-               >
-                 <div className="flex items-center">
-                   <div className="p-2 bg-yellow-100 rounded-lg">
-                     <Clock className="h-6 w-6 text-yellow-600" />
-                   </div>
-                   <div className="ml-4">
-                     <p className="text-sm font-medium text-gray-600">Pending</p>
-                     <p className="text-2xl font-bold text-gray-900">{analytics.pending}</p>
-                   </div>
-                 </div>
-               </motion.div>
-
-               <motion.div
-                 initial={{ opacity: 0, y: 20 }}
-                 animate={{ opacity: 1, y: 0 }}
-                 transition={{ delay: 0.3 }}
-                 className="bg-white rounded-lg shadow p-6"
-               >
-                 <div className="flex items-center">
-                   <div className="p-2 bg-green-100 rounded-lg">
-                     <DollarSign className="h-6 w-6 text-green-600" />
-                   </div>
-                   <div className="ml-4">
-                     <p className="text-sm font-medium text-gray-600">Revenue</p>
-                     <p className="text-2xl font-bold text-gray-900">${analytics.estimatedRevenue}</p>
-                   </div>
-                 </div>
-               </motion.div>
-             </div>
-
-             {/* Bookings Table */}
-             <div className="bg-white rounded-lg shadow">
-               {/* Bookings Header */}
-               <div className="px-6 py-4 border-b border-gray-200">
-              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0">
-                <div>
-                  <h2 className="text-lg font-semibold text-gray-900">Bookings</h2>
-                  <p className="text-sm text-gray-600">Manage customer appointments</p>
+        {activeTab === 'bookings' && (
+          <motion.div
+            key="bookings-tab"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="space-y-6"
+          >
+            {/* Analytics Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="bg-white rounded-lg shadow p-6"
+              >
+                <div className="flex items-center">
+                  <div className="p-2 bg-blue-100 rounded-lg">
+                    <Calendar className="h-6 w-6 text-blue-600" />
+                  </div>
+                  <div className="ml-4">
+                    <p className="text-sm font-medium text-gray-600">Total Bookings</p>
+                    <p className="text-2xl font-bold text-gray-900">{analytics.total}</p>
+                  </div>
                 </div>
-                <div className="flex space-x-2">
-                  <select
-                    value={selectedStatus}
-                    onChange={(e) => setSelectedStatus(e.target.value as any)}
-                    className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  >
-                    <option value="all">All Bookings</option>
-                    <option value="Pending">Pending</option>
-                    <option value="Confirmed">Confirmed</option>
-                    <option value="Cancelled">Cancelled</option>
-                  </select>
-                  <button
-                    onClick={() => downloadBookings()}
-                    className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-300 flex items-center"
-                  >
-                    <Download className="h-4 w-4 mr-2" />
-                    Export
-                  </button>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 }}
+                className="bg-white rounded-lg shadow p-6"
+              >
+                <div className="flex items-center">
+                  <div className="p-2 bg-green-100 rounded-lg">
+                    <CheckCircle className="h-6 w-6 text-green-600" />
+                  </div>
+                  <div className="ml-4">
+                    <p className="text-sm font-medium text-gray-600">Confirmed</p>
+                    <p className="text-2xl font-bold text-gray-900">{analytics.confirmed}</p>
+                  </div>
                 </div>
-              </div>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+                className="bg-white rounded-lg shadow p-6"
+              >
+                <div className="flex items-center">
+                  <div className="p-2 bg-yellow-100 rounded-lg">
+                    <Clock className="h-6 w-6 text-yellow-600" />
+                  </div>
+                  <div className="ml-4">
+                    <p className="text-sm font-medium text-gray-600">Pending</p>
+                    <p className="text-2xl font-bold text-gray-900">{analytics.pending}</p>
+                  </div>
+                </div>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
+                className="bg-white rounded-lg shadow p-6"
+              >
+                <div className="flex items-center">
+                  <div className="p-2 bg-green-100 rounded-lg">
+                    <DollarSign className="h-6 w-6 text-green-600" />
+                  </div>
+                  <div className="ml-4">
+                    <p className="text-sm font-medium text-gray-600">Revenue</p>
+                    <p className="text-2xl font-bold text-gray-900">${analytics.estimatedRevenue}</p>
+                  </div>
+                </div>
+              </motion.div>
             </div>
 
-            {/* Bookings List */}
-            <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Customer
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Service
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Date & Time
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Status
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Actions
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
-                  {filteredBookings.map((booking) => (
-                    <tr key={booking.id} className="hover:bg-gray-50">
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div>
-                          <div className="text-sm font-medium text-gray-900">{booking.name}</div>
-                          <div className="text-sm text-gray-500">{booking.email}</div>
-                          <div className="text-sm text-gray-500">{booking.phone}</div>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-900">{booking.service}</div>
-                        {booking.message && (
-                          <div className="text-sm text-gray-500 truncate max-w-xs">
-                            {booking.message}
-                          </div>
-                        )}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-900">{booking.date}</div>
-                        <div className="text-sm text-gray-500">{booking.time}</div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                          booking.status === 'Confirmed' 
-                            ? 'bg-green-100 text-green-800'
-                            : booking.status === 'Pending'
-                            ? 'bg-yellow-100 text-yellow-800'
-                            : 'bg-red-100 text-red-800'
-                        }`}>
-                          {booking.status}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        <div className="flex space-x-2">
-                          <select
-                            value={booking.status}
-                            onChange={(e) => updateBookingStatus(booking.id, e.target.value as any)}
-                            className="px-2 py-1 border border-gray-300 rounded text-xs focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                          >
-                            <option value="Pending">Pending</option>
-                            <option value="Confirmed">Confirmed</option>
-                            <option value="Cancelled">Cancelled</option>
-                          </select>
-                          <button
-                            onClick={() => handleDeleteBooking(booking.id)}
-                            className="text-red-600 hover:text-red-900"
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </button>
-                        </div>
-                      </td>
+            {/* Bookings Table */}
+            <div className="bg-white rounded-lg shadow">
+              {/* Bookings Header */}
+              <div className="px-6 py-4 border-b border-gray-200">
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0">
+                  <div>
+                    <h2 className="text-lg font-semibold text-gray-900">Bookings</h2>
+                    <p className="text-sm text-gray-600">Manage customer appointments</p>
+                  </div>
+                  <div className="flex space-x-2">
+                    <select
+                      value={selectedStatus}
+                      onChange={(e) => setSelectedStatus(e.target.value as any)}
+                      className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    >
+                      <option value="all">All Bookings</option>
+                      <option value="Pending">Pending</option>
+                      <option value="Confirmed">Confirmed</option>
+                      <option value="Cancelled">Cancelled</option>
+                    </select>
+                    <button
+                      onClick={() => downloadBookings()}
+                      className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-300 flex items-center"
+                    >
+                      <Download className="h-4 w-4 mr-2" />
+                      Export
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Bookings List */}
+              <div className="overflow-x-auto">
+                <table className="min-w-full divide-y divide-gray-200">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Customer
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Service
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Date & Time
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Status
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Actions
+                      </th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                  </thead>
+                  <tbody className="bg-white divide-y divide-gray-200">
+                    {filteredBookings.map((booking) => (
+                      <tr key={booking.id} className="hover:bg-gray-50">
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div>
+                            <div className="text-sm font-medium text-gray-900">{booking.name}</div>
+                            <div className="text-sm text-gray-500">{booking.email}</div>
+                            <div className="text-sm text-gray-500">{booking.phone}</div>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="text-sm text-gray-900">{booking.service}</div>
+                          {booking.message && (
+                            <div className="text-sm text-gray-500 truncate max-w-xs">
+                              {booking.message}
+                            </div>
+                          )}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="text-sm text-gray-900">{booking.date}</div>
+                          <div className="text-sm text-gray-500">{booking.time}</div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                            booking.status === 'Confirmed' 
+                              ? 'bg-green-100 text-green-800'
+                              : booking.status === 'Pending'
+                              ? 'bg-yellow-100 text-yellow-800'
+                              : 'bg-red-100 text-red-800'
+                          }`}>
+                            {booking.status}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                          <div className="flex space-x-2">
+                            <select
+                              value={booking.status}
+                              onChange={(e) => updateBookingStatus(booking.id, e.target.value as any)}
+                              className="px-2 py-1 border border-gray-300 rounded text-xs focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            >
+                              <option value="Pending">Pending</option>
+                              <option value="Confirmed">Confirmed</option>
+                              <option value="Cancelled">Cancelled</option>
+                            </select>
+                            <button
+                              onClick={() => handleDeleteBooking(booking.id)}
+                              className="text-red-600 hover:text-red-900"
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
 
-            {/* Booking Status Distribution */}
-            <div className="bg-white rounded-lg shadow p-6 mt-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Booking Status Distribution</h3>
-              <div className="flex items-center justify-center">
-                <div className="relative w-32 h-32">
-                  <svg className="w-32 h-32 transform -rotate-90" viewBox="0 0 36 36">
-                    <path
-                      d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                      fill="none"
-                      stroke="#e5e7eb"
-                      strokeWidth="3"
-                    />
-                    {analytics.total > 0 && (
-                      <>
-                        <path
-                          d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                          fill="none"
-                          stroke="#10b981"
-                          strokeWidth="3"
-                          strokeDasharray={`${analytics.total > 0 ? (analytics.confirmed / analytics.total) * 100 : 0} ${analytics.total > 0 ? 100 - (analytics.confirmed / analytics.total) * 100 : 100}`}
-                        />
-                        <path
-                          d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                          fill="none"
-                          stroke="#f59e0b"
-                          strokeWidth="3"
-                          strokeDasharray={`${analytics.total > 0 ? (analytics.pending / analytics.total) * 100 : 0} ${analytics.total > 0 ? 100 - (analytics.pending / analytics.total) * 100 : 100}`}
-                          strokeDashoffset={`-${analytics.total > 0 ? (analytics.confirmed / analytics.total) * 100 : 0}`}
-                        />
-                        <path
-                          d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                          fill="none"
-                          stroke="#ef4444"
-                          strokeWidth="3"
-                          strokeDasharray={`${analytics.total > 0 ? (analytics.cancelled / analytics.total) * 100 : 0} ${analytics.total > 0 ? 100 - (analytics.cancelled / analytics.total) * 100 : 100}`}
-                          strokeDashoffset={`-${analytics.total > 0 ? ((analytics.confirmed + analytics.pending) / analytics.total) * 100 : 0}`}
-                        />
-                      </>
-                    )}
-                  </svg>
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <span className="text-2xl font-bold text-gray-900">{analytics.total}</span>
+              {/* Booking Status Distribution */}
+              <div className="bg-white rounded-lg shadow p-6 mt-6">
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">Booking Status Distribution</h3>
+                <div className="flex items-center justify-center">
+                  <div className="relative w-32 h-32">
+                    <svg className="w-32 h-32 transform -rotate-90" viewBox="0 0 36 36">
+                      <path
+                        d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                        fill="none"
+                        stroke="#e5e7eb"
+                        strokeWidth="3"
+                      />
+                      {analytics.total > 0 && (
+                        <>
+                          <path
+                            d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                            fill="none"
+                            stroke="#10b981"
+                            strokeWidth="3"
+                            strokeDasharray={`${analytics.total > 0 ? (analytics.confirmed / analytics.total) * 100 : 0} ${analytics.total > 0 ? 100 - (analytics.confirmed / analytics.total) * 100 : 100}`}
+                          />
+                          <path
+                            d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                            fill="none"
+                            stroke="#f59e0b"
+                            strokeWidth="3"
+                            strokeDasharray={`${analytics.total > 0 ? (analytics.pending / analytics.total) * 100 : 0} ${analytics.total > 0 ? 100 - (analytics.pending / analytics.total) * 100 : 100}`}
+                            strokeDashoffset={`-${analytics.total > 0 ? (analytics.confirmed / analytics.total) * 100 : 0}`}
+                          />
+                          <path
+                            d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                            fill="none"
+                            stroke="#ef4444"
+                            strokeWidth="3"
+                            strokeDasharray={`${analytics.total > 0 ? (analytics.cancelled / analytics.total) * 100 : 0} ${analytics.total > 0 ? 100 - (analytics.cancelled / analytics.total) * 100 : 100}`}
+                            strokeDashoffset={`-${analytics.total > 0 ? ((analytics.confirmed + analytics.pending) / analytics.total) * 100 : 0}`}
+                          />
+                        </>
+                      )}
+                    </svg>
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <span className="text-2xl font-bold text-gray-900">{analytics.total}</span>
+                    </div>
                   </div>
-                </div>
-                <div className="ml-6 space-y-2">
-                  <div className="flex items-center">
-                    <div className="w-3 h-3 bg-green-500 rounded-full mr-2"></div>
-                    <span className="text-sm text-gray-600">Confirmed: {analytics.confirmed}</span>
-                  </div>
-                  <div className="flex items-center">
-                    <div className="w-3 h-3 bg-yellow-500 rounded-full mr-2"></div>
-                    <span className="text-sm text-gray-600">Pending: {analytics.pending}</span>
-                  </div>
-                  <div className="flex items-center">
-                    <div className="w-3 h-3 bg-red-500 rounded-full mr-2"></div>
-                    <span className="text-sm text-gray-600">Cancelled: {analytics.cancelled}</span>
+                  <div className="ml-6 space-y-2">
+                    <div className="flex items-center">
+                      <div className="w-3 h-3 bg-green-500 rounded-full mr-2"></div>
+                      <span className="text-sm text-gray-600">Confirmed: {analytics.confirmed}</span>
+                    </div>
+                    <div className="flex items-center">
+                      <div className="w-3 h-3 bg-yellow-500 rounded-full mr-2"></div>
+                      <span className="text-sm text-gray-600">Pending: {analytics.pending}</span>
+                    </div>
+                    <div className="flex items-center">
+                      <div className="w-3 h-3 bg-red-500 rounded-full mr-2"></div>
+                      <span className="text-sm text-gray-600">Cancelled: {analytics.cancelled}</span>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </motion.div>
-        )}
+            </motion.div>
+          )}
 
         {activeTab === 'availability' && (
           <motion.div
@@ -724,9 +701,9 @@ export default function MobileMountainAdminPage() {
                           onChange={(e) => updateAvailability(index, 'isAvailable', e.target.checked)}
                           className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
                         />
-                                                 <span className="ml-2 text-sm font-medium text-gray-900">
-                           {day.day} ({getDateForDay(day.day)})
-                         </span>
+                        <span className="ml-2 text-sm font-medium text-gray-900">
+                          {day.day} ({getDateForDay(day.day)})
+                        </span>
                       </label>
                     </div>
                     
@@ -765,325 +742,306 @@ export default function MobileMountainAdminPage() {
           </motion.div>
         )}
 
-                 {activeTab === 'settings' && (
-           <motion.div
-             key="settings-tab"
-             initial={{ opacity: 0 }}
-             animate={{ opacity: 1 }}
-             className="bg-white rounded-lg shadow"
-           >
-             <div className="px-6 py-4 border-b border-gray-200">
-               <h2 className="text-lg font-semibold text-gray-900">Settings</h2>
-               <p className="text-sm text-gray-600">Manage your business settings</p>
-             </div>
-             
-             <div className="p-6">
-               <div className="space-y-6">
-                 
-                 <div>
-                   <h3 className="text-lg font-medium text-gray-900 mb-4">Change Password</h3>
-                   <form onSubmit={handlePasswordChange} className="space-y-4">
-                     <div>
-                       <label className="block text-sm font-medium text-gray-700 mb-2">
-                         Current Password
-                       </label>
-                       <input
-                         type="password"
-                         value={currentPassword}
-                         onChange={(e) => setCurrentPassword(e.target.value)}
-                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                         required
-                       />
-                     </div>
-                     <div>
-                       <label className="block text-sm font-medium text-gray-700 mb-2">
-                         New Password
-                       </label>
-                       <input
-                         type="password"
-                         value={newPassword}
-                         onChange={(e) => setNewPassword(e.target.value)}
-                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                         required
-                       />
-                     </div>
-                     <div>
-                       <label className="block text-sm font-medium text-gray-700 mb-2">
-                         Confirm New Password
-                       </label>
-                       <input
-                         type="password"
-                         value={confirmPassword}
-                         onChange={(e) => setConfirmPassword(e.target.value)}
-                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                         required
-                       />
-                     </div>
-                     {passwordError && (
-                       <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg">
-                         {passwordError}
-                       </div>
-                     )}
-                     {passwordSuccess && (
-                       <div className="bg-green-50 border border-green-200 text-green-600 px-4 py-3 rounded-lg">
-                         {passwordSuccess}
-                       </div>
-                     )}
-                     <button
-                       type="submit"
-                       className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition-colors duration-300"
-                     >
-                       Update Password
-                     </button>
-                   </form>
-                 </div>
-
-                 <div>
-                   <h3 className="text-lg font-medium text-gray-900 mb-4">Services & Pricing</h3>
-                   <div className="space-y-4">
-                     <div className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
-                       <div>
-                         <h4 className="font-medium text-gray-900">Basic Wash</h4>
-                         <p className="text-sm text-gray-600">Exterior wash, tire cleaning, interior vacuum</p>
-                       </div>
-                       <div className="flex items-center space-x-2">
-                         <span className="text-lg font-bold text-gray-900">$45</span>
-                         <button className="text-blue-600 hover:text-blue-700">
-                           <Edit className="h-4 w-4" />
-                         </button>
-                       </div>
-                     </div>
-                     
-                     <div className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
-                       <div>
-                         <h4 className="font-medium text-gray-900">Premium Detail</h4>
-                         <p className="text-sm text-gray-600">Complete interior and exterior detailing</p>
-                       </div>
-                       <div className="flex items-center space-x-2">
-                         <span className="text-lg font-bold text-gray-900">$125</span>
-                         <button className="text-blue-600 hover:text-blue-700">
-                           <Edit className="h-4 w-4" />
-                         </button>
-                       </div>
-                     </div>
-                     
-                     <div className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
-                       <div>
-                         <h4 className="font-medium text-gray-900">Ultimate Detail</h4>
-                         <p className="text-sm text-gray-600">Premium service with paint correction</p>
-                       </div>
-                       <div className="flex items-center space-x-2">
-                         <span className="text-lg font-bold text-gray-900">$200</span>
-                         <button className="text-blue-600 hover:text-blue-700">
-                           <Edit className="h-4 w-4" />
-                         </button>
-                       </div>
-                     </div>
-                   </div>
-                 </div>
-               </div>
-               
-               <div className="mt-6">
-                 <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition-colors duration-300">
-                   Save Settings
-                 </button>
-               </div>
-             </div>
-           </motion.div>
-         )}
-
-                   {activeTab === 'website' && (
-            <motion.div
-              key="website-tab"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="bg-white rounded-lg shadow"
-            >
-              <div className="px-6 py-4 border-b border-gray-200">
-                <h2 className="text-lg font-semibold text-gray-900">Real-Time Website Content Editor</h2>
-                <p className="text-sm text-gray-600">Edit website content and see changes instantly</p>
-              </div>
-              
-              <div className="p-6">
-                <div className="space-y-6">
-                  <div>
-                    <h3 className="text-lg font-medium text-gray-900 mb-4">Hero Section</h3>
-                    <div className="space-y-4">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Main Headline
-                        </label>
-                        <input
-                          type="text"
-                          value={safeContent.heroTitle}
-                          onChange={(e) => updateContent({ heroTitle: e.target.value })}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Subtitle
-                        </label>
-                        <textarea
-                          rows={3}
-                          value={safeContent.heroSubtitle}
-                          onChange={(e) => updateContent({ heroSubtitle: e.target.value })}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                        />
-                      </div>
-                    </div>
-                  </div>
-
-                  <div>
-                    <h3 className="text-lg font-medium text-gray-900 mb-4">Services Section</h3>
-                    <div className="space-y-4">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Section Title
-                        </label>
-                        <input
-                          type="text"
-                          value={safeContent.servicesTitle}
-                          onChange={(e) => updateContent({ servicesTitle: e.target.value })}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Section Subtitle
-                        </label>
-                        <textarea
-                          rows={2}
-                          value={safeContent.servicesSubtitle}
-                          onChange={(e) => updateContent({ servicesSubtitle: e.target.value })}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                        />
-                      </div>
-                    </div>
-                  </div>
-
-                  <div>
-                    <h3 className="text-lg font-medium text-gray-900 mb-4">Pricing Section</h3>
-                    <div className="space-y-4">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Section Title
-                        </label>
-                        <input
-                          type="text"
-                          value={safeContent.pricingTitle}
-                          onChange={(e) => updateContent({ pricingTitle: e.target.value })}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Section Subtitle
-                        </label>
-                        <textarea
-                          rows={2}
-                          value={safeContent.pricingSubtitle}
-                          onChange={(e) => updateContent({ pricingSubtitle: e.target.value })}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                        />
-                      </div>
-                    </div>
-                  </div>
-
-                  <div>
-                    <h3 className="text-lg font-medium text-gray-900 mb-4">Business Information</h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Business Name
-                        </label>
-                                                 <input
-                           type="text"
-                           value={safeContent.businessName}
-                           onChange={(e) => updateContent({ businessName: e.target.value })}
-                           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                         />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Phone Number
-                        </label>
-                                                 <input
-                           type="tel"
-                           value={safeContent.phoneNumber}
-                           onChange={(e) => updateContent({ phoneNumber: e.target.value })}
-                           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                         />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Email
-                        </label>
-                                                 <input
-                           type="email"
-                           value={safeContent.email}
-                           onChange={(e) => updateContent({ email: e.target.value })}
-                           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                         />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Service Area
-                        </label>
-                                                 <input
-                           type="text"
-                           value={safeContent.serviceArea}
-                           onChange={(e) => updateContent({ serviceArea: e.target.value })}
-                           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                         />
-                      </div>
-                    </div>
-                  </div>
-
-                  <div>
-                    <h3 className="text-lg font-medium text-gray-900 mb-4">Footer</h3>
+        {activeTab === 'settings' && (
+          <motion.div
+            key="settings-tab"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="bg-white rounded-lg shadow"
+          >
+            <div className="px-6 py-4 border-b border-gray-200">
+              <h2 className="text-lg font-semibold text-gray-900">Settings</h2>
+              <p className="text-sm text-gray-600">Manage your business settings</p>
+            </div>
+            
+            <div className="p-6">
+              <div className="space-y-6">
+                
+                <div>
+                  <h3 className="text-lg font-medium text-gray-900 mb-4">Change Password</h3>
+                  <form onSubmit={handlePasswordChange} className="space-y-4">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Footer Description
+                        Current Password
                       </label>
-                                             <textarea
-                         rows={3}
-                         value={safeContent.footerDescription}
-                         onChange={(e) => updateContent({ footerDescription: e.target.value })}
-                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                       />
+                      <input
+                        type="password"
+                        value={currentPassword}
+                        onChange={(e) => setCurrentPassword(e.target.value)}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        New Password
+                      </label>
+                      <input
+                        type="password"
+                        value={newPassword}
+                        onChange={(e) => setNewPassword(e.target.value)}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Confirm New Password
+                      </label>
+                      <input
+                        type="password"
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        required
+                      />
+                    </div>
+                    {passwordError && (
+                      <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg">
+                        {passwordError}
+                      </div>
+                    )}
+                    {passwordSuccess && (
+                      <div className="bg-green-50 border border-green-200 text-green-600 px-4 py-3 rounded-lg">
+                        {passwordSuccess}
+                      </div>
+                    )}
+                    <button
+                      type="submit"
+                      className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition-colors duration-300"
+                    >
+                      Update Password
+                    </button>
+                  </form>
+                </div>
+
+                <div>
+                  <h3 className="text-lg font-medium text-gray-900 mb-4">Services & Pricing</h3>
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
+                      <div>
+                        <h4 className="font-medium text-gray-900">Basic Wash</h4>
+                        <p className="text-sm text-gray-600">Exterior wash, tire cleaning, interior vacuum</p>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <span className="text-lg font-bold text-gray-900">$45</span>
+                        <button className="text-blue-600 hover:text-blue-700">
+                          <Edit className="h-4 w-4" />
+                        </button>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
+                      <div>
+                        <h4 className="font-medium text-gray-900">Premium Detail</h4>
+                        <p className="text-sm text-gray-600">Complete interior and exterior detailing</p>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <span className="text-lg font-bold text-gray-900">$125</span>
+                        <button className="text-blue-600 hover:text-blue-700">
+                          <Edit className="h-4 w-4" />
+                        </button>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
+                      <div>
+                        <h4 className="font-medium text-gray-900">Ultimate Detail</h4>
+                        <p className="text-sm text-gray-600">Premium service with paint correction</p>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <span className="text-lg font-bold text-gray-900">$200</span>
+                        <button className="text-blue-600 hover:text-blue-700">
+                          <Edit className="h-4 w-4" />
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
-                
-                                 <div className="mt-6 p-4 bg-green-50 border border-green-200 rounded-lg">
-                   <p className="text-green-800 text-sm">
-                     ✅ Changes are saved to Firebase and appear instantly on the website!
-                   </p>
-                 </div>
               </div>
-            </motion.div>
-          )}
-       </div>
-     </div>
-   )
-   } catch (error) {
-     console.error('Error rendering admin page:', error)
-     return (
-       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-         <div className="max-w-md w-full text-center">
-           <div className="bg-white rounded-2xl shadow-xl p-8">
-             <h1 className="text-2xl font-bold text-gray-900 mb-4">Error Loading Admin Dashboard</h1>
-             <p className="text-gray-600 mb-6">There was an error loading the admin dashboard. Please try refreshing the page.</p>
-             <button 
-               onClick={() => window.location.reload()} 
-               className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-300"
-             >
-               Refresh Page
-             </button>
-           </div>
-         </div>
-       </div>
-     )
-   }
- }
+              
+              <div className="mt-6">
+                <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition-colors duration-300">
+                  Save Settings
+                </button>
+              </div>
+            </div>
+          </motion.div>
+        )}
+
+        {activeTab === 'website' && (
+          <motion.div
+            key="website-tab"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="bg-white rounded-lg shadow"
+          >
+            <div className="px-6 py-4 border-b border-gray-200">
+              <h2 className="text-lg font-semibold text-gray-900">Real-Time Website Content Editor</h2>
+              <p className="text-sm text-gray-600">Edit website content and see changes instantly</p>
+            </div>
+            
+            <div className="p-6">
+              <div className="space-y-6">
+                <div>
+                  <h3 className="text-lg font-medium text-gray-900 mb-4">Hero Section</h3>
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Main Headline
+                      </label>
+                      <input
+                        type="text"
+                        value={safeContent.heroTitle}
+                        onChange={(e) => updateContent({ heroTitle: e.target.value })}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Subtitle
+                      </label>
+                      <textarea
+                        rows={3}
+                        value={safeContent.heroSubtitle}
+                        onChange={(e) => updateContent({ heroSubtitle: e.target.value })}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <h3 className="text-lg font-medium text-gray-900 mb-4">Services Section</h3>
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Section Title
+                      </label>
+                      <input
+                        type="text"
+                        value={safeContent.servicesTitle}
+                        onChange={(e) => updateContent({ servicesTitle: e.target.value })}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Section Subtitle
+                      </label>
+                      <textarea
+                        rows={2}
+                        value={safeContent.servicesSubtitle}
+                        onChange={(e) => updateContent({ servicesSubtitle: e.target.value })}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <h3 className="text-lg font-medium text-gray-900 mb-4">Pricing Section</h3>
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Section Title
+                      </label>
+                      <input
+                        type="text"
+                        value={safeContent.pricingTitle}
+                        onChange={(e) => updateContent({ pricingTitle: e.target.value })}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Section Subtitle
+                      </label>
+                      <textarea
+                        rows={2}
+                        value={safeContent.pricingSubtitle}
+                        onChange={(e) => updateContent({ pricingSubtitle: e.target.value })}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <h3 className="text-lg font-medium text-gray-900 mb-4">Business Information</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Business Name
+                      </label>
+                      <input
+                        type="text"
+                        value={safeContent.businessName}
+                        onChange={(e) => updateContent({ businessName: e.target.value })}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Phone Number
+                      </label>
+                      <input
+                        type="tel"
+                        value={safeContent.phoneNumber}
+                        onChange={(e) => updateContent({ phoneNumber: e.target.value })}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Email
+                      </label>
+                      <input
+                        type="email"
+                        value={safeContent.email}
+                        onChange={(e) => updateContent({ email: e.target.value })}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Service Area
+                      </label>
+                      <input
+                        type="text"
+                        value={safeContent.serviceArea}
+                        onChange={(e) => updateContent({ serviceArea: e.target.value })}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <h3 className="text-lg font-medium text-gray-900 mb-4">Footer</h3>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Footer Description
+                    </label>
+                    <textarea
+                      rows={3}
+                      value={safeContent.footerDescription}
+                      onChange={(e) => updateContent({ footerDescription: e.target.value })}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    />
+                  </div>
+                </div>
+              </div>
+              
+              <div className="mt-6 p-4 bg-green-50 border border-green-200 rounded-lg">
+                <p className="text-green-800 text-sm">
+                  ✅ Changes are saved to Firebase and appear instantly on the website!
+                </p>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </div>
+    </div>
+  )
+}
