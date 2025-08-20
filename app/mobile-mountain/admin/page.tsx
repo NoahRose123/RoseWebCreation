@@ -67,6 +67,7 @@ export default function MobileMountainAdminPage() {
   const [error, setError] = useState('')
   const [bookings, setBookings] = useState<Booking[]>([])
   const [selectedStatus, setSelectedStatus] = useState<'all' | 'Confirmed' | 'Pending' | 'Cancelled'>('all')
+  const [bookingTab, setBookingTab] = useState<'all' | 'pending' | 'confirmed' | 'cancelled'>('all')
   const [activeTab, setActiveTab] = useState<'bookings' | 'availability' | 'settings' | 'website'>('bookings')
   const [currentPassword, setCurrentPassword] = useState('')
   const [newPassword, setNewPassword] = useState('')
@@ -82,6 +83,39 @@ export default function MobileMountainAdminPage() {
     { day: 'Saturday', startTime: '09:00', endTime: '17:00', isAvailable: true },
     { day: 'Sunday', startTime: '10:00', endTime: '16:00', isAvailable: false }
   ])
+  
+  // Generate next 7 days availability starting from today
+  const generateNextWeekAvailability = () => {
+    const today = new Date()
+    const nextWeek = []
+    
+    for (let i = 0; i < 7; i++) {
+      const date = new Date(today)
+      date.setDate(today.getDate() + i)
+      
+      const dayName = date.toLocaleDateString('en-US', { weekday: 'long' })
+      const dateString = date.toLocaleDateString('en-US', { 
+        month: 'short', 
+        day: 'numeric',
+        year: 'numeric'
+      })
+      
+      const dayAvailability = availability.find(day => day.day === dayName)
+      
+      nextWeek.push({
+        date: dateString,
+        day: dayName,
+        startTime: dayAvailability?.startTime || '08:00',
+        endTime: dayAvailability?.endTime || '18:00',
+        isAvailable: dayAvailability?.isAvailable || false,
+        isToday: i === 0
+      })
+    }
+    
+    return nextWeek
+  }
+  
+  const nextWeekAvailability = generateNextWeekAvailability()
 
   // Safe content with proper error handling
   const safeContent = useMemo(() => {
@@ -107,10 +141,14 @@ export default function MobileMountainAdminPage() {
 
   // Filtered bookings
   const filteredBookings = useMemo(() => {
-    return selectedStatus === 'all' 
+    return bookingTab === 'all' 
       ? bookings 
-      : bookings.filter(booking => booking.status === selectedStatus)
-  }, [bookings, selectedStatus])
+      : bookingTab === 'pending'
+      ? bookings.filter(booking => booking.status === 'Pending')
+      : bookingTab === 'confirmed'
+      ? bookings.filter(booking => booking.status === 'Confirmed')
+      : bookings.filter(booking => booking.status === 'Cancelled')
+  }, [bookings, bookingTab])
 
   // Analytics calculation with error handling
   const analytics = useMemo(() => {
@@ -502,9 +540,54 @@ export default function MobileMountainAdminPage() {
               </motion.div>
             </div>
 
-            {/* Bookings Table */}
+            {/* Booking Tabs */}
             <div className="bg-white rounded-lg shadow">
-              {/* Bookings Header */}
+              <div className="border-b border-gray-200">
+                <nav className="flex space-x-8 px-6">
+                  <button
+                    onClick={() => setBookingTab('all')}
+                    className={`py-4 px-1 border-b-2 font-medium text-sm ${
+                      bookingTab === 'all'
+                        ? 'border-gray-800 text-gray-900'
+                        : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                    }`}
+                  >
+                    All Bookings ({bookings.length})
+                  </button>
+                  <button
+                    onClick={() => setBookingTab('pending')}
+                    className={`py-4 px-1 border-b-2 font-medium text-sm ${
+                      bookingTab === 'pending'
+                        ? 'border-yellow-500 text-yellow-600'
+                        : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                    }`}
+                  >
+                    Pending ({bookings.filter(b => b.status === 'Pending').length})
+                  </button>
+                  <button
+                    onClick={() => setBookingTab('confirmed')}
+                    className={`py-4 px-1 border-b-2 font-medium text-sm ${
+                      bookingTab === 'confirmed'
+                        ? 'border-green-500 text-green-600'
+                        : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                    }`}
+                  >
+                    Confirmed ({bookings.filter(b => b.status === 'Confirmed').length})
+                  </button>
+                  <button
+                    onClick={() => setBookingTab('cancelled')}
+                    className={`py-4 px-1 border-b-2 font-medium text-sm ${
+                      bookingTab === 'cancelled'
+                        ? 'border-red-500 text-red-600'
+                        : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                    }`}
+                  >
+                    Cancelled ({bookings.filter(b => b.status === 'Cancelled').length})
+                  </button>
+                </nav>
+              </div>
+
+              {/* Bookings Table */}
               <div className="px-6 py-4 border-b border-gray-200">
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0">
                   <div>
@@ -512,16 +595,6 @@ export default function MobileMountainAdminPage() {
                     <p className="text-sm text-gray-600">Manage customer appointments</p>
                   </div>
                   <div className="flex space-x-2">
-                    <select
-                      value={selectedStatus}
-                      onChange={(e) => setSelectedStatus(e.target.value as any)}
-                      className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    >
-                      <option value="all">All Bookings</option>
-                      <option value="Pending">Pending</option>
-                      <option value="Confirmed">Confirmed</option>
-                      <option value="Cancelled">Cancelled</option>
-                    </select>
                     <button
                       onClick={() => downloadBookings()}
                       className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-300 flex items-center"
@@ -686,12 +759,83 @@ export default function MobileMountainAdminPage() {
           >
             <div className="px-6 py-4 border-b border-gray-200">
               <h2 className="text-lg font-semibold text-gray-900">Availability Settings</h2>
-              <p className="text-sm text-gray-600">Set your working hours and availability</p>
+              <p className="text-sm text-gray-600">Set your working hours and availability for the next 7 days</p>
             </div>
             
             <div className="p-6">
-              <div className="space-y-4">
-                {availability.map((day, index) => (
+              {/* Next 7 Days Availability */}
+              <div className="mb-8">
+                <h3 className="text-lg font-medium text-gray-900 mb-4">Next 7 Days Schedule</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {nextWeekAvailability.map((day, index) => (
+                    <div key={day.date} className={`p-4 border rounded-lg ${day.isToday ? 'border-blue-500 bg-blue-50' : 'border-gray-200'}`}>
+                      <div className="flex items-center justify-between mb-2">
+                        <span className={`font-medium ${day.isToday ? 'text-blue-700' : 'text-gray-900'}`}>
+                          {day.day}
+                        </span>
+                        {day.isToday && (
+                          <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">Today</span>
+                        )}
+                      </div>
+                      <div className="text-sm text-gray-600 mb-2">{day.date}</div>
+                      <div className="space-y-2">
+                        <label className="flex items-center">
+                          <input
+                            type="checkbox"
+                            checked={day.isAvailable}
+                            onChange={(e) => {
+                              const newAvailability = [...nextWeekAvailability]
+                              newAvailability[index] = { ...newAvailability[index], isAvailable: e.target.checked }
+                              // Update the main availability array as well
+                              const dayIndex = availability.findIndex(d => d.day === day.day)
+                              if (dayIndex !== -1) {
+                                updateAvailability(dayIndex, 'isAvailable', e.target.checked)
+                              }
+                            }}
+                            className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                          />
+                          <span className="ml-2 text-sm text-gray-700">Available</span>
+                        </label>
+                        {day.isAvailable && (
+                          <div className="grid grid-cols-2 gap-2 text-xs">
+                            <div>
+                              <span className="text-gray-500">Start:</span>
+                              <input
+                                type="time"
+                                value={day.startTime}
+                                onChange={(e) => {
+                                  const newAvailability = [...nextWeekAvailability]
+                                  newAvailability[index] = { ...newAvailability[index], startTime: e.target.value }
+                                }}
+                                className="w-full px-2 py-1 border border-gray-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-transparent"
+                              />
+                            </div>
+                            <div>
+                              <span className="text-gray-500">End:</span>
+                              <input
+                                type="time"
+                                value={day.endTime}
+                                onChange={(e) => {
+                                  const newAvailability = [...nextWeekAvailability]
+                                  newAvailability[index] = { ...newAvailability[index], endTime: e.target.value }
+                                }}
+                                className="w-full px-2 py-1 border border-gray-300 rounded text-xs focus:ring-1 focus:ring-blue-500 focus:border-transparent"
+                              />
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Weekly Schedule Template */}
+              <div className="border-t pt-6">
+                <h3 className="text-lg font-medium text-gray-900 mb-4">Weekly Schedule Template</h3>
+                <p className="text-sm text-gray-600 mb-4">Set your default weekly schedule that will be applied to future weeks</p>
+                <div className="space-y-4">
+                  {availability.map((day, index) => (
                   <div key={day.day} className="flex items-center space-x-4 p-4 border border-gray-200 rounded-lg">
                     <div className="w-24">
                       <label className="flex items-center">

@@ -22,7 +22,10 @@ import {
   X,
   Wrench,
   Droplets,
-  Zap
+  Zap,
+  Mountain,
+  Award,
+  Clock3
 } from 'lucide-react'
 import Image from 'next/image'
 import Header from '../components/MobileMountainHeader'
@@ -106,7 +109,7 @@ export default function MobileMountainPage() {
       features: [
         'Everything in Basic',
         'Clay Bar Treatment',
-        'Paint Protection Wax',
+        'Paint Correction',
         'Interior Deep Clean',
         'Leather Conditioning',
         'Odor Elimination'
@@ -119,11 +122,11 @@ export default function MobileMountainPage() {
       period: 'per vehicle',
       features: [
         'Everything in Premium',
-        'Paint Correction',
         'Ceramic Coating',
         'Engine Bay Cleaning',
         'Headlight Restoration',
-        'Premium Products'
+        'Paint Protection Film',
+        '1 Year Warranty'
       ],
       popular: false
     }
@@ -146,48 +149,18 @@ export default function MobileMountainPage() {
     }
   ]
 
-  const mockBookings = [
-    {
-      id: 1,
-      name: 'John Smith',
-      email: 'john@example.com',
-      service: 'Premium Detail',
-      date: '2024-01-15',
-      time: '10:00 AM',
-      status: 'Confirmed'
-    },
-    {
-      id: 2,
-      name: 'Emily Davis',
-      email: 'emily@example.com',
-      service: 'Basic Wash',
-      date: '2024-01-16',
-      time: '2:00 PM',
-      status: 'Pending'
-    }
-  ]
-
-  const analytics = {
-    totalBookings: 45,
-    completionRate: 95
-  }
-
-  const handleBookingSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
-    
+
     try {
-      // Create new booking data
-      const newBooking = {
+      await addBooking({
         ...bookingData,
-        status: 'Pending' as const
-      }
-      
-      // Add booking to Firestore (using 'mobile-mountain-bookings' collection)
-      await addBooking(newBooking, 'mobile-mountain-bookings')
-      
-      // Reset form and close modal
-      setShowBookingModal(false)
+        status: 'Pending',
+        createdAt: new Date().toISOString()
+      })
+
+      // Reset form
       setBookingData({
         name: '',
         email: '',
@@ -197,28 +170,26 @@ export default function MobileMountainPage() {
         time: '',
         message: ''
       })
+      setShowBookingModal(false)
       
       // Show success message
       setShowSuccessMessage(true)
       setTimeout(() => setShowSuccessMessage(false), 5000)
     } catch (error) {
       console.error('Error submitting booking:', error)
-      // Show a more user-friendly error message
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred'
-      
-             alert('There was an error submitting your booking. Please try again.')
+      alert('There was an error submitting your booking. Please try again.')
     } finally {
       setIsSubmitting(false)
     }
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-100">
       <Header />
       
-             {/* Hero Section */}
-       <section id="home" className="bg-gradient-to-br from-gray-900 via-blue-900 to-gray-800 min-h-[45vh] flex items-center justify-center relative overflow-hidden pt-20 md:pt-0">
-        <div className="absolute inset-0 bg-gradient-to-br from-gray-800/50 to-blue-900/50"></div>
+      {/* Hero Section - Grey Theme */}
+      <section id="home" className="bg-gradient-to-br from-gray-800 via-gray-700 to-gray-900 min-h-[50vh] flex items-center justify-center relative overflow-hidden pt-20 md:pt-0">
+        <div className="absolute inset-0 bg-gradient-to-br from-gray-900/60 to-gray-800/60"></div>
         <div className="container-custom section-padding relative z-10">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <motion.div
@@ -227,23 +198,26 @@ export default function MobileMountainPage() {
               transition={{ duration: 0.8 }}
               className="space-y-8"
             >
-                             <h1 className="text-5xl lg:text-6xl font-bold text-white leading-tight">
-                 {content.heroTitle}
-               </h1>
+              <div className="flex items-center space-x-3 mb-4">
+                <Mountain className="h-8 w-8 text-gray-300" />
+                <h1 className="text-5xl lg:text-6xl font-bold text-white leading-tight">
+                  {content.heroTitle}
+                </h1>
+              </div>
               <p className="text-xl text-gray-300 leading-relaxed">
                 {content.heroSubtitle}
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <button 
                   onClick={() => setShowBookingModal(true)}
-                  className="btn-primary bg-blue-600 hover:bg-blue-700"
+                  className="btn-primary bg-gray-600 hover:bg-gray-700 text-white border-2 border-gray-500"
                 >
                   Book Appointment
                   <Calendar className="ml-2 h-5 w-5" />
                 </button>
                 <button 
                   onClick={() => document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' })}
-                  className="btn-secondary bg-gray-700 hover:bg-gray-600 text-white"
+                  className="btn-secondary bg-transparent hover:bg-gray-700 text-white border-2 border-gray-400"
                 >
                   View Pricing
                 </button>
@@ -256,77 +230,54 @@ export default function MobileMountainPage() {
               className="relative"
             >
               <div className="relative">
-                                 <div className="grid grid-cols-3 gap-3">
-                   <Image
-                     src="/mobile-mountain-hero.jpg"
-                     alt="Mobile Mountain Detail - Professional Car Detailing"
-                     width={150}
-                     height={90}
-                     className="w-full h-auto rounded-lg shadow-2xl"
-                     priority
-                   />
-                   <Image
-                     src="/mobile-mountain-hero-2.jpg"
-                     alt="Mobile Mountain Detail - Professional Car Detailing"
-                     width={150}
-                     height={90}
-                     className="w-full h-auto rounded-lg shadow-2xl"
-                     priority
-                   />
-                   <Image
-                     src="/mobile-mountain-hero-3.jpg"
-                     alt="Mobile Mountain Detail - Professional Car Detailing"
-                     width={150}
-                     height={90}
-                     className="w-full h-auto rounded-lg shadow-2xl"
-                     priority
-                   />
-                   <Image
-                     src="/mobile-mountain-hero-4.jpg"
-                     alt="Mobile Mountain Detail - Professional Car Detailing"
-                     width={150}
-                     height={90}
-                     className="w-full h-auto rounded-lg shadow-2xl"
-                     priority
-                   />
-                   <Image
-                     src="/mobile-mountain-hero-5.jpg"
-                     alt="Mobile Mountain Detail - Professional Car Detailing"
-                     width={150}
-                     height={90}
-                     className="w-full h-auto rounded-lg shadow-2xl"
-                     priority
-                   />
-                   <Image
-                     src="/mobile-mountain-hero.jpg"
-                     alt="Mobile Mountain Detail - Professional Car Detailing"
-                     width={150}
-                     height={90}
-                     className="w-full h-auto rounded-lg shadow-2xl"
-                     priority
-                   />
-                 </div>
+                {/* Hero Image Collage - Only 4 images as requested */}
+                <div className="grid grid-cols-2 gap-4">
+                  <Image
+                    src="/mobile-mountain-hero.jpg"
+                    alt="Mobile Mountain Detail - Professional Car Detailing"
+                    width={200}
+                    height={120}
+                    className="w-full h-auto rounded-lg shadow-2xl"
+                    priority
+                  />
+                  <Image
+                    src="/mobile-mountain-hero-2.jpg"
+                    alt="Mobile Mountain Detail - Professional Car Detailing"
+                    width={200}
+                    height={120}
+                    className="w-full h-auto rounded-lg shadow-2xl"
+                    priority
+                  />
+                  <Image
+                    src="/mobile-mountain-hero-5.jpg"
+                    alt="Mobile Mountain Detail - Professional Car Detailing"
+                    width={200}
+                    height={120}
+                    className="w-full h-auto rounded-lg shadow-2xl"
+                    priority
+                  />
+                  <Image
+                    src="/mobile-mountain-hero-6.jpg"
+                    alt="Mobile Mountain Detail - Professional Car Detailing"
+                    width={200}
+                    height={120}
+                    className="w-full h-auto rounded-lg shadow-2xl"
+                    priority
+                  />
+                </div>
               </div>
             </motion.div>
           </div>
         </div>
-        <motion.div
-          animate={{ y: [0, -10, 0] }}
-          transition={{ duration: 2, repeat: Infinity }}
-          className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
-        >
-          <ChevronDown className="h-6 w-6 text-white animate-bounce" />
-        </motion.div>
       </section>
 
-      {/* Services Section */}
-      <section id="services" className="section-padding bg-white">
-        <div className="container-custom">
+      {/* Services Section - Grey Theme */}
+      <section id="services" className="py-20 bg-gray-50">
+        <div className="container-custom section-padding">
           <motion.div
             initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            animate={{ opacity: isVisible ? 1 : 0, y: isVisible ? 0 : 50 }}
             transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
             className="text-center mb-16"
           >
             <h2 className="text-4xl font-bold text-gray-900 mb-4">
@@ -336,26 +287,25 @@ export default function MobileMountainPage() {
               {content.servicesSubtitle}
             </p>
           </motion.div>
-          
+
           <div className="grid md:grid-cols-3 gap-8">
             {services.map((service, index) => (
               <motion.div
                 key={service.title}
                 initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: index * 0.1 }}
-                viewport={{ once: true }}
-                className="bg-gray-50 rounded-xl p-8 card-hover border border-gray-200"
+                animate={{ opacity: isVisible ? 1 : 0, y: isVisible ? 0 : 50 }}
+                transition={{ duration: 0.8, delay: index * 0.2 }}
+                className="bg-white rounded-xl shadow-lg p-8 border border-gray-200 hover:shadow-xl transition-shadow duration-300"
               >
-                <div className="bg-blue-100 w-16 h-16 rounded-lg flex items-center justify-center mb-6">
-                  <service.icon className="h-8 w-8 text-blue-600" />
+                <div className="bg-gray-100 w-16 h-16 rounded-lg flex items-center justify-center mb-6">
+                  <service.icon className="h-8 w-8 text-gray-700" />
                 </div>
                 <h3 className="text-2xl font-bold text-gray-900 mb-4">{service.title}</h3>
                 <p className="text-gray-600 mb-6">{service.description}</p>
-                <ul className="space-y-3">
+                <ul className="space-y-2">
                   {service.features.map((feature) => (
                     <li key={feature} className="flex items-center text-gray-700">
-                      <CheckCircle2 className="h-5 w-5 text-blue-600 mr-3 flex-shrink-0" />
+                      <CheckCircle className="h-5 w-5 text-gray-600 mr-3" />
                       {feature}
                     </li>
                   ))}
@@ -366,39 +316,39 @@ export default function MobileMountainPage() {
         </div>
       </section>
 
-      {/* Pricing Section */}
-      <section id="pricing" className="section-padding bg-gradient-to-br from-gray-100 to-blue-50">
-        <div className="container-custom">
+      {/* Pricing Section - Grey Theme */}
+      <section id="pricing" className="py-20 bg-gray-100">
+        <div className="container-custom section-padding">
           <motion.div
             initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            animate={{ opacity: isVisible ? 1 : 0, y: isVisible ? 0 : 50 }}
             transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
             className="text-center mb-16"
           >
             <h2 className="text-4xl font-bold text-gray-900 mb-4">
-              Pricing Plans
+              {content.pricingTitle}
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Choose the perfect detailing package for your vehicle. All plans include our mobile service and quality guarantee.
+              {content.pricingSubtitle}
             </p>
           </motion.div>
-          
-          <div className="grid md:grid-cols-3 gap-8">
+
+          <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
             {pricingPlans.map((plan, index) => (
               <motion.div
                 key={plan.name}
                 initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: index * 0.1 }}
-                viewport={{ once: true }}
-                className={`bg-white rounded-xl shadow-lg p-8 card-hover border-2 ${
-                  plan.popular ? 'border-blue-500 relative' : 'border-gray-100'
+                animate={{ opacity: isVisible ? 1 : 0, y: isVisible ? 0 : 50 }}
+                transition={{ duration: 0.8, delay: index * 0.2 }}
+                className={`bg-white rounded-xl shadow-lg p-8 border-2 transition-all duration-300 hover:shadow-xl ${
+                  plan.popular 
+                    ? 'border-gray-600 relative scale-105' 
+                    : 'border-gray-200 hover:border-gray-300'
                 }`}
               >
                 {plan.popular && (
                   <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                    <span className="bg-blue-600 text-white px-4 py-1 rounded-full text-sm font-medium">
+                    <span className="bg-gray-800 text-white px-4 py-2 rounded-full text-sm font-semibold">
                       Most Popular
                     </span>
                   </div>
@@ -406,27 +356,30 @@ export default function MobileMountainPage() {
                 <div className="text-center mb-8">
                   <h3 className="text-2xl font-bold text-gray-900 mb-4">{plan.name}</h3>
                   <div className="mb-4">
-                    <span className="text-4xl font-bold text-blue-600">{plan.price}</span>
+                    <span className="text-4xl font-bold text-gray-900">{plan.price}</span>
                     <span className="text-gray-600 ml-2">{plan.period}</span>
                   </div>
                 </div>
                 <ul className="space-y-4 mb-8">
                   {plan.features.map((feature) => (
-                    <li key={feature} className="flex items-center text-gray-600">
-                      <CheckCircle2 className="h-5 w-5 text-blue-600 mr-3 flex-shrink-0" />
+                    <li key={feature} className="flex items-center text-gray-700">
+                      <CheckCircle className="h-5 w-5 text-gray-600 mr-3 flex-shrink-0" />
                       {feature}
                     </li>
                   ))}
                 </ul>
                 <button 
-                  onClick={() => setShowBookingModal(true)}
-                  className={`w-full py-3 px-6 rounded-lg font-semibold transition-all duration-300 ${
-                    plan.popular 
-                      ? 'bg-blue-600 hover:bg-blue-700 text-white shadow-lg hover:shadow-xl' 
-                      : 'bg-white hover:bg-gray-50 text-blue-600 border-2 border-blue-600'
+                  onClick={() => {
+                    setSelectedService(plan.name)
+                    setShowBookingModal(true)
+                  }}
+                  className={`w-full py-3 px-6 rounded-lg font-semibold transition-colors duration-300 ${
+                    plan.popular
+                      ? 'bg-gray-800 hover:bg-gray-900 text-white'
+                      : 'bg-gray-100 hover:bg-gray-200 text-gray-900'
                   }`}
                 >
-                  Book Service
+                  Choose Plan
                 </button>
               </motion.div>
             ))}
@@ -434,134 +387,50 @@ export default function MobileMountainPage() {
         </div>
       </section>
 
-      {/* Service Areas Section */}
-      <section className="section-padding bg-gradient-to-br from-blue-50 to-gray-50">
-        <div className="container-custom">
+      {/* Testimonials Section - Grey Theme */}
+      <section id="testimonials" className="py-20 bg-gray-50">
+        <div className="container-custom section-padding">
           <motion.div
             initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            animate={{ opacity: isVisible ? 1 : 0, y: isVisible ? 0 : 50 }}
             transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
             className="text-center mb-16"
           >
             <h2 className="text-4xl font-bold text-gray-900 mb-4">
-              Service Areas
+              {content.testimonialsTitle}
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              We provide mobile car detailing services throughout the local area. Contact us to confirm service availability in your location.
+              {content.testimonialsSubtitle}
             </p>
           </motion.div>
-          
-          <div className="grid md:grid-cols-3 gap-8">
-            <motion.div
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.1 }}
-              viewport={{ once: true }}
-              className="bg-white rounded-xl p-8 card-hover border border-gray-200 text-center"
-            >
-              <MapPin className="h-12 w-12 text-blue-600 mx-auto mb-4" />
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">Local Areas</h3>
-              <p className="text-gray-600 mb-6">
-                Serving residential areas within a 25-mile radius of our base location.
-              </p>
-              <ul className="text-gray-700 space-y-2">
-                <li>• Residential Homes</li>
-                <li>• Office Buildings</li>
-                <li>• Apartment Complexes</li>
-                <li>• Shopping Centers</li>
-              </ul>
-            </motion.div>
-            
-            <motion.div
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              viewport={{ once: true }}
-              className="bg-white rounded-xl p-8 card-hover border border-gray-200 text-center"
-            >
-              <Clock className="h-12 w-12 text-blue-600 mx-auto mb-4" />
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">Flexible Hours</h3>
-              <p className="text-gray-600 mb-6">
-                We work around your schedule to provide convenient service times.
-              </p>
-              <ul className="text-gray-700 space-y-2">
-                <li>• Weekdays: 8 AM - 6 PM</li>
-                <li>• Weekends: 9 AM - 5 PM</li>
-                <li>• Evening Appointments</li>
-                <li>• Same-Day Service Available</li>
-              </ul>
-            </motion.div>
-            
-            <motion.div
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.3 }}
-              viewport={{ once: true }}
-              className="bg-white rounded-xl p-8 card-hover border border-gray-200 text-center"
-            >
-              <Shield className="h-12 w-12 text-blue-600 mx-auto mb-4" />
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">Quality Guarantee</h3>
-              <p className="text-gray-600 mb-6">
-                We stand behind our work with a satisfaction guarantee.
-              </p>
-              <ul className="text-gray-700 space-y-2">
-                <li>• 100% Satisfaction Guarantee</li>
-                <li>• Professional Equipment</li>
-                <li>• Eco-Friendly Products</li>
-                <li>• Insured & Licensed</li>
-              </ul>
-            </motion.div>
-          </div>
-        </div>
-      </section>
 
-      {/* Testimonials Section */}
-      <section className="section-padding bg-white">
-        <div className="container-custom">
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">
-              What Our Customers Say
-            </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Don't just take our word for it. Here's what our customers have to say about our mobile detailing service.
-            </p>
-          </motion.div>
-          
-          <div className="grid md:grid-cols-2 gap-8">
+          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
             {testimonials.map((testimonial, index) => (
               <motion.div
                 key={testimonial.name}
                 initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: index * 0.1 }}
-                viewport={{ once: true }}
-                className="bg-gradient-to-br from-gray-50 to-blue-50 rounded-xl p-8 card-hover border border-gray-200"
+                animate={{ opacity: isVisible ? 1 : 0, y: isVisible ? 0 : 50 }}
+                transition={{ duration: 0.8, delay: index * 0.2 }}
+                className="bg-white rounded-xl shadow-lg p-8 border border-gray-200"
               >
                 <div className="flex items-center mb-6">
-                  <div className="flex items-center space-x-1 mr-4">
-                    {[...Array(testimonial.rating)].map((_, i) => (
-                      <Star key={i} className="h-5 w-5 text-yellow-400 fill-current" />
-                    ))}
+                  <Image
+                    src={testimonial.image}
+                    alt={testimonial.name}
+                    width={48}
+                    height={48}
+                    className="rounded-lg"
+                  />
+                  <div className="ml-4">
+                    <h4 className="text-lg font-semibold text-gray-900">{testimonial.name}</h4>
+                    <p className="text-gray-600">{testimonial.role}</p>
                   </div>
-                                                 <Image
-              src={testimonial.image}
-              alt={testimonial.name}
-              width={48}
-              height={48}
-              className="rounded-lg"
-            />
                 </div>
-                <p className="text-gray-700 mb-6 italic">"{testimonial.content}"</p>
-                <div>
-                  <h4 className="font-semibold text-gray-900">{testimonial.name}</h4>
-                  <p className="text-gray-600">{testimonial.role}</p>
+                <p className="text-gray-700 mb-4">{testimonial.content}</p>
+                <div className="flex items-center">
+                  {[...Array(testimonial.rating)].map((_, i) => (
+                    <Star key={i} className="h-5 w-5 text-yellow-400 fill-current" />
+                  ))}
                 </div>
               </motion.div>
             ))}
@@ -569,63 +438,89 @@ export default function MobileMountainPage() {
         </div>
       </section>
 
-      {/* Call to Action Section */}
-      <section className="section-padding bg-gradient-to-br from-blue-600 to-blue-800">
-        <div className="container-custom">
+      {/* Contact Section - Grey Theme */}
+      <section id="contact" className="py-20 bg-gray-100">
+        <div className="container-custom section-padding">
           <motion.div
             initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            animate={{ opacity: isVisible ? 1 : 0, y: isVisible ? 0 : 50 }}
             transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-            className="text-center"
+            className="text-center mb-16"
           >
-            <h2 className="text-4xl font-bold text-white mb-6">
-              Ready to Transform Your Vehicle?
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">
+              {content.contactTitle}
             </h2>
-            <p className="text-xl text-blue-100 mb-8 max-w-3xl mx-auto">
-              Book your mobile car detailing service today and experience the difference professional care makes for your vehicle.
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              {content.contactSubtitle}
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button 
-                onClick={() => setShowBookingModal(true)}
-                className="bg-white text-blue-600 hover:bg-gray-100 font-semibold px-8 py-4 rounded-lg transition-colors duration-300 flex items-center justify-center"
-              >
-                <Calendar className="mr-2 h-5 w-5" />
-                Book Now
-              </button>
-              <button 
-                onClick={() => document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' })}
-                className="border-2 border-white text-white hover:bg-white hover:text-blue-600 font-semibold px-8 py-4 rounded-lg transition-colors duration-300"
-              >
-                View Pricing
-              </button>
-            </div>
           </motion.div>
+
+          <div className="grid lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
+            <motion.div
+              initial={{ opacity: 0, x: -50 }}
+              animate={{ opacity: isVisible ? 1 : 0, x: isVisible ? 0 : -50 }}
+              transition={{ duration: 0.8 }}
+              className="space-y-8"
+            >
+              <div className="bg-white rounded-xl shadow-lg p-8 border border-gray-200">
+                <h3 className="text-2xl font-bold text-gray-900 mb-6">Get In Touch</h3>
+                <div className="space-y-6">
+                  <div className="flex items-center">
+                    <Phone className="h-6 w-6 text-gray-600 mr-4" />
+                    <div>
+                      <p className="font-semibold text-gray-900">Phone</p>
+                      <p className="text-gray-600">{content.phoneNumber}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center">
+                    <Mail className="h-6 w-6 text-gray-600 mr-4" />
+                    <div>
+                      <p className="font-semibold text-gray-900">Email</p>
+                      <p className="text-gray-600">{content.email}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center">
+                    <MapPin className="h-6 w-6 text-gray-600 mr-4" />
+                    <div>
+                      <p className="font-semibold text-gray-900">Service Area</p>
+                      <p className="text-gray-600">{content.serviceArea}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, x: 50 }}
+              animate={{ opacity: isVisible ? 1 : 0, x: isVisible ? 0 : 50 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="bg-white rounded-xl shadow-lg p-8 border border-gray-200"
+            >
+              <h3 className="text-2xl font-bold text-gray-900 mb-6">Why Choose Us?</h3>
+              <div className="space-y-4">
+                <div className="flex items-center">
+                  <Award className="h-5 w-5 text-gray-600 mr-3" />
+                  <span className="text-gray-700">Professional Quality Guaranteed</span>
+                </div>
+                <div className="flex items-center">
+                  <Clock3 className="h-5 w-5 text-gray-600 mr-3" />
+                  <span className="text-gray-700">Convenient Mobile Service</span>
+                </div>
+                <div className="flex items-center">
+                  <Shield className="h-5 w-5 text-gray-600 mr-3" />
+                  <span className="text-gray-700">Safe & Eco-Friendly Products</span>
+                </div>
+                <div className="flex items-center">
+                  <Users className="h-5 w-5 text-gray-600 mr-3" />
+                  <span className="text-gray-700">Experienced Team</span>
+                </div>
+              </div>
+            </motion.div>
+          </div>
         </div>
       </section>
 
       <Footer />
-
-      {/* Success Message */}
-      {showSuccessMessage && (
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="fixed bottom-4 right-4 bg-green-500 text-white px-6 py-4 rounded-lg shadow-lg z-50 flex items-center space-x-3"
-        >
-          <CheckCircle className="h-6 w-6" />
-          <div>
-            <h4 className="font-semibold">Booking Submitted!</h4>
-            <p className="text-sm">We'll contact you soon to confirm your appointment.</p>
-          </div>
-          <button
-            onClick={() => setShowSuccessMessage(false)}
-            className="text-white hover:text-gray-200"
-          >
-            <X className="h-5 w-5" />
-          </button>
-        </motion.div>
-      )}
 
       {/* Booking Modal */}
       {showBookingModal && (
@@ -633,110 +528,151 @@ export default function MobileMountainPage() {
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full max-h-[90vh] overflow-y-auto"
+            exit={{ opacity: 0, scale: 0.9 }}
+            className="bg-white rounded-xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto"
           >
-            <div className="flex justify-between items-center mb-6">
-              <h3 className="text-2xl font-bold text-gray-900">Book Detailing Service</h3>
-              <button
-                onClick={() => setShowBookingModal(false)}
-                className="text-gray-400 hover:text-gray-600"
-              >
-                <X className="h-6 w-6" />
-              </button>
-            </div>
-            
-            <form onSubmit={handleBookingSubmit} className="space-y-6">
-              <div className="grid md:grid-cols-2 gap-4">
-                <input
-                  type="text"
-                  placeholder="First Name"
-                  value={bookingData.name}
-                  onChange={(e) => setBookingData({...bookingData, name: e.target.value})}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  required
-                />
-                <input
-                  type="text"
-                  placeholder="Last Name"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                />
+            <div className="p-6">
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-2xl font-bold text-gray-900">Book Your Appointment</h2>
+                <button
+                  onClick={() => setShowBookingModal(false)}
+                  className="text-gray-400 hover:text-gray-600"
+                >
+                  <X className="h-6 w-6" />
+                </button>
               </div>
-              <input
-                type="email"
-                placeholder="Email Address"
-                value={bookingData.email}
-                onChange={(e) => setBookingData({...bookingData, email: e.target.value})}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                required
-              />
-              <input
-                type="tel"
-                placeholder="Phone Number"
-                value={bookingData.phone}
-                onChange={(e) => setBookingData({...bookingData, phone: e.target.value})}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                required
-              />
-              <select 
-                value={bookingData.service}
-                onChange={(e) => setBookingData({...bookingData, service: e.target.value})}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                required
-              >
-                <option value="">Select Service</option>
-                <option value="Basic Wash - $45">Basic Wash - $45</option>
-                <option value="Premium Detail - $125">Premium Detail - $125</option>
-                <option value="Ultimate Detail - $200">Ultimate Detail - $200</option>
-              </select>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  When would you like service?
-                </label>
-                <div className="grid grid-cols-2 gap-4">
+
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Name *
+                  </label>
                   <input
-                    type="date"
-                    value={bookingData.date}
-                    onChange={(e) => setBookingData({...bookingData, date: e.target.value})}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    type="text"
                     required
-                  />
-                  <input
-                    type="time"
-                    value={bookingData.time}
-                    onChange={(e) => setBookingData({...bookingData, time: e.target.value})}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    required
+                    value={bookingData.name}
+                    onChange={(e) => setBookingData({ ...bookingData, name: e.target.value })}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent"
                   />
                 </div>
-              </div>
-              <textarea
-                placeholder="Tell us about your vehicle and any special requests..."
-                rows={4}
-                value={bookingData.message}
-                onChange={(e) => setBookingData({...bookingData, message: e.target.value})}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              ></textarea>
-              <button 
-                type="submit" 
-                disabled={isSubmitting}
-                className={`w-full font-semibold py-3 px-6 rounded-lg transition-colors duration-300 ${
-                  isSubmitting 
-                    ? 'bg-gray-400 cursor-not-allowed' 
-                    : 'bg-blue-600 hover:bg-blue-700 text-white'
-                }`}
-              >
-                {isSubmitting ? (
-                  <div className="flex items-center justify-center">
-                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
-                    Submitting...
-                  </div>
-                ) : (
-                  'Book Service'
-                )}
-              </button>
-            </form>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Email *
+                  </label>
+                  <input
+                    type="email"
+                    required
+                    value={bookingData.email}
+                    onChange={(e) => setBookingData({ ...bookingData, email: e.target.value })}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Phone *
+                  </label>
+                  <input
+                    type="tel"
+                    required
+                    value={bookingData.phone}
+                    onChange={(e) => setBookingData({ ...bookingData, phone: e.target.value })}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Service *
+                  </label>
+                  <select
+                    required
+                    value={bookingData.service}
+                    onChange={(e) => setBookingData({ ...bookingData, service: e.target.value })}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent"
+                  >
+                    <option value="">Select a service</option>
+                    <option value="Basic Wash - $45">Basic Wash - $45</option>
+                    <option value="Premium Detail - $125">Premium Detail - $125</option>
+                    <option value="Ultimate Detail - $200">Ultimate Detail - $200</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Date *
+                  </label>
+                  <input
+                    type="date"
+                    required
+                    value={bookingData.date}
+                    onChange={(e) => setBookingData({ ...bookingData, date: e.target.value })}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Time *
+                  </label>
+                  <select
+                    required
+                    value={bookingData.time}
+                    onChange={(e) => setBookingData({ ...bookingData, time: e.target.value })}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent"
+                  >
+                    <option value="">Select a time</option>
+                    <option value="9:00 AM">9:00 AM</option>
+                    <option value="10:00 AM">10:00 AM</option>
+                    <option value="11:00 AM">11:00 AM</option>
+                    <option value="12:00 PM">12:00 PM</option>
+                    <option value="1:00 PM">1:00 PM</option>
+                    <option value="2:00 PM">2:00 PM</option>
+                    <option value="3:00 PM">3:00 PM</option>
+                    <option value="4:00 PM">4:00 PM</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Message
+                  </label>
+                  <textarea
+                    value={bookingData.message}
+                    onChange={(e) => setBookingData({ ...bookingData, message: e.target.value })}
+                    rows={4}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent"
+                    placeholder="Any special requests or notes..."
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="w-full bg-gray-800 hover:bg-gray-900 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-300 disabled:opacity-50"
+                >
+                  {isSubmitting ? 'Submitting...' : 'Book Appointment'}
+                </button>
+              </form>
+            </div>
           </motion.div>
         </div>
+      )}
+
+      {/* Success Message */}
+      {showSuccessMessage && (
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: 50 }}
+          className="fixed bottom-4 right-4 bg-green-500 text-white px-6 py-4 rounded-lg shadow-lg z-50"
+        >
+          <div className="flex items-center">
+            <CheckCircle className="h-5 w-5 mr-2" />
+            <span>Booking submitted successfully! We'll contact you soon.</span>
+          </div>
+        </motion.div>
       )}
     </div>
   )
