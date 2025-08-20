@@ -197,52 +197,126 @@ export default function MobileMountainPage() {
               transition={{ duration: 0.8, delay: 0.2 }}
               className="relative"
             >
-              {/* Custom Car Detail Icons */}
-              <div className="grid grid-cols-2 gap-6">
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.3 }}
-                  className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center"
-                >
-                  <Shield className="h-12 w-12 text-blue-400 mx-auto mb-4" />
-                  <h3 className="text-white font-semibold mb-2">Premium Protection</h3>
-                  <p className="text-gray-300 text-sm">Advanced paint protection and ceramic coatings</p>
-                </motion.div>
+              {/* Artistic Car Detail Visual */}
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.3, duration: 0.8 }}
+                className="relative w-full max-w-4xl mx-auto"
+              >
+                {/* Central Car Silhouette */}
+                <div className="relative">
+                  <motion.div
+                    animate={{ 
+                      rotate: [0, 5, -5, 0],
+                      scale: [1, 1.05, 1]
+                    }}
+                    transition={{ 
+                      duration: 4,
+                      repeat: Infinity,
+                      ease: "easeInOut"
+                    }}
+                    className="w-32 h-16 mx-auto mb-8"
+                  >
+                    <Car className="w-full h-full text-white/80" />
+                  </motion.div>
+                  
+                  {/* Orbiting Elements */}
+                  <motion.div
+                    animate={{ rotate: 360 }}
+                    transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                    className="absolute inset-0 flex items-center justify-center"
+                  >
+                    <div className="relative w-80 h-80">
+                      {/* Protection Shield */}
+                      <motion.div
+                        animate={{ 
+                          scale: [1, 1.2, 1],
+                          opacity: [0.6, 1, 0.6]
+                        }}
+                        transition={{ duration: 3, repeat: Infinity }}
+                        className="absolute top-0 left-1/2 transform -translate-x-1/2"
+                      >
+                        <Shield className="h-8 w-8 text-blue-400" />
+                      </motion.div>
+                      
+                      {/* Sparkles */}
+                      <motion.div
+                        animate={{ 
+                          scale: [1, 1.3, 1],
+                          opacity: [0.7, 1, 0.7]
+                        }}
+                        transition={{ duration: 2.5, repeat: Infinity, delay: 0.5 }}
+                        className="absolute top-8 right-8"
+                      >
+                        <Sparkles className="h-6 w-6 text-yellow-400" />
+                      </motion.div>
+                      
+                      {/* Clock */}
+                      <motion.div
+                        animate={{ 
+                          scale: [1, 1.2, 1],
+                          opacity: [0.6, 1, 0.6]
+                        }}
+                        transition={{ duration: 3.5, repeat: Infinity, delay: 1 }}
+                        className="absolute bottom-8 right-8"
+                      >
+                        <Clock className="h-6 w-6 text-green-400" />
+                      </motion.div>
+                      
+                      {/* Award */}
+                      <motion.div
+                        animate={{ 
+                          scale: [1, 1.3, 1],
+                          opacity: [0.7, 1, 0.7]
+                        }}
+                        transition={{ duration: 2.8, repeat: Infinity, delay: 1.5 }}
+                        className="absolute bottom-8 left-8"
+                      >
+                        <Award className="h-6 w-6 text-purple-400" />
+                      </motion.div>
+                      
+                      {/* Zap */}
+                      <motion.div
+                        animate={{ 
+                          scale: [1, 1.4, 1],
+                          opacity: [0.5, 1, 0.5]
+                        }}
+                        transition={{ duration: 2, repeat: Infinity, delay: 0.8 }}
+                        className="absolute top-8 left-8"
+                      >
+                        <Zap className="h-6 w-6 text-orange-400" />
+                      </motion.div>
+                    </div>
+                  </motion.div>
+                  
+                  {/* Floating Particles */}
+                  {[...Array(12)].map((_, i) => (
+                    <motion.div
+                      key={i}
+                      animate={{
+                        y: [0, -20, 0],
+                        opacity: [0, 1, 0],
+                        scale: [0, 1, 0]
+                      }}
+                      transition={{
+                        duration: 3,
+                        repeat: Infinity,
+                        delay: i * 0.2,
+                        ease: "easeInOut"
+                      }}
+                      className="absolute w-2 h-2 bg-white/60 rounded-full"
+                      style={{
+                        left: `${20 + (i * 60) % 80}%`,
+                        top: `${30 + (i * 40) % 60}%`
+                      }}
+                    />
+                  ))}
+                </div>
                 
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.4 }}
-                  className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center"
-                >
-                  <Sparkles className="h-12 w-12 text-yellow-400 mx-auto mb-4" />
-                  <h3 className="text-white font-semibold mb-2">Showroom Finish</h3>
-                  <p className="text-gray-300 text-sm">Professional detailing that exceeds expectations</p>
-                </motion.div>
-                
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.5 }}
-                  className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center"
-                >
-                  <Clock className="h-12 w-12 text-green-400 mx-auto mb-4" />
-                  <h3 className="text-white font-semibold mb-2">Convenient Service</h3>
-                  <p className="text-gray-300 text-sm">We come to you at your preferred time</p>
-                </motion.div>
-                
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.6 }}
-                  className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center"
-                >
-                  <Award className="h-12 w-12 text-purple-400 mx-auto mb-4" />
-                  <h3 className="text-white font-semibold mb-2">Guaranteed Quality</h3>
-                  <p className="text-gray-300 text-sm">100% satisfaction guaranteed on every detail</p>
-                </motion.div>
-              </div>
+                {/* Subtle Glow Effect */}
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-green-500/20 rounded-full blur-3xl -z-10"></div>
+              </motion.div>
             </motion.div>
           </div>
         </div>

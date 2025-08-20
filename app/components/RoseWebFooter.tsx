@@ -99,14 +99,14 @@ export default function RoseWebFooter() {
           <div>
             <h3 className="text-lg font-semibold mb-3">Contact Info</h3>
             <div className="space-y-2">
-              <div className="flex items-center">
-                <Phone className="h-4 w-4 mr-2 text-purple-400" />
-                <span className="text-gray-300 text-sm">(555) 987-6543</span>
-              </div>
-              <div className="flex items-center">
-                <Mail className="h-4 w-4 mr-2 text-blue-400" />
-                <span className="text-gray-300 text-sm">info@rosewebcreation.com</span>
-              </div>
+                             <div className="flex items-center">
+                 <Phone className="h-4 w-4 mr-2 text-purple-400" />
+                 <span className="text-gray-300 text-sm">(289) 213-0256</span>
+               </div>
+               <div className="flex items-center">
+                 <Mail className="h-4 w-4 mr-2 text-blue-400" />
+                 <span className="text-gray-300 text-sm">rosewebc@gmail.com</span>
+               </div>
               <div className="flex items-center">
                 <MapPin className="h-4 w-4 mr-2 text-green-400" />
                 <span className="text-gray-300 text-sm">Serving Nationwide</span>

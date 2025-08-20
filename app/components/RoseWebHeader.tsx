@@ -27,31 +27,34 @@ export default function RoseWebHeader() {
         <div className="flex items-center justify-between h-20">
           {/* Logo and Business Name */}
           <Link href="/" className="flex items-center space-x-4">
-            <div className="w-12 h-12 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-xl">R</span>
-            </div>
+            <Image
+              src="/rosewebc-original.png"
+              alt="Rose Web Creation"
+              width={50}
+              height={50}
+              className="rounded-lg"
+            />
             <div className="hidden sm:block">
               <h1 className="text-2xl font-bold text-gray-900">Rose Web Creation</h1>
-              <p className="text-sm text-gray-600">Professional Web Development</p>
             </div>
           </Link>
 
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center space-x-8">
-            <Link href="#home" className="text-gray-700 hover:text-gray-900 font-medium transition-colors">
+            <Link href="#home" className="text-gray-700 hover:text-blue-600 font-medium transition-colors">
               Home
             </Link>
-            <Link href="#services" className="text-gray-700 hover:text-gray-900 font-medium transition-colors">
+            <Link href="#services" className="text-gray-700 hover:text-blue-600 font-medium transition-colors">
               Services
             </Link>
-            <Link href="#pricing" className="text-gray-700 hover:text-gray-900 font-medium transition-colors">
-              Pricing
+            <Link href="#pricing" className="text-gray-700 hover:text-blue-600 font-medium transition-colors">
+              Prices
             </Link>
-            <Link href="#contact" className="text-gray-700 hover:text-gray-900 font-medium transition-colors">
-              Contact
+            <Link href="/bookings" className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+              Book Appointment
             </Link>
-            <Link href="/bookings" className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
-              Get Started
+            <Link href="/admin" className="text-gray-700 hover:text-blue-600 font-medium transition-colors">
+              Admin
             </Link>
           </nav>
 
@@ -59,11 +62,11 @@ export default function RoseWebHeader() {
           <div className="hidden lg:flex items-center space-x-4">
             <div className="flex items-center space-x-2 text-sm text-gray-600">
               <Phone className="h-4 w-4" />
-              <span>(555) 987-6543</span>
+              <span>(289) 213-0256</span>
             </div>
             <div className="flex items-center space-x-2 text-sm text-gray-600">
               <Mail className="h-4 w-4" />
-              <span>info@rosewebcreation.com</span>
+              <span>rosewebc@gmail.com</span>
             </div>
           </div>
 
@@ -93,38 +96,38 @@ export default function RoseWebHeader() {
             <div className="px-4 py-4 space-y-4">
               <Link 
                 href="#home" 
-                className="block text-gray-700 hover:text-gray-900 font-medium"
+                className="block text-gray-700 hover:text-blue-600 font-medium"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 Home
               </Link>
               <Link 
                 href="#services" 
-                className="block text-gray-700 hover:text-gray-900 font-medium"
+                className="block text-gray-700 hover:text-blue-600 font-medium"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 Services
               </Link>
               <Link 
                 href="#pricing" 
-                className="block text-gray-700 hover:text-gray-900 font-medium"
+                className="block text-gray-700 hover:text-blue-600 font-medium"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                Pricing
-              </Link>
-              <Link 
-                href="#contact" 
-                className="block text-gray-700 hover:text-gray-900 font-medium"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                Contact
+                Prices
               </Link>
               <Link 
                 href="/bookings" 
-                className="block bg-purple-600 text-white px-4 py-2 rounded-lg font-medium text-center"
+                className="block bg-blue-600 text-white px-4 py-2 rounded-lg font-medium text-center"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                Get Started
+                Book Appointment
+              </Link>
+              <Link 
+                href="/admin" 
+                className="block text-gray-700 hover:text-blue-600 font-medium"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Admin
               </Link>
             </div>
           </motion.div>

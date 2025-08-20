@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect, useMemo } from 'react'
+import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { 
   Calendar, 
@@ -20,8 +20,9 @@ import {
   PieChart,
   TrendingUp,
   DollarSign,
-  Car,
-  Sparkles,
+  Code,
+  Monitor,
+  Smartphone,
   Settings,
   CalendarDays,
   Plus,
@@ -33,44 +34,27 @@ import {
 } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { getBookings, updateBooking, deleteBooking, Booking } from '../../../lib/firebase'
-import { doc, updateDoc } from 'firebase/firestore'
-import { db } from '../../../lib/firebase'
+import { getBookings, updateBooking, deleteBooking, Booking } from '../../lib/firebase'
+import { doc, getDoc, updateDoc } from 'firebase/firestore'
+import { db } from '../../lib/firebase'
 
-interface Availability {
-  day: string
-  startTime: string
-  endTime: string
-  isAvailable: boolean
-}
-
-export default function MobileMountainAdminPage() {
-  // State declarations
+export default function RoseWebAdminPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [code, setCode] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState('')
   const [bookings, setBookings] = useState<Booking[]>([])
   const [bookingTab, setBookingTab] = useState<'all' | 'pending' | 'confirmed' | 'cancelled'>('all')
-  const [activeTab, setActiveTab] = useState<'bookings' | 'availability' | 'settings' | 'pricing'>('bookings')
+  const [activeTab, setActiveTab] = useState<'bookings' | 'pricing' | 'settings'>('bookings')
   const [currentPassword, setCurrentPassword] = useState('')
   const [newPassword, setNewPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [passwordError, setPasswordError] = useState('')
   const [passwordSuccess, setPasswordSuccess] = useState('')
-  const [availability, setAvailability] = useState<Availability[]>([
-    { day: 'Monday', startTime: '08:00', endTime: '18:00', isAvailable: true },
-    { day: 'Tuesday', startTime: '08:00', endTime: '18:00', isAvailable: true },
-    { day: 'Wednesday', startTime: '08:00', endTime: '18:00', isAvailable: true },
-    { day: 'Thursday', startTime: '08:00', endTime: '18:00', isAvailable: true },
-    { day: 'Friday', startTime: '08:00', endTime: '18:00', isAvailable: true },
-    { day: 'Saturday', startTime: '09:00', endTime: '17:00', isAvailable: true },
-    { day: 'Sunday', startTime: '10:00', endTime: '16:00', isAvailable: false }
-  ])
   const [pricing, setPricing] = useState({
-    basicWash: 45,
-    premiumDetail: 125,
-    ultimateDetail: 200
+    websiteMonthly: 40,
+    websiteYearly: 200,
+    customSoftware: 'Contact'
   })
   const [isUpdatingPricing, setIsUpdatingPricing] = useState(false)
 
@@ -78,7 +62,7 @@ export default function MobileMountainAdminPage() {
   useEffect(() => {
     const loadBookings = async () => {
       try {
-        const firestoreBookings = await getBookings('mobile-mountain-bookings')
+        const firestoreBookings = await getBookings('roseweb-bookings')
         setBookings(firestoreBookings)
       } catch (error) {
         console.error('Error loading bookings:', error)
@@ -86,6 +70,22 @@ export default function MobileMountainAdminPage() {
     }
     
     loadBookings()
+  }, [])
+
+  // Load pricing from Firestore
+  useEffect(() => {
+    const loadPricing = async () => {
+      try {
+        const pricingDoc = await getDoc(doc(db, 'roseweb-settings', 'pricing'))
+        if (pricingDoc.exists()) {
+          setPricing(pricingDoc.data())
+        }
+      } catch (error) {
+        console.error('Error loading pricing:', error)
+      }
+    }
+    
+    loadPricing()
   }, [])
 
   const handleCodeSubmit = (e: React.FormEvent) => {
@@ -100,9 +100,9 @@ export default function MobileMountainAdminPage() {
 
   const updateBookingStatus = async (id: number, status: 'Confirmed' | 'Pending' | 'Cancelled') => {
     try {
-      await updateBooking(id, status, 'mobile-mountain-bookings')
+      await updateBooking(id, status, 'roseweb-bookings')
       // Reload bookings from Firestore
-      const firestoreBookings = await getBookings('mobile-mountain-bookings')
+      const firestoreBookings = await getBookings('roseweb-bookings')
       setBookings(firestoreBookings)
     } catch (error) {
       console.error('Error updating booking status:', error)
@@ -111,9 +111,9 @@ export default function MobileMountainAdminPage() {
 
   const handleDeleteBooking = async (id: number) => {
     try {
-      await deleteBooking(id, 'mobile-mountain-bookings')
+      await deleteBooking(id, 'roseweb-bookings')
       // Reload bookings from Firestore
-      const firestoreBookings = await getBookings('mobile-mountain-bookings')
+      const firestoreBookings = await getBookings('roseweb-bookings')
       setBookings(firestoreBookings)
     } catch (error) {
       console.error('Error deleting booking:', error)
@@ -123,8 +123,7 @@ export default function MobileMountainAdminPage() {
   const updatePricing = async () => {
     setIsUpdatingPricing(true)
     try {
-      // Update pricing in Firebase
-      await updateDoc(doc(db, 'mobile-mountain-settings', 'pricing'), pricing)
+      await updateDoc(doc(db, 'roseweb-settings', 'pricing'), pricing)
       setIsUpdatingPricing(false)
     } catch (error) {
       console.error('Error updating pricing:', error)
@@ -156,7 +155,7 @@ export default function MobileMountainAdminPage() {
     const url = window.URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
-    a.download = `mobile-mountain-bookings-${status || 'all'}-${new Date().toISOString().split('T')[0]}.csv`
+    a.download = `roseweb-bookings-${status || 'all'}-${new Date().toISOString().split('T')[0]}.csv`
     a.click()
     window.URL.revokeObjectURL(url)
   }
@@ -180,9 +179,9 @@ export default function MobileMountainAdminPage() {
     const cancelled = bookings.filter(b => b.status === 'Cancelled').length
     
     const servicePrices: { [key: string]: number } = {
-      'Basic Wash - $45': pricing.basicWash,
-      'Premium Detail - $125': pricing.premiumDetail,
-      'Ultimate Detail - $200': pricing.ultimateDetail
+      'Website Monthly': pricing.websiteMonthly,
+      'Website Yearly': pricing.websiteYearly,
+      'Custom Software/App': 0 // Contact for quote
     }
     
     const estimatedRevenue = bookings
@@ -209,7 +208,7 @@ export default function MobileMountainAdminPage() {
             <div className="w-16 h-16 bg-blue-600 rounded-lg flex items-center justify-center mx-auto mb-4">
               <Lock className="h-8 w-8 text-white" />
             </div>
-            <h2 className="text-2xl font-bold text-gray-900">Mobile Mountain Admin</h2>
+            <h2 className="text-2xl font-bold text-gray-900">Rose Web Creation Admin</h2>
             <p className="text-gray-600 mt-2">Enter your admin code to continue</p>
           </div>
           
@@ -251,7 +250,7 @@ export default function MobileMountainAdminPage() {
           </form>
           
           <div className="mt-6 text-center">
-            <Link href="/mobile-mountain" className="text-blue-600 hover:text-blue-700 text-sm">
+            <Link href="/" className="text-blue-600 hover:text-blue-700 text-sm">
               ← Back to Website
             </Link>
           </div>
@@ -267,13 +266,13 @@ export default function MobileMountainAdminPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center space-x-4">
-              <Link href="/mobile-mountain" className="flex items-center space-x-2">
+              <Link href="/" className="flex items-center space-x-2">
                 <ArrowLeft className="h-5 w-5 text-gray-600" />
                 <span className="text-gray-600">Back to Website</span>
               </Link>
             </div>
             <div className="flex items-center space-x-4">
-              <h1 className="text-xl font-bold text-gray-900">Mobile Mountain Admin</h1>
+              <h1 className="text-xl font-bold text-gray-900">Rose Web Creation Admin</h1>
             </div>
           </div>
         </div>
@@ -291,16 +290,6 @@ export default function MobileMountainAdminPage() {
             }`}
           >
             Bookings
-          </button>
-          <button
-            onClick={() => setActiveTab('availability')}
-            className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${
-              activeTab === 'availability'
-                ? 'bg-blue-600 text-white'
-                : 'text-gray-600 hover:text-gray-900'
-            }`}
-          >
-            Availability
           </button>
           <button
             onClick={() => setActiveTab('pricing')}
@@ -506,41 +495,42 @@ export default function MobileMountainAdminPage() {
 
         {activeTab === 'pricing' && (
           <div className="bg-white rounded-lg shadow-sm p-6">
-            <h3 className="text-lg font-medium text-gray-900 mb-6">Update Service Pricing</h3>
+            <h3 className="text-lg font-medium text-gray-900 mb-6">Update Pricing</h3>
             <div className="space-y-6">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Basic Wash Price ($)
+                  Website Monthly Price ($)
                 </label>
                 <input
                   type="number"
-                  value={pricing.basicWash}
-                  onChange={(e) => setPricing({...pricing, basicWash: parseInt(e.target.value) || 0})}
+                  value={pricing.websiteMonthly}
+                  onChange={(e) => setPricing({...pricing, websiteMonthly: parseInt(e.target.value) || 0})}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
               
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Premium Detail Price ($)
+                  Website Yearly Price ($)
                 </label>
                 <input
                   type="number"
-                  value={pricing.premiumDetail}
-                  onChange={(e) => setPricing({...pricing, premiumDetail: parseInt(e.target.value) || 0})}
+                  value={pricing.websiteYearly}
+                  onChange={(e) => setPricing({...pricing, websiteYearly: parseInt(e.target.value) || 0})}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
               
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Ultimate Detail Price ($)
+                  Custom Software/App (Text)
                 </label>
                 <input
-                  type="number"
-                  value={pricing.ultimateDetail}
-                  onChange={(e) => setPricing({...pricing, ultimateDetail: parseInt(e.target.value) || 0})}
+                  type="text"
+                  value={pricing.customSoftware}
+                  onChange={(e) => setPricing({...pricing, customSoftware: e.target.value})}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="e.g., Contact for quote"
                 />
               </div>
               
