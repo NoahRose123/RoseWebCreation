@@ -135,14 +135,14 @@ export default function MobileMountainPage() {
       role: 'Local Business Owner',
       content: 'Mobile Mountain Detail transformed my truck completely. Professional service and amazing results!',
       rating: 5,
-      image: '/mobile-mountain-logo.jpg'
+      image: '/testimonial-profile.png'
     },
     {
       name: 'Mike Chen',
       role: 'Car Enthusiast',
       content: 'Best detailing service I\'ve ever used. They come to you and the quality is outstanding.',
       rating: 5,
-      image: '/mobile-mountain-logo.jpg'
+      image: '/testimonial-profile.png'
     }
   ]
 
@@ -217,7 +217,7 @@ export default function MobileMountainPage() {
       <Header />
       
              {/* Hero Section */}
-       <section id="home" className="bg-gradient-to-br from-gray-900 via-blue-900 to-gray-800 min-h-[60vh] flex items-center justify-center relative overflow-hidden pt-20 md:pt-0">
+       <section id="home" className="bg-gradient-to-br from-gray-900 via-blue-900 to-gray-800 min-h-[45vh] flex items-center justify-center relative overflow-hidden pt-20 md:pt-0">
         <div className="absolute inset-0 bg-gradient-to-br from-gray-800/50 to-blue-900/50"></div>
         <div className="container-custom section-padding relative z-10">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
@@ -256,36 +256,52 @@ export default function MobileMountainPage() {
               className="relative"
             >
               <div className="relative">
-                                 <div className="grid grid-cols-2 gap-4">
+                                 <div className="grid grid-cols-3 gap-3">
                    <Image
                      src="/mobile-mountain-hero.jpg"
                      alt="Mobile Mountain Detail - Professional Car Detailing"
-                     width={200}
-                     height={120}
+                     width={150}
+                     height={90}
                      className="w-full h-auto rounded-lg shadow-2xl"
                      priority
                    />
                    <Image
                      src="/mobile-mountain-hero-2.jpg"
                      alt="Mobile Mountain Detail - Professional Car Detailing"
-                     width={200}
-                     height={120}
+                     width={150}
+                     height={90}
                      className="w-full h-auto rounded-lg shadow-2xl"
                      priority
                    />
                    <Image
                      src="/mobile-mountain-hero-3.jpg"
                      alt="Mobile Mountain Detail - Professional Car Detailing"
-                     width={200}
-                     height={120}
+                     width={150}
+                     height={90}
                      className="w-full h-auto rounded-lg shadow-2xl"
                      priority
                    />
                    <Image
                      src="/mobile-mountain-hero-4.jpg"
                      alt="Mobile Mountain Detail - Professional Car Detailing"
-                     width={200}
-                     height={120}
+                     width={150}
+                     height={90}
+                     className="w-full h-auto rounded-lg shadow-2xl"
+                     priority
+                   />
+                   <Image
+                     src="/mobile-mountain-hero-5.jpg"
+                     alt="Mobile Mountain Detail - Professional Car Detailing"
+                     width={150}
+                     height={90}
+                     className="w-full h-auto rounded-lg shadow-2xl"
+                     priority
+                   />
+                   <Image
+                     src="/mobile-mountain-hero.jpg"
+                     alt="Mobile Mountain Detail - Professional Car Detailing"
+                     width={150}
+                     height={90}
                      className="w-full h-auto rounded-lg shadow-2xl"
                      priority
                    />
@@ -535,8 +551,8 @@ export default function MobileMountainPage() {
                     ))}
                   </div>
                                                  <Image
-              src="/rosewebc.png"
-              alt="Rose Web Creation"
+              src={testimonial.image}
+              alt={testimonial.name}
               width={48}
               height={48}
               className="rounded-lg"

@@ -251,10 +251,10 @@ export default function MobileMountainAdminPage() {
             <div className="text-center mb-8">
               <div className="flex items-center justify-center space-x-3 mb-4">
                                  <Image
-                   src="/mobile-mountain-logo.png"
+                   src="/mobile-mountain-logo-new.png"
                    alt="Mobile Mountain Detail"
-                   width={100}
-                   height={100}
+                   width={120}
+                   height={120}
                    className="rounded-lg"
                  />
                  <h1 className="text-2xl font-bold text-gray-900">Admin Access</h1>
@@ -319,10 +319,10 @@ export default function MobileMountainAdminPage() {
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center space-x-3">
                              <Image
-                 src="/mobile-mountain-logo.png"
+                 src="/mobile-mountain-logo-new.png"
                  alt="Mobile Mountain Detail"
-                 width={80}
-                 height={80}
+                 width={96}
+                 height={96}
                  className="rounded-lg"
                />
                <h1 className="text-xl font-bold text-gray-900">Admin Dashboard</h1>
@@ -394,72 +394,7 @@ export default function MobileMountainAdminPage() {
              className="space-y-6"
            >
              {/* Analytics Cards */}
-             <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-               {/* Pie Chart */}
-               <motion.div
-                 initial={{ opacity: 0, y: 20 }}
-                 animate={{ opacity: 1, y: 0 }}
-                 transition={{ delay: 0.4 }}
-                 className="md:col-span-2 bg-white rounded-lg shadow p-6"
-               >
-                 <h3 className="text-lg font-semibold text-gray-900 mb-4">Booking Status Distribution</h3>
-                 <div className="flex items-center justify-center">
-                   <div className="relative w-32 h-32">
-                     <svg className="w-32 h-32 transform -rotate-90" viewBox="0 0 36 36">
-                       <path
-                         d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                         fill="none"
-                         stroke="#e5e7eb"
-                         strokeWidth="3"
-                       />
-                       {analytics.total > 0 && (
-                         <>
-                           <path
-                             d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                             fill="none"
-                             stroke="#10b981"
-                             strokeWidth="3"
-                             strokeDasharray={`${(analytics.confirmed / analytics.total) * 100} ${100 - (analytics.confirmed / analytics.total) * 100}`}
-                           />
-                           <path
-                             d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                             fill="none"
-                             stroke="#f59e0b"
-                             strokeWidth="3"
-                             strokeDasharray={`${(analytics.pending / analytics.total) * 100} ${100 - (analytics.pending / analytics.total) * 100}`}
-                             strokeDashoffset={`-${(analytics.confirmed / analytics.total) * 100}`}
-                           />
-                           <path
-                             d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                             fill="none"
-                             stroke="#ef4444"
-                             strokeWidth="3"
-                             strokeDasharray={`${(analytics.cancelled / analytics.total) * 100} ${100 - (analytics.cancelled / analytics.total) * 100}`}
-                             strokeDashoffset={`-${((analytics.confirmed + analytics.pending) / analytics.total) * 100}`}
-                           />
-                         </>
-                       )}
-                     </svg>
-                     <div className="absolute inset-0 flex items-center justify-center">
-                       <span className="text-2xl font-bold text-gray-900">{analytics.total}</span>
-                     </div>
-                   </div>
-                   <div className="ml-6 space-y-2">
-                     <div className="flex items-center">
-                       <div className="w-3 h-3 bg-green-500 rounded-full mr-2"></div>
-                       <span className="text-sm text-gray-600">Confirmed: {analytics.confirmed}</span>
-                     </div>
-                     <div className="flex items-center">
-                       <div className="w-3 h-3 bg-yellow-500 rounded-full mr-2"></div>
-                       <span className="text-sm text-gray-600">Pending: {analytics.pending}</span>
-                     </div>
-                     <div className="flex items-center">
-                       <div className="w-3 h-3 bg-red-500 rounded-full mr-2"></div>
-                       <span className="text-sm text-gray-600">Cancelled: {analytics.cancelled}</span>
-                     </div>
-                   </div>
-                 </div>
-               </motion.div>
+             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                <motion.div
                  initial={{ opacity: 0, y: 20 }}
                  animate={{ opacity: 1, y: 0 }}
@@ -637,6 +572,67 @@ export default function MobileMountainAdminPage() {
                   ))}
                 </tbody>
               </table>
+            </div>
+
+            {/* Booking Status Distribution */}
+            <div className="bg-white rounded-lg shadow p-6 mt-6">
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">Booking Status Distribution</h3>
+              <div className="flex items-center justify-center">
+                <div className="relative w-32 h-32">
+                  <svg className="w-32 h-32 transform -rotate-90" viewBox="0 0 36 36">
+                    <path
+                      d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                      fill="none"
+                      stroke="#e5e7eb"
+                      strokeWidth="3"
+                    />
+                    {analytics.total > 0 && (
+                      <>
+                        <path
+                          d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                          fill="none"
+                          stroke="#10b981"
+                          strokeWidth="3"
+                          strokeDasharray={`${(analytics.confirmed / analytics.total) * 100} ${100 - (analytics.confirmed / analytics.total) * 100}`}
+                        />
+                        <path
+                          d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                          fill="none"
+                          stroke="#f59e0b"
+                          strokeWidth="3"
+                          strokeDasharray={`${(analytics.pending / analytics.total) * 100} ${100 - (analytics.pending / analytics.total) * 100}`}
+                          strokeDashoffset={`-${(analytics.confirmed / analytics.total) * 100}`}
+                        />
+                        <path
+                          d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                          fill="none"
+                          stroke="#ef4444"
+                          strokeWidth="3"
+                          strokeDasharray={`${(analytics.cancelled / analytics.total) * 100} ${100 - (analytics.cancelled / analytics.total) * 100}`}
+                          strokeDashoffset={`-${((analytics.confirmed + analytics.pending) / analytics.total) * 100}`}
+                        />
+                      </>
+                    )}
+                  </svg>
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <span className="text-2xl font-bold text-gray-900">{analytics.total}</span>
+                  </div>
+                </div>
+                <div className="ml-6 space-y-2">
+                  <div className="flex items-center">
+                    <div className="w-3 h-3 bg-green-500 rounded-full mr-2"></div>
+                    <span className="text-sm text-gray-600">Confirmed: {analytics.confirmed}</span>
+                  </div>
+                  <div className="flex items-center">
+                    <div className="w-3 h-3 bg-yellow-500 rounded-full mr-2"></div>
+                    <span className="text-sm text-gray-600">Pending: {analytics.pending}</span>
+                  </div>
+                  <div className="flex items-center">
+                    <div className="w-3 h-3 bg-red-500 rounded-full mr-2"></div>
+                    <span className="text-sm text-gray-600">Cancelled: {analytics.cancelled}</span>
+                  </div>
+                </div>
+              </div>
             </div>
           </motion.div>
         )}

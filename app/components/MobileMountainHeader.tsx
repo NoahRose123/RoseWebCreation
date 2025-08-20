@@ -39,10 +39,10 @@ export default function MobileMountainHeader() {
             className="flex items-center space-x-3"
           >
             <Image
-              src="/mobile-mountain-logo.png"
+              src="/mobile-mountain-logo-new.png"
               alt="Mobile Mountain Detail"
-              width={100}
-              height={100}
+              width={120}
+              height={120}
               className="rounded-lg"
             />
             <span className={`font-bold text-xl transition-colors duration-300 ${

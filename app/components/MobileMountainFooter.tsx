@@ -13,10 +13,10 @@ export default function MobileMountainFooter() {
           <div className="md:col-span-2">
             <div className="flex items-center space-x-3 mb-6">
               <Image
-                src="/mobile-mountain-logo.png"
+                src="/mobile-mountain-logo-new.png"
                 alt="Mobile Mountain Detail"
-                width={100}
-                height={100}
+                width={120}
+                height={120}
                 className="rounded-lg"
               />
               <div>

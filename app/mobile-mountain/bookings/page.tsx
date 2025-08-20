@@ -188,10 +188,10 @@ export default function MobileMountainBookingsPage() {
           <div className="text-center mb-8">
             <div className="flex items-center justify-center space-x-2 mb-4">
               <Image
-                src="/mobile-mountain-logo.jpg"
+                src="/mobile-mountain-logo-new.png"
                 alt="Mobile Mountain Detail"
-                width={40}
-                height={40}
+                width={48}
+                height={48}
                 className="rounded-lg"
               />
               <span className="font-bold text-xl text-gray-900">Mobile Mountain Detail</span>
@@ -264,10 +264,10 @@ export default function MobileMountainBookingsPage() {
               </Link>
               <div className="flex items-center space-x-2">
                 <Image
-                  src="/mobile-mountain-logo.jpg"
+                  src="/mobile-mountain-logo-new.png"
                   alt="Mobile Mountain Detail"
-                  width={32}
-                  height={32}
+                  width={40}
+                  height={40}
                   className="rounded-lg"
                 />
                 <span className="font-bold text-lg text-gray-900">Mobile Mountain Detail - Bookings Dashboard</span>
