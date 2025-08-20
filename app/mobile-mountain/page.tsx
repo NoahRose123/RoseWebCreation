@@ -69,10 +69,12 @@ export default function MobileMountainPage() {
         date.setDate(today.getDate() + i)
         const dateStr = date.toISOString().split('T')[0]
         
-        // Generate time slots from 8 AM to 6 PM
+        // Generate time slots from 8 AM to 6 PM in 12-hour format
         const times = []
         for (let hour = 8; hour <= 18; hour++) {
-          times.push(`${hour.toString().padStart(2, '0')}:00`)
+          const displayHour = hour > 12 ? hour - 12 : hour
+          const ampm = hour >= 12 ? 'PM' : 'AM'
+          times.push(`${displayHour}:00 ${ampm}`)
         }
         
         slots.push({
@@ -126,7 +128,7 @@ export default function MobileMountainPage() {
       <Header />
       
       {/* Hero Section - New Design with Custom Car Styling */}
-      <section id="home" className="bg-gradient-to-br from-gray-800 via-gray-700 to-gray-900 min-h-[60vh] flex items-center justify-center relative overflow-hidden pt-20 md:pt-0">
+      <section id="home" className="bg-gradient-to-br from-gray-800 via-gray-700 to-gray-900 min-h-[80vh] md:min-h-[60vh] flex items-center justify-center relative overflow-hidden pt-20 md:pt-0">
         <div className="absolute inset-0 bg-black/20"></div>
         
         {/* Custom Car Animation */}
@@ -169,21 +171,20 @@ export default function MobileMountainPage() {
           </motion.div>
         </div>
         
-        <div className="container-custom relative z-10">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
+        <div className="container-custom relative z-10 px-4">
+          <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
             <motion.div
               initial={{ opacity: 0, x: -50 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8 }}
               className="text-center lg:text-left"
             >
-              <div className="flex items-center justify-center lg:justify-start mb-6">
-                <Car className="h-12 w-12 text-blue-400 mr-4" />
-                <h1 className="text-5xl md:text-7xl font-bold text-white leading-tight">
+              <div className="text-center lg:text-left mb-6">
+                <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white leading-tight">
                   {content?.heroTitle || 'Professional Mobile Car Detailing'}
                 </h1>
               </div>
-              <p className="text-xl text-gray-200 mb-8 leading-relaxed">
+              <p className="text-lg md:text-xl text-gray-200 mb-8 leading-relaxed">
                 {content?.heroSubtitle || 'We bring the detailing service to you. Professional, convenient, and exceptional results every time.'}
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
@@ -191,14 +192,14 @@ export default function MobileMountainPage() {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={() => setIsBookingModalOpen(true)}
-                  className="bg-white text-gray-900 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-100 transition-colors"
+                  className="bg-white text-gray-900 px-6 md:px-8 py-3 md:py-4 rounded-lg font-semibold text-base md:text-lg hover:bg-gray-100 transition-colors"
                 >
                   Book Your Detail
                 </motion.button>
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="border-2 border-white text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-white hover:text-gray-900 transition-colors"
+                  className="border-2 border-white text-white px-6 md:px-8 py-3 md:py-4 rounded-lg font-semibold text-base md:text-lg hover:bg-white hover:text-gray-900 transition-colors"
                 >
                   View Services
                 </motion.button>
@@ -209,7 +210,7 @@ export default function MobileMountainPage() {
               initial={{ opacity: 0, x: 50 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="relative"
+              className="relative hidden lg:block"
             >
               {/* Artistic Car Detail Visual */}
               <motion.div

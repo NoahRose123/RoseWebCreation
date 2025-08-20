@@ -161,8 +161,12 @@ export default function RoseWebAdminPage() {
         return
       }
 
-      // In a real app, you would update this in Firebase
-      // For now, we'll just show success
+      // Update password in Firebase
+      await updateDoc(doc(db, 'admin-settings', 'password'), {
+        password: newPassword,
+        updatedAt: new Date().toISOString()
+      })
+
       setPasswordSuccess('Password updated successfully!')
       setCurrentPassword('')
       setNewPassword('')
@@ -356,60 +360,63 @@ export default function RoseWebAdminPage() {
           </button>
         </div>
 
-        {/* Analytics Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <div className="bg-white rounded-lg shadow-sm p-6">
-            <div className="flex items-center">
-              <div className="p-2 bg-blue-100 rounded-lg">
-                <Calendar className="h-6 w-6 text-blue-600" />
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Total Bookings</p>
-                <p className="text-2xl font-bold text-gray-900">{analytics.total}</p>
-              </div>
-            </div>
-          </div>
-          
-          <div className="bg-white rounded-lg shadow-sm p-6">
-            <div className="flex items-center">
-              <div className="p-2 bg-green-100 rounded-lg">
-                <CheckCircle className="h-6 w-6 text-green-600" />
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Confirmed</p>
-                <p className="text-2xl font-bold text-gray-900">{analytics.confirmed}</p>
-              </div>
-            </div>
-          </div>
-          
-          <div className="bg-white rounded-lg shadow-sm p-6">
-            <div className="flex items-center">
-              <div className="p-2 bg-yellow-100 rounded-lg">
-                <Clock className="h-6 w-6 text-yellow-600" />
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Pending</p>
-                <p className="text-2xl font-bold text-gray-900">{analytics.pending}</p>
-              </div>
-            </div>
-          </div>
-          
-          <div className="bg-white rounded-lg shadow-sm p-6">
-            <div className="flex items-center">
-              <div className="p-2 bg-purple-100 rounded-lg">
-                <DollarSign className="h-6 w-6 text-purple-600" />
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Est. Revenue</p>
-                <p className="text-2xl font-bold text-gray-900">${analytics.estimatedRevenue}</p>
-              </div>
-            </div>
-          </div>
-        </div>
+        
 
         {/* Content based on active tab */}
-        {activeTab === 'bookings' && (
-          <div className="bg-white rounded-lg shadow-sm">
+                 {activeTab === 'bookings' && (
+           <div>
+             {/* Analytics Cards */}
+             <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+               <div className="bg-white rounded-lg shadow-sm p-6">
+                 <div className="flex items-center">
+                   <div className="p-2 bg-blue-100 rounded-lg">
+                     <Calendar className="h-6 w-6 text-blue-600" />
+                   </div>
+                   <div className="ml-4">
+                     <p className="text-sm font-medium text-gray-600">Total Bookings</p>
+                     <p className="text-2xl font-bold text-gray-900">{analytics.total}</p>
+                   </div>
+                 </div>
+               </div>
+               
+               <div className="bg-white rounded-lg shadow-sm p-6">
+                 <div className="flex items-center">
+                   <div className="p-2 bg-green-100 rounded-lg">
+                     <CheckCircle className="h-6 w-6 text-green-600" />
+                   </div>
+                   <div className="ml-4">
+                     <p className="text-sm font-medium text-gray-600">Confirmed</p>
+                     <p className="text-2xl font-bold text-gray-900">{analytics.confirmed}</p>
+                   </div>
+                 </div>
+               </div>
+               
+               <div className="bg-white rounded-lg shadow-sm p-6">
+                 <div className="flex items-center">
+                   <div className="p-2 bg-yellow-100 rounded-lg">
+                     <Clock className="h-6 w-6 text-yellow-600" />
+                   </div>
+                   <div className="ml-4">
+                     <p className="text-sm font-medium text-gray-600">Pending</p>
+                     <p className="text-2xl font-bold text-gray-900">{analytics.pending}</p>
+                   </div>
+                 </div>
+               </div>
+               
+               <div className="bg-white rounded-lg shadow-sm p-6">
+                 <div className="flex items-center">
+                   <div className="p-2 bg-purple-100 rounded-lg">
+                     <DollarSign className="h-6 w-6 text-purple-600" />
+                   </div>
+                   <div className="ml-4">
+                     <p className="text-sm font-medium text-gray-600">Est. Revenue</p>
+                     <p className="text-2xl font-bold text-gray-900">${analytics.estimatedRevenue}</p>
+                   </div>
+                 </div>
+               </div>
+             </div>
+
+             <div className="bg-white rounded-lg shadow-sm">
             {/* Booking Tabs */}
             <div className="border-b border-gray-200">
               <nav className="flex space-x-8 px-6">
@@ -517,33 +524,24 @@ export default function RoseWebAdminPage() {
                              {booking.status}
                            </span>
                            
-                           <div className="flex items-center space-x-2">
-                             {booking.status === 'Pending' && (
-                               <>
-                                 <button
-                                   onClick={() => updateBookingStatus(booking.id, 'Confirmed')}
-                                   className="text-green-600 hover:text-green-700 p-1 rounded"
-                                   title="Confirm"
-                                 >
-                                   <CheckCircle className="h-5 w-5" />
-                                 </button>
-                                 <button
-                                   onClick={() => updateBookingStatus(booking.id, 'Cancelled')}
-                                   className="text-red-600 hover:text-red-700 p-1 rounded"
-                                   title="Cancel"
-                                 >
-                                   <X className="h-5 w-5" />
-                                 </button>
-                               </>
-                             )}
-                             <button
-                               onClick={() => handleDeleteBooking(booking.id)}
-                               className="text-gray-400 hover:text-red-600 p-1 rounded"
-                               title="Delete"
-                             >
-                               <Trash2 className="h-4 w-4" />
-                             </button>
-                           </div>
+                                                       <div className="flex items-center space-x-2">
+                              <select
+                                value={booking.status}
+                                onChange={(e) => updateBookingStatus(booking.id, e.target.value as 'Confirmed' | 'Pending' | 'Cancelled')}
+                                className="px-2 py-1 border border-gray-300 rounded text-xs focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                              >
+                                <option value="Pending">Pending</option>
+                                <option value="Confirmed">Confirmed</option>
+                                <option value="Cancelled">Cancelled</option>
+                              </select>
+                              <button
+                                onClick={() => handleDeleteBooking(booking.id)}
+                                className="text-gray-400 hover:text-red-600 p-1 rounded"
+                                title="Delete"
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </button>
+                            </div>
                          </div>
                        </div>
                        
