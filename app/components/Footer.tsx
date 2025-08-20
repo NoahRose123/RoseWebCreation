@@ -1,191 +1,136 @@
 'use client'
 
+import React from 'react'
 import { motion } from 'framer-motion'
-import { 
-  Mail, 
-  Phone, 
-  MapPin, 
-  Facebook, 
-  Twitter, 
-  Instagram, 
-  Linkedin,
-  Github
-} from 'lucide-react'
 import Image from 'next/image'
+import Link from 'next/link'
+import { Phone, Mail, MapPin, Clock, Shield, Award } from 'lucide-react'
 
 export default function Footer() {
   const currentYear = new Date().getFullYear()
 
-  const footerLinks = {
-    services: [
-      'Website Design',
-      'Mobile Development',
-      'UI/UX Design',
-      'Web Development',
-      'E-commerce Solutions'
-    ],
-    company: [
-      'About Us',
-      'Our Team',
-      'Careers',
-      'Blog',
-      'Contact'
-    ],
-    support: [
-      'Help Center',
-      'Documentation',
-      'API Reference',
-      'Status Page',
-      'Contact Support'
-    ]
-  }
-
-  
-
   return (
-    <footer className="bg-secondary-900 text-white">
-      <div className="container-custom section-padding">
-        <div className="grid lg:grid-cols-4 md:grid-cols-2 gap-8 mb-12">
+    <footer className="bg-gray-900 text-white">
+      <div className="container-custom py-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Company Info */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-            className="lg:col-span-1"
-          >
-            <div className="flex items-center space-x-2 mb-6">
+          <div className="space-y-4">
+            <div className="flex items-center space-x-3">
               <Image
-                src="/rosewebc.png"
-                alt="RoseWeb Design Logo"
-                width={40}
-                height={40}
+                src="/mobile-mountain-logo-new.png"
+                alt="Mobile Mountain Detail"
+                width={120}
+                height={120}
                 className="rounded-lg"
               />
-                             <span className="font-bold text-xl">RoseWeb Creation</span>
             </div>
-            <p className="text-secondary-300 mb-6 leading-relaxed">
-              We create stunning, modern websites and applications that help businesses grow and succeed in the digital world.
+            <p className="text-gray-300 leading-relaxed">
+              Professional mobile car detailing services. We bring the detailing to you with premium quality and convenience.
             </p>
-            <div className="space-y-3">
-              <div className="flex items-center space-x-3">
-                <Mail className="h-5 w-5 text-primary-400" />
-                                 <span className="text-secondary-300">rosewebc@gmail.com</span>
-              </div>
-              <div className="flex items-center space-x-3">
-                <Phone className="h-5 w-5 text-primary-400" />
-                                 <span className="text-secondary-300">(289) 213-0256</span>
-              </div>
-              <div className="flex items-center space-x-3">
-                <MapPin className="h-5 w-5 text-primary-400" />
-                                 <span className="text-secondary-300">Niagara, Ontario</span>
+            <div className="flex space-x-4">
+              <div className="flex items-center text-sm text-gray-300">
+                <Award className="h-4 w-4 mr-2 text-yellow-400" />
+                <span>Licensed & Insured</span>
               </div>
             </div>
-          </motion.div>
+            <div className="flex space-x-4">
+              <div className="flex items-center text-sm text-gray-300">
+                <Shield className="h-4 w-4 mr-2 text-green-400" />
+                <span>Quality Guaranteed</span>
+              </div>
+            </div>
+          </div>
 
-          {/* Services */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.1 }}
-            viewport={{ once: true }}
-          >
-            <h3 className="text-lg font-semibold mb-6">Services</h3>
-            <ul className="space-y-3">
-              {footerLinks.services.map((service) => (
-                <li key={service}>
-                  <a 
-                    href="#" 
-                    className="text-secondary-300 hover:text-primary-400 transition-colors duration-300"
-                  >
-                    {service}
-                  </a>
-                </li>
-              ))}
+          {/* Quick Links */}
+          <div>
+            <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
+            <ul className="space-y-2">
+              <li>
+                <Link href="#home" className="text-gray-300 hover:text-white transition-colors">
+                  Home
+                </Link>
+              </li>
+              <li>
+                <Link href="#services" className="text-gray-300 hover:text-white transition-colors">
+                  Services
+                </Link>
+              </li>
+              <li>
+                <Link href="#pricing" className="text-gray-300 hover:text-white transition-colors">
+                  Pricing
+                </Link>
+              </li>
+              <li>
+                <Link href="#contact" className="text-gray-300 hover:text-white transition-colors">
+                  Contact
+                </Link>
+              </li>
+              <li>
+                <Link href="/mobile-mountain/bookings" className="text-gray-300 hover:text-white transition-colors">
+                  Book Now
+                </Link>
+              </li>
+              <li>
+                <Link href="/mobile-mountain/admin" className="text-gray-300 hover:text-white transition-colors">
+                  Admin
+                </Link>
+              </li>
             </ul>
-          </motion.div>
+          </div>
 
-          {/* Company */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            viewport={{ once: true }}
-          >
-            <h3 className="text-lg font-semibold mb-6">Company</h3>
-            <ul className="space-y-3">
-              {footerLinks.company.map((item) => (
-                <li key={item}>
-                  <a 
-                    href="#" 
-                    className="text-secondary-300 hover:text-primary-400 transition-colors duration-300"
-                  >
-                    {item}
-                  </a>
-                </li>
-              ))}
+          {/* Our Services */}
+          <div>
+            <h3 className="text-lg font-semibold mb-4">Our Services</h3>
+            <ul className="space-y-2 text-gray-300">
+              <li>Basic Wash - $45</li>
+              <li>Premium Detail - $125</li>
+              <li>Ultimate Detail - $200</li>
+              <li>Interior Deep Clean</li>
+              <li>Exterior Protection</li>
+              <li>Paint Correction</li>
             </ul>
-          </motion.div>
+          </div>
 
-          {/* Support */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-            viewport={{ once: true }}
-          >
-            <h3 className="text-lg font-semibold mb-6">Support</h3>
-            <ul className="space-y-3">
-              {footerLinks.support.map((item) => (
-                <li key={item}>
-                  <a 
-                    href="#" 
-                    className="text-secondary-300 hover:text-primary-400 transition-colors duration-300"
-                  >
-                    {item}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </motion.div>
+          {/* Contact Info */}
+          <div>
+            <h3 className="text-lg font-semibold mb-4">Contact Info</h3>
+            <div className="space-y-3">
+              <div className="flex items-center">
+                <Phone className="h-4 w-4 mr-3 text-blue-400" />
+                <span className="text-gray-300">(555) 123-4567</span>
+              </div>
+              <div className="flex items-center">
+                <Mail className="h-4 w-4 mr-3 text-blue-400" />
+                <span className="text-gray-300">info@mobilemountain.com</span>
+              </div>
+              <div className="flex items-center">
+                <MapPin className="h-4 w-4 mr-3 text-blue-400" />
+                <span className="text-gray-300">Greater Denver Metro Area</span>
+              </div>
+              <div className="flex items-center">
+                <Clock className="h-4 w-4 mr-3 text-blue-400" />
+                <span className="text-gray-300">Mon-Sat: 8AM-6PM</span>
+              </div>
+            </div>
+          </div>
         </div>
 
-        {/* Bottom Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.4 }}
-          viewport={{ once: true }}
-          className="border-t border-secondary-700 pt-8"
-        >
-                     <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-             <p className="text-secondary-400 text-sm">
-               © {currentYear} RoseWeb Creation. All rights reserved.
-             </p>
-             
-             <div className="flex space-x-2">
-               {/* Mobile Mountain Detailing Button */}
-               <motion.button
-                 whileHover={{ scale: 1.05 }}
-                 whileTap={{ scale: 0.95 }}
-                 onClick={() => window.location.href = '/mobile-mountain'}
-                 className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded text-sm font-medium transition-colors duration-300"
-               >
-                 Mobile Mountain Detailing
-               </motion.button>
-               
-               {/* View Bookings Button */}
-               <motion.button
-                 whileHover={{ scale: 1.05 }}
-                 whileTap={{ scale: 0.95 }}
-                 onClick={() => window.location.href = '/bookings'}
-                 className="bg-gray-600 hover:bg-gray-700 text-white px-3 py-1 rounded text-xs transition-colors duration-300 opacity-60 hover:opacity-100"
-               >
-                 Admin
-               </motion.button>
-             </div>
-           </div>
-        </motion.div>
+        {/* Bottom Bar */}
+        <div className="border-t border-gray-800 mt-12 pt-8">
+          <div className="flex flex-col md:flex-row justify-between items-center">
+            <p className="text-gray-400 text-sm">
+              © {currentYear} Mobile Mountain Detail. All rights reserved.
+            </p>
+            <div className="flex space-x-6 mt-4 md:mt-0">
+              <Link href="/mobile-mountain/admin" className="text-gray-400 hover:text-white text-sm transition-colors">
+                Admin Access
+              </Link>
+              <Link href="/mobile-mountain/bookings" className="text-gray-400 hover:text-white text-sm transition-colors">
+                Book Appointment
+              </Link>
+            </div>
+          </div>
+        </div>
       </div>
     </footer>
   )
