@@ -22,8 +22,8 @@ import {
   X
 } from 'lucide-react'
 import Image from 'next/image'
-import Header from './components/Header'
-import Footer from './components/Footer'
+import RoseWebHeader from './components/RoseWebHeader'
+import RoseWebFooter from './components/RoseWebFooter'
 import { addBooking } from '../lib/firebase'
 
 export default function Home() {
@@ -203,7 +203,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-white">
-      <Header />
+      <RoseWebHeader />
       
       {/* Hero Section */}
       <section id="home" className="gradient-bg min-h-screen flex items-center justify-center relative overflow-hidden pt-20 md:pt-0">
@@ -517,7 +517,7 @@ export default function Home() {
 
 
 
-      <Footer />
+      <RoseWebFooter />
 
        {/* Booking Modal */}
        {showBookingModal && (
