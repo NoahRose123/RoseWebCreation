@@ -1,19 +1,25 @@
 rules_version = '2';
+
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Allow read/write access to bookings collection
+    // Allow read and write access to bookings collection
     match /bookings/{document} {
       allow read, write: if true;
     }
     
-    // Allow read/write access to mobile-mountain-bookings collection
+    // Allow read and write access to mobile-mountain-bookings collection
     match /mobile-mountain-bookings/{document} {
       allow read, write: if true;
     }
     
-    // Allow read/write access to all other collections (for future use)
-    match /{document=**} {
+    // Allow read and write access to website-content collection
+    match /website-content/{document} {
       allow read, write: if true;
+    }
+    
+    // Deny access to all other collections
+    match /{document=**} {
+      allow read, write: if false;
     }
   }
 }

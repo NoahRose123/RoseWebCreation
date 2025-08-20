@@ -8,6 +8,7 @@ import { Star, Check, Phone, Mail, MapPin, Clock, Shield, Award } from 'lucide-r
 import { useWebsiteContent } from '../../lib/websiteContent'
 import { addBooking } from '../../lib/firebase'
 import Footer from '../components/Footer'
+import Header from '../components/Header'
 
 export default function MobileMountainPage() {
   const { content } = useWebsiteContent()
@@ -76,8 +77,10 @@ export default function MobileMountainPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <Header />
+      
       {/* Hero Section */}
-      <section id="home" className="bg-gradient-to-br from-gray-800 via-gray-700 to-gray-900 min-h-[50vh] flex items-center justify-center relative overflow-hidden pt-20 md:pt-0">
+      <section id="home" className="bg-gradient-to-br from-gray-800 via-gray-700 to-gray-900 min-h-[40vh] flex items-center justify-center relative overflow-hidden pt-20 md:pt-0">
         <div className="absolute inset-0 bg-black/20"></div>
         <div className="container-custom relative z-10">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
@@ -118,37 +121,37 @@ export default function MobileMountainPage() {
               transition={{ duration: 0.8, delay: 0.2 }}
               className="relative"
             >
-              {/* Hero Image Collage - Fixed to 4 unique images */}
-              <div className="grid grid-cols-2 gap-4">
+              {/* Hero Image Collage - Smaller height */}
+              <div className="grid grid-cols-2 gap-3">
                 <Image
                   src="/mobile-mountain-hero.jpg"
                   alt="Mobile Mountain Detail - Professional Car Detailing"
-                  width={200}
-                  height={120}
+                  width={150}
+                  height={90}
                   className="w-full h-auto rounded-lg shadow-2xl"
                   priority
                 />
                 <Image
                   src="/mobile-mountain-hero-2.jpg"
                   alt="Mobile Mountain Detail - Professional Car Detailing"
-                  width={200}
-                  height={120}
+                  width={150}
+                  height={90}
                   className="w-full h-auto rounded-lg shadow-2xl"
                   priority
                 />
                 <Image
                   src="/mobile-mountain-hero-5.jpg"
                   alt="Mobile Mountain Detail - Professional Car Detailing"
-                  width={200}
-                  height={120}
+                  width={150}
+                  height={90}
                   className="w-full h-auto rounded-lg shadow-2xl"
                   priority
                 />
                 <Image
                   src="/mobile-mountain-hero-7.jpg"
                   alt="Mobile Mountain Detail - Professional Car Detailing"
-                  width={200}
-                  height={120}
+                  width={150}
+                  height={90}
                   className="w-full h-auto rounded-lg shadow-2xl"
                   priority
                 />
@@ -460,7 +463,7 @@ export default function MobileMountainPage() {
       </section>
 
       {/* Contact Section */}
-      <section id="contact" className="py-20 bg-gray-900 text-white">
+      <section id="contact" className="py-20 bg-gray-100 text-gray-900">
         <div className="container-custom">
           <motion.div
             initial={{ opacity: 0, y: 50 }}
@@ -470,7 +473,7 @@ export default function MobileMountainPage() {
             className="text-center mb-16"
           >
             <h2 className="text-4xl font-bold mb-4">Get In Touch</h2>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               Ready to give your vehicle the care it deserves? Contact us today to schedule your mobile detailing appointment.
             </p>
           </motion.div>
@@ -485,31 +488,31 @@ export default function MobileMountainPage() {
               <h3 className="text-2xl font-bold mb-6">Contact Information</h3>
               <div className="space-y-6">
                 <div className="flex items-center">
-                  <Phone className="h-6 w-6 text-blue-400 mr-4" />
+                  <Phone className="h-6 w-6 text-blue-600 mr-4" />
                   <div>
                     <p className="font-semibold">Phone</p>
-                    <p className="text-gray-300">{content?.phoneNumber || '(555) 123-4567'}</p>
+                    <p className="text-gray-600">{content?.phoneNumber || '(555) 123-4567'}</p>
                   </div>
                 </div>
                 <div className="flex items-center">
-                  <Mail className="h-6 w-6 text-blue-400 mr-4" />
+                  <Mail className="h-6 w-6 text-blue-600 mr-4" />
                   <div>
                     <p className="font-semibold">Email</p>
-                    <p className="text-gray-300">{content?.email || 'info@mobilemountain.com'}</p>
+                    <p className="text-gray-600">{content?.email || 'info@mobilemountain.com'}</p>
                   </div>
                 </div>
                 <div className="flex items-center">
-                  <MapPin className="h-6 w-6 text-blue-400 mr-4" />
+                  <MapPin className="h-6 w-6 text-blue-600 mr-4" />
                   <div>
                     <p className="font-semibold">Service Area</p>
-                    <p className="text-gray-300">{content?.serviceArea || 'Greater Denver Metro Area'}</p>
+                    <p className="text-gray-600">{content?.serviceArea || 'Greater Denver Metro Area'}</p>
                   </div>
                 </div>
                 <div className="flex items-center">
-                  <Clock className="h-6 w-6 text-blue-400 mr-4" />
+                  <Clock className="h-6 w-6 text-blue-600 mr-4" />
                   <div>
                     <p className="font-semibold">Hours</p>
-                    <p className="text-gray-300">Monday - Saturday: 8:00 AM - 6:00 PM</p>
+                    <p className="text-gray-600">Monday - Saturday: 8:00 AM - 6:00 PM</p>
                   </div>
                 </div>
               </div>
@@ -520,10 +523,10 @@ export default function MobileMountainPage() {
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8 }}
               viewport={{ once: true }}
-              className="bg-gray-800 p-8 rounded-2xl"
+              className="bg-white p-8 rounded-2xl shadow-lg"
             >
               <h3 className="text-2xl font-bold mb-6">Book Your Appointment</h3>
-              <p className="text-gray-300 mb-6">
+              <p className="text-gray-600 mb-6">
                 Schedule your mobile detailing service today. We'll come to your location and give your vehicle the professional care it deserves.
               </p>
               <button
@@ -536,6 +539,8 @@ export default function MobileMountainPage() {
           </div>
         </div>
       </section>
+
+      <Footer />
 
       {/* Booking Modal */}
       {isBookingModalOpen && (
@@ -652,8 +657,6 @@ export default function MobileMountainPage() {
           </motion.div>
         </div>
       )}
-
-      <Footer />
     </div>
   )
 }

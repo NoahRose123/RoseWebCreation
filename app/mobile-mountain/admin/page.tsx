@@ -83,6 +83,45 @@ export default function MobileMountainAdminPage() {
     { day: 'Sunday', startTime: '10:00', endTime: '16:00', isAvailable: false }
   ])
 
+  // Advanced availability system
+  const [nextWeekAvailability, setNextWeekAvailability] = useState<Availability[]>([])
+  const [weeklyTemplate, setWeeklyTemplate] = useState<Availability[]>([])
+  const [selectedWeek, setSelectedWeek] = useState(0)
+
+  // Generate next 7 days availability starting from today
+  const generateNextWeekAvailability = useMemo(() => {
+    const today = new Date()
+    const nextWeek = []
+    
+    for (let i = 0; i < 7; i++) {
+      const date = new Date(today)
+      date.setDate(today.getDate() + i)
+      const dayName = date.toLocaleDateString('en-US', { weekday: 'long' })
+      
+      const dayAvailability = availability.find(day => day.day === dayName) || {
+        day: dayName,
+        startTime: '08:00',
+        endTime: '18:00',
+        isAvailable: false
+      }
+      
+      nextWeek.push({
+        ...dayAvailability,
+        date: date.toISOString().split('T')[0]
+      })
+    }
+    
+    return nextWeek
+  }, [availability])
+
+  // Get date for specific day
+  const getDateForDay = (dayIndex: number) => {
+    const today = new Date()
+    const date = new Date(today)
+    date.setDate(today.getDate() + dayIndex)
+    return date.toISOString().split('T')[0]
+  }
+
   // Safe content with proper error handling
   const safeContent = useMemo(() => {
     if (!content) {
@@ -709,59 +748,184 @@ export default function MobileMountainAdminPage() {
             key="availability-tab"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="bg-white rounded-lg shadow"
+            className="space-y-6"
           >
-            <div className="px-6 py-4 border-b border-gray-200">
-              <h2 className="text-lg font-semibold text-gray-900">Availability Settings</h2>
-              <p className="text-sm text-gray-600">Set your working hours and availability</p>
-            </div>
-            
-            <div className="p-6">
-              <div className="space-y-4">
-                {availability.map((day, index) => (
-                  <div key={day.day} className="flex items-center space-x-4 p-4 border border-gray-200 rounded-lg">
-                    <div className="w-24">
-                      <label className="flex items-center">
-                        <input
-                          type="checkbox"
-                          checked={day.isAvailable}
-                          onChange={(e) => updateAvailability(index, 'isAvailable', e.target.checked)}
-                          className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                        />
-                        <span className="ml-2 text-sm font-medium text-gray-900">{day.day}</span>
-                      </label>
-                    </div>
-                    
-                    {day.isAvailable && (
-                      <>
-                        <div className="flex items-center space-x-2">
-                          <span className="text-sm text-gray-600">From:</span>
-                          <input
-                            type="time"
-                            value={day.startTime}
-                            onChange={(e) => updateAvailability(index, 'startTime', e.target.value)}
-                            className="px-3 py-1 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                          />
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <span className="text-sm text-gray-600">To:</span>
-                          <input
-                            type="time"
-                            value={day.endTime}
-                            onChange={(e) => updateAvailability(index, 'endTime', e.target.value)}
-                            className="px-3 py-1 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                          />
-                        </div>
-                      </>
-                    )}
-                  </div>
-                ))}
+            {/* Basic Weekly Schedule */}
+            <div className="bg-white rounded-lg shadow">
+              <div className="px-6 py-4 border-b border-gray-200">
+                <h2 className="text-lg font-semibold text-gray-900">Weekly Schedule Template</h2>
+                <p className="text-sm text-gray-600">Set your default working hours for each day of the week</p>
               </div>
               
-              <div className="mt-6">
-                <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition-colors duration-300">
-                  Save Availability
-                </button>
+              <div className="p-6">
+                <div className="space-y-4">
+                  {availability.map((day, index) => (
+                    <div key={day.day} className="flex items-center space-x-4 p-4 border border-gray-200 rounded-lg">
+                      <div className="w-24">
+                        <label className="flex items-center">
+                          <input
+                            type="checkbox"
+                            checked={day.isAvailable}
+                            onChange={(e) => updateAvailability(index, 'isAvailable', e.target.checked)}
+                            className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                          />
+                          <span className="ml-2 text-sm font-medium text-gray-900">{day.day}</span>
+                        </label>
+                      </div>
+                      
+                      {day.isAvailable && (
+                        <>
+                          <div className="flex items-center space-x-2">
+                            <span className="text-sm text-gray-600">From:</span>
+                            <input
+                              type="time"
+                              value={day.startTime}
+                              onChange={(e) => updateAvailability(index, 'startTime', e.target.value)}
+                              className="px-3 py-1 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            />
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <span className="text-sm text-gray-600">To:</span>
+                            <input
+                              type="time"
+                              value={day.endTime}
+                              onChange={(e) => updateAvailability(index, 'endTime', e.target.value)}
+                              className="px-3 py-1 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            />
+                          </div>
+                        </>
+                      )}
+                    </div>
+                  ))}
+                </div>
+                
+                <div className="mt-6">
+                  <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition-colors duration-300">
+                    Save Weekly Template
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Next 7 Days Schedule */}
+            <div className="bg-white rounded-lg shadow">
+              <div className="px-6 py-4 border-b border-gray-200">
+                <h2 className="text-lg font-semibold text-gray-900">Next 7 Days Schedule</h2>
+                <p className="text-sm text-gray-600">Your availability for the next 7 days starting from today</p>
+              </div>
+              
+              <div className="p-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {generateNextWeekAvailability.map((day, index) => (
+                    <div key={index} className="border border-gray-200 rounded-lg p-4">
+                      <div className="flex items-center justify-between mb-3">
+                        <h4 className="font-semibold text-gray-900">{day.day}</h4>
+                        <span className="text-sm text-gray-500">{day.date}</span>
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <label className="flex items-center">
+                          <input
+                            type="checkbox"
+                            checked={day.isAvailable}
+                            onChange={(e) => {
+                              const newWeek = [...generateNextWeekAvailability]
+                              newWeek[index] = { ...newWeek[index], isAvailable: e.target.checked }
+                              setNextWeekAvailability(newWeek)
+                            }}
+                            className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                          />
+                          <span className="ml-2 text-sm text-gray-700">Available</span>
+                        </label>
+                        
+                        {day.isAvailable && (
+                          <div className="space-y-2">
+                            <div className="flex items-center space-x-2">
+                              <span className="text-xs text-gray-600">From:</span>
+                              <input
+                                type="time"
+                                value={day.startTime}
+                                onChange={(e) => {
+                                  const newWeek = [...generateNextWeekAvailability]
+                                  newWeek[index] = { ...newWeek[index], startTime: e.target.value }
+                                  setNextWeekAvailability(newWeek)
+                                }}
+                                className="px-2 py-1 border border-gray-300 rounded text-xs focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                              />
+                            </div>
+                            <div className="flex items-center space-x-2">
+                              <span className="text-xs text-gray-600">To:</span>
+                              <input
+                                type="time"
+                                value={day.endTime}
+                                onChange={(e) => {
+                                  const newWeek = [...generateNextWeekAvailability]
+                                  newWeek[index] = { ...newWeek[index], endTime: e.target.value }
+                                  setNextWeekAvailability(newWeek)
+                                }}
+                                className="px-2 py-1 border border-gray-300 rounded text-xs focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                              />
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                
+                <div className="mt-6 flex space-x-4">
+                  <button className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg font-medium transition-colors duration-300">
+                    Save Next Week Schedule
+                  </button>
+                  <button 
+                    onClick={() => {
+                      setWeeklyTemplate([...availability])
+                      alert('Weekly template saved! You can now apply this template to future weeks.')
+                    }}
+                    className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-lg font-medium transition-colors duration-300"
+                  >
+                    Save as Weekly Template
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Weekly Schedule Template */}
+            <div className="bg-white rounded-lg shadow">
+              <div className="px-6 py-4 border-b border-gray-200">
+                <h2 className="text-lg font-semibold text-gray-900">Weekly Schedule Template</h2>
+                <p className="text-sm text-gray-600">Apply your saved template to future weeks</p>
+              </div>
+              
+              <div className="p-6">
+                <div className="flex items-center space-x-4 mb-4">
+                  <label className="text-sm font-medium text-gray-700">Apply template to week starting:</label>
+                  <input
+                    type="date"
+                    className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    min={new Date().toISOString().split('T')[0]}
+                  />
+                  <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors duration-300">
+                    Apply Template
+                  </button>
+                </div>
+                
+                <div className="bg-gray-50 p-4 rounded-lg">
+                  <h4 className="font-semibold text-gray-900 mb-2">Current Template:</h4>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-sm">
+                    {weeklyTemplate.length > 0 ? weeklyTemplate.map((day, index) => (
+                      <div key={index} className="flex items-center space-x-2">
+                        <div className={`w-2 h-2 rounded-full ${day.isAvailable ? 'bg-green-500' : 'bg-red-500'}`}></div>
+                        <span className="text-gray-700">{day.day}</span>
+                        {day.isAvailable && (
+                          <span className="text-gray-500 text-xs">{day.startTime}-{day.endTime}</span>
+                        )}
+                      </div>
+                    )) : (
+                      <p className="text-gray-500">No template saved yet. Save your current schedule as a template.</p>
+                    )}
+                  </div>
+                </div>
               </div>
             </div>
           </motion.div>
@@ -848,169 +1012,242 @@ export default function MobileMountainAdminPage() {
             key="website-tab"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="bg-white rounded-lg shadow"
+            className="space-y-6"
           >
-            <div className="px-6 py-4 border-b border-gray-200">
-              <h2 className="text-lg font-semibold text-gray-900">Real-Time Website Content Editor</h2>
-              <p className="text-sm text-gray-600">Edit website content and see changes instantly</p>
-            </div>
-            
-            <div className="p-6">
-              <div className="space-y-6">
-                <div>
-                  <h3 className="text-lg font-medium text-gray-900 mb-4">Hero Section</h3>
-                  <div className="space-y-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Main Headline
-                      </label>
-                      <input
-                        type="text"
-                        value={safeContent.heroTitle}
-                        onChange={(e) => updateContent({ heroTitle: e.target.value })}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Subtitle
-                      </label>
-                      <textarea
-                        rows={3}
-                        value={safeContent.heroSubtitle}
-                        onChange={(e) => updateContent({ heroSubtitle: e.target.value })}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                <div>
-                  <h3 className="text-lg font-medium text-gray-900 mb-4">Services Section</h3>
-                  <div className="space-y-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Section Title
-                      </label>
-                      <input
-                        type="text"
-                        value={safeContent.servicesTitle}
-                        onChange={(e) => updateContent({ servicesTitle: e.target.value })}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Section Subtitle
-                      </label>
-                      <textarea
-                        rows={2}
-                        value={safeContent.servicesSubtitle}
-                        onChange={(e) => updateContent({ servicesSubtitle: e.target.value })}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                <div>
-                  <h3 className="text-lg font-medium text-gray-900 mb-4">Pricing Section</h3>
-                  <div className="space-y-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Section Title
-                      </label>
-                      <input
-                        type="text"
-                        value={safeContent.pricingTitle}
-                        onChange={(e) => updateContent({ pricingTitle: e.target.value })}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Section Subtitle
-                      </label>
-                      <textarea
-                        rows={2}
-                        value={safeContent.pricingSubtitle}
-                        onChange={(e) => updateContent({ pricingSubtitle: e.target.value })}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                <div>
-                  <h3 className="text-lg font-medium text-gray-900 mb-4">Business Information</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Business Name
-                      </label>
-                      <input
-                        type="text"
-                        value={safeContent.businessName}
-                        onChange={(e) => updateContent({ businessName: e.target.value })}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Phone Number
-                      </label>
-                      <input
-                        type="tel"
-                        value={safeContent.phoneNumber}
-                        onChange={(e) => updateContent({ phoneNumber: e.target.value })}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Email
-                      </label>
-                      <input
-                        type="email"
-                        value={safeContent.email}
-                        onChange={(e) => updateContent({ email: e.target.value })}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Service Area
-                      </label>
-                      <input
-                        type="text"
-                        value={safeContent.serviceArea}
-                        onChange={(e) => updateContent({ serviceArea: e.target.value })}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                <div>
-                  <h3 className="text-lg font-medium text-gray-900 mb-4">Footer</h3>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Footer Description
-                    </label>
-                    <textarea
-                      rows={3}
-                      value={safeContent.footerDescription}
-                      onChange={(e) => updateContent({ footerDescription: e.target.value })}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    />
+            {/* Real-time Preview */}
+            <div className="bg-white rounded-lg shadow">
+              <div className="px-6 py-4 border-b border-gray-200">
+                <h2 className="text-lg font-semibold text-gray-900">Live Website Preview</h2>
+                <p className="text-sm text-gray-600">See your changes in real-time as you edit</p>
+              </div>
+              <div className="p-6">
+                <div className="bg-gray-50 rounded-lg p-4 border-2 border-dashed border-gray-300">
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">
+                    {safeContent.heroTitle || 'Professional Mobile Car Detailing'}
+                  </h3>
+                  <p className="text-gray-600 mb-4">
+                    {safeContent.heroSubtitle || 'We bring the detailing service to you. Professional, convenient, and exceptional results every time.'}
+                  </p>
+                  <div className="text-sm text-gray-500">
+                    <p>Phone: {safeContent.phoneNumber || '(555) 123-4567'}</p>
+                    <p>Email: {safeContent.email || 'info@mobilemountain.com'}</p>
+                    <p>Service Area: {safeContent.serviceArea || 'Greater Denver Metro Area'}</p>
                   </div>
                 </div>
               </div>
+            </div>
+
+            {/* Content Editor */}
+            <div className="bg-white rounded-lg shadow">
+              <div className="px-6 py-4 border-b border-gray-200">
+                <h2 className="text-lg font-semibold text-gray-900">Real-Time Content Editor</h2>
+                <p className="text-sm text-gray-600">Edit website content and see changes instantly</p>
+              </div>
               
-              <div className="mt-6 p-4 bg-green-50 border border-green-200 rounded-lg">
-                <p className="text-green-800 text-sm">
-                  ✅ Changes are saved to Firebase and appear instantly on the website!
-                </p>
+              <div className="p-6">
+                <div className="space-y-6">
+                  <div>
+                    <h3 className="text-lg font-medium text-gray-900 mb-4">Hero Section</h3>
+                    <div className="space-y-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Main Headline
+                        </label>
+                        <input
+                          type="text"
+                          value={safeContent.heroTitle}
+                          onChange={(e) => updateContent({ heroTitle: e.target.value })}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                          placeholder="Enter your main headline..."
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Subtitle
+                        </label>
+                        <textarea
+                          rows={3}
+                          value={safeContent.heroSubtitle}
+                          onChange={(e) => updateContent({ heroSubtitle: e.target.value })}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                          placeholder="Enter your subtitle..."
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <h3 className="text-lg font-medium text-gray-900 mb-4">Services Section</h3>
+                    <div className="space-y-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Section Title
+                        </label>
+                        <input
+                          type="text"
+                          value={safeContent.servicesTitle}
+                          onChange={(e) => updateContent({ servicesTitle: e.target.value })}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                          placeholder="Enter services section title..."
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Section Subtitle
+                        </label>
+                        <textarea
+                          rows={2}
+                          value={safeContent.servicesSubtitle}
+                          onChange={(e) => updateContent({ servicesSubtitle: e.target.value })}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                          placeholder="Enter services section subtitle..."
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <h3 className="text-lg font-medium text-gray-900 mb-4">Pricing Section</h3>
+                    <div className="space-y-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Section Title
+                        </label>
+                        <input
+                          type="text"
+                          value={safeContent.pricingTitle}
+                          onChange={(e) => updateContent({ pricingTitle: e.target.value })}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                          placeholder="Enter pricing section title..."
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Section Subtitle
+                        </label>
+                        <textarea
+                          rows={2}
+                          value={safeContent.pricingSubtitle}
+                          onChange={(e) => updateContent({ pricingSubtitle: e.target.value })}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                          placeholder="Enter pricing section subtitle..."
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <h3 className="text-lg font-medium text-gray-900 mb-4">Testimonials Section</h3>
+                    <div className="space-y-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Section Title
+                        </label>
+                        <input
+                          type="text"
+                          value={safeContent.testimonialsTitle}
+                          onChange={(e) => updateContent({ testimonialsTitle: e.target.value })}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                          placeholder="Enter testimonials section title..."
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Section Subtitle
+                        </label>
+                        <textarea
+                          rows={2}
+                          value={safeContent.testimonialsSubtitle}
+                          onChange={(e) => updateContent({ testimonialsSubtitle: e.target.value })}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                          placeholder="Enter testimonials section subtitle..."
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <h3 className="text-lg font-medium text-gray-900 mb-4">Business Information</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Business Name
+                        </label>
+                        <input
+                          type="text"
+                          value={safeContent.businessName}
+                          onChange={(e) => updateContent({ businessName: e.target.value })}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                          placeholder="Enter business name..."
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Phone Number
+                        </label>
+                        <input
+                          type="tel"
+                          value={safeContent.phoneNumber}
+                          onChange={(e) => updateContent({ phoneNumber: e.target.value })}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                          placeholder="Enter phone number..."
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Email
+                        </label>
+                        <input
+                          type="email"
+                          value={safeContent.email}
+                          onChange={(e) => updateContent({ email: e.target.value })}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                          placeholder="Enter email address..."
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Service Area
+                        </label>
+                        <input
+                          type="text"
+                          value={safeContent.serviceArea}
+                          onChange={(e) => updateContent({ serviceArea: e.target.value })}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                          placeholder="Enter service area..."
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <h3 className="text-lg font-medium text-gray-900 mb-4">Footer</h3>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Footer Description
+                      </label>
+                      <textarea
+                        rows={3}
+                        value={safeContent.footerDescription}
+                        onChange={(e) => updateContent({ footerDescription: e.target.value })}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        placeholder="Enter footer description..."
+                      />
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="mt-6 p-4 bg-green-50 border border-green-200 rounded-lg">
+                  <div className="flex items-center">
+                    <div className="w-4 h-4 bg-green-500 rounded-full mr-2 animate-pulse"></div>
+                    <p className="text-green-800 text-sm font-medium">
+                      ✅ Changes are saved to Firebase and appear instantly on the website!
+                    </p>
+                  </div>
+                  <p className="text-green-700 text-xs mt-1">
+                    All changes are automatically saved and synchronized across all visitors.
+                  </p>
+                </div>
               </div>
             </div>
           </motion.div>
