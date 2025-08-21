@@ -3,18 +3,18 @@
   "name": "Mobile Mountain Detail - Professional Auto Detailing",
   "icons": [
     {
-      "src": "mmd 1.jpg",
+      "src": "Gemini_Generated_Image_brne9hbrne9hbrne-removebg-preview.png",
       "sizes": "64x64 32x32 24x24 16x16",
-      "type": "image/jpeg"
+      "type": "image/png"
     },
     {
-      "src": "mmd 1.jpg",
-      "type": "image/jpeg",
+      "src": "Gemini_Generated_Image_brne9hbrne9hbrne-removebg-preview.png",
+      "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "mmd 1.jpg",
-      "type": "image/jpeg",
+      "src": "Gemini_Generated_Image_brne9hbrne9hbrne-removebg-preview.png",
+      "type": "image/png",
       "sizes": "512x512"
     }
   ],

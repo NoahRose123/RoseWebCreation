@@ -71,7 +71,7 @@ function BookingSection() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    // Validation
+    // Validation - email is now optional
     if (!formData.fullName || !formData.phone || !formData.address || !formData.serviceType || !formData.vehicleType || !formData.date || !formData.time) {
       setSubmitStatus({ type: 'error', message: 'Please fill in all required fields.' });
       return;
@@ -169,6 +169,7 @@ function BookingSection() {
                   value={formData.email}
                   onChange={handleInputChange}
                   className="input-field"
+                  placeholder="Optional"
                 />
               </div>
               <div>
