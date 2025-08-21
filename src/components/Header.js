@@ -4,16 +4,16 @@ function Header() {
   return (
     <header className="bg-gray-900/95 backdrop-blur-md shadow-lg border-b border-gray-700 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center py-4 md:py-6">
+        <div className="flex justify-between items-center py-2 md:py-6">
           {/* Logo and Business Name */}
-          <div className="flex items-center space-x-3 md:space-x-4">
+          <div className="flex items-center space-x-2 md:space-x-4">
             <img 
               src="/Gemini_Generated_Image_brne9hbrne9hbrne-removebg-preview.png" 
               alt="Mobile Mountain Detail Logo" 
-              className="h-12 w-12 md:h-16 md:w-16 lg:h-20 lg:w-20 object-contain rounded-lg shadow-lg"
+              className="h-16 w-16 md:h-20 md:w-20 lg:h-24 lg:w-24 object-contain rounded-lg shadow-lg"
             />
             <div>
-              <h1 className="text-lg md:text-xl lg:text-2xl font-bold text-white">Mobile Mountain Detail</h1>
+              <h1 className="text-xl md:text-2xl lg:text-3xl font-bold text-white">Mobile Mountain Detail</h1>
             </div>
           </div>
 
