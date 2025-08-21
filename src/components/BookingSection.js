@@ -20,9 +20,9 @@ function BookingSection() {
   const [submitStatus, setSubmitStatus] = useState(null);
 
   const serviceTypes = [
-    { value: 'exterior', label: 'Exterior Detail', price: 75 },
-    { value: 'interior', label: 'Interior Detail', price: 75 },
-    { value: 'full', label: 'Full Detail', price: 140 }
+    { value: 'exterior', label: 'Exterior Detail', price: 100 },
+    { value: 'interior', label: 'Interior Detail', price: 125 },
+    { value: 'full', label: 'Full Detail', price: 200 }
   ];
 
   const addOnOptions = [
@@ -116,11 +116,12 @@ function BookingSection() {
       <div className="max-w-4xl mx-auto">
         {/* Section Header */}
         <div className="text-center mb-12">
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
+          <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
             Book Your Appointment
           </h2>
-          <p className="text-xl text-gray-300">
-            Schedule your professional auto detailing service today
+          <p className="text-xl text-gray-300 max-w-2xl mx-auto leading-relaxed">
+            Schedule your professional auto detailing service today. 
+            We'll come to your location and transform your vehicle.
           </p>
         </div>
 

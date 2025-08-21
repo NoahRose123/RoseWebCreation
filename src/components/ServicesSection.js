@@ -4,7 +4,7 @@ function ServicesSection() {
   const services = [
     {
       title: "Exterior Detail",
-      price: "$75",
+      price: "$100",
       description: "Complete exterior wash with professional detailing",
       features: [
         "Foam cannon pre-wash & two-bucket hand wash (scratch-free)",
@@ -17,19 +17,19 @@ function ServicesSection() {
     },
     {
       title: "Interior Detail",
-      price: "$75",
+      price: "$125",
       description: "Thorough interior cleaning and sanitization",
       features: [
-        "Vacuum and dust removal",
-        "Dashboard and console cleaning",
-        "Seat cleaning and conditioning",
-        "Door panels and trim",
-        "Air freshener application"
+        "Deep vacuuming (trunk included)",
+        "Carpet, mat & seat shampoo with drill brush & extractor",
+        "All plastic & vinyl surfaces cleaned and dressed",
+        "Leather seats cleaned & conditioned",
+        "Streak-free interior glass"
       ]
     },
     {
       title: "Full Detail",
-      price: "$140",
+      price: "$200",
       description: "Complete interior and exterior detailing package",
       features: [
         "All exterior services",
@@ -56,12 +56,12 @@ function ServicesSection() {
     {
       title: "Interior Ceramic Seat Sealant",
       price: "+$30",
-      description: "Protect seats from stains and spills"
+      description: "Extended protection for seats"
     },
     {
       title: "Pet Hair Removal",
-      price: "+$15",
-      description: "Thorough pet hair removal from all surfaces"
+      price: "+$15+",
+      description: "Based on severity"
     }
   ];
 

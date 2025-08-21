@@ -3,23 +3,23 @@
   "name": "Mobile Mountain Detail - Professional Auto Detailing",
   "icons": [
     {
-      "src": "mobile-mountain-logo-new.png",
+      "src": "mmd 1.jpg",
       "sizes": "64x64 32x32 24x24 16x16",
-      "type": "image/png"
+      "type": "image/jpeg"
     },
     {
-      "src": "mobile-mountain-logo-new.png",
-      "type": "image/png",
+      "src": "mmd 1.jpg",
+      "type": "image/jpeg",
       "sizes": "192x192"
     },
     {
-      "src": "mobile-mountain-logo-new.png",
-      "type": "image/png",
+      "src": "mmd 1.jpg",
+      "type": "image/jpeg",
       "sizes": "512x512"
     }
   ],
   "start_url": ".",
   "display": "standalone",
   "theme_color": "#0ea5e9",
-  "background_color": "#ffffff"
+  "background_color": "#0f172a"
 }
