@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { collection, getDocs, query, orderBy, where } from 'firebase/firestore';
+import { collection, getDocs, query, orderBy, doc, deleteDoc, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase';
-import { format } from 'date-fns';
+import { Link } from 'react-router-dom';
 
 function AdminPanel() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState('');
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [filterDate, setFilterDate] = useState('');
+  const [activeTab, setActiveTab] = useState('pending');
   const [totalRevenue, setTotalRevenue] = useState(0);
 
   const handleLogin = (e) => {
@@ -24,32 +24,19 @@ function AdminPanel() {
   const fetchBookings = async () => {
     setLoading(true);
     try {
-      let q = query(collection(db, 'mobile-mountain-bookings'), orderBy('createdAt', 'desc'));
-      
-      if (filterDate) {
-        const startDate = new Date(filterDate);
-        const endDate = new Date(filterDate);
-        endDate.setDate(endDate.getDate() + 1);
-        
-        q = query(
-          collection(db, 'mobile-mountain-bookings'),
-          where('date', '>=', filterDate),
-          where('date', '<', endDate.toISOString().split('T')[0]),
-          orderBy('createdAt', 'desc')
-        );
-      }
-
+      const q = query(collection(db, 'mobile-mountain-bookings'), orderBy('createdAt', 'desc'));
       const querySnapshot = await getDocs(q);
       const bookingsData = querySnapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data(),
-        createdAt: doc.data().createdAt?.toDate() || new Date()
+        createdAt: doc.data().createdAt?.toDate ? doc.data().createdAt.toDate() : new Date()
       }));
 
       setBookings(bookingsData);
       
-      // Calculate total revenue
-      const revenue = bookingsData.reduce((sum, booking) => sum + (booking.totalPrice || 0), 0);
+      // Calculate total revenue from confirmed bookings only
+      const confirmedBookings = bookingsData.filter(booking => booking.status === 'confirmed');
+      const revenue = confirmedBookings.reduce((sum, booking) => sum + (booking.totalPrice || 0), 0);
       setTotalRevenue(revenue);
     } catch (error) {
       console.error('Error fetching bookings:', error);
@@ -59,17 +46,37 @@ function AdminPanel() {
     }
   };
 
-  const handleFilterChange = (e) => {
-    setFilterDate(e.target.value);
+  const confirmBooking = async (bookingId) => {
+    try {
+      await updateDoc(doc(db, 'mobile-mountain-bookings', bookingId), {
+        status: 'confirmed'
+      });
+      fetchBookings(); // Refresh the data
+    } catch (error) {
+      console.error('Error confirming booking:', error);
+      alert('Error confirming booking');
+    }
   };
 
-  const applyFilter = () => {
-    fetchBookings();
+  const deleteBooking = async (bookingId) => {
+    if (window.confirm('Are you sure you want to delete this booking?')) {
+      try {
+        await deleteDoc(doc(db, 'mobile-mountain-bookings', bookingId));
+        fetchBookings(); // Refresh the data
+      } catch (error) {
+        console.error('Error deleting booking:', error);
+        alert('Error deleting booking');
+      }
+    }
   };
 
-  const clearFilter = () => {
-    setFilterDate('');
-    fetchBookings();
+  const getFilteredBookings = () => {
+    if (activeTab === 'pending') {
+      return bookings.filter(booking => booking.status === 'pending');
+    } else if (activeTab === 'confirmed') {
+      return bookings.filter(booking => booking.status === 'confirmed');
+    }
+    return bookings;
   };
 
   const formatAddOns = (addOns) => {
@@ -90,24 +97,23 @@ function AdminPanel() {
     const vehicleMap = {
       'sedan': 'Sedan',
       'midsize': 'Midsize (+$25)',
-      'suv': 'SUV (+$50)',
-      'truck': 'Truck (+$50)'
+      'suv-truck': 'SUV/Truck (+$50)'
     };
     return vehicleMap[vehicleType] || vehicleType;
   };
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
         <div className="max-w-md w-full">
           <div className="card">
             <div className="text-center mb-8">
-              <h1 className="text-2xl font-bold text-gray-900 mb-2">Admin Login</h1>
-              <p className="text-gray-600">Enter password to access admin panel</p>
+              <h1 className="text-2xl font-bold text-white mb-2">Admin Login</h1>
+              <p className="text-gray-300">Enter password to access admin panel</p>
             </div>
             <form onSubmit={handleLogin} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-white mb-2">
                   Password
                 </label>
                 <input
@@ -115,6 +121,7 @@ function AdminPanel() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="input-field"
+                  autoComplete="new-password"
                   required
                 />
               </div>
@@ -128,196 +135,218 @@ function AdminPanel() {
     );
   }
 
+  const pendingBookings = bookings.filter(b => b.status === 'pending');
+  const confirmedBookings = bookings.filter(b => b.status === 'confirmed');
+
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="flex justify-between items-center mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
-            <p className="text-gray-600">Mobile Mountain Detail Booking Management</p>
+            <h1 className="text-3xl font-bold text-white">Admin Dashboard</h1>
+            <p className="text-gray-300">Mobile Mountain Detail Booking Management</p>
           </div>
-          <button
-            onClick={() => setIsAuthenticated(false)}
-            className="btn-secondary"
-          >
-            Logout
-          </button>
+          <div className="flex space-x-4">
+            <Link to="/" className="btn-secondary">
+              Back to Website
+            </Link>
+            <button
+              onClick={() => setIsAuthenticated(false)}
+              className="btn-secondary"
+            >
+              Logout
+            </button>
+          </div>
         </div>
 
         {/* Stats */}
         <div className="grid md:grid-cols-3 gap-6 mb-8">
           <div className="card">
             <div className="text-center">
-              <div className="text-3xl font-bold text-primary-600 mb-2">
-                {bookings.length}
+              <div className="text-3xl font-bold text-blue-400 mb-2">
+                {pendingBookings.length}
               </div>
-              <div className="text-gray-600">Total Bookings</div>
+              <div className="text-gray-300">Pending Bookings</div>
             </div>
           </div>
           <div className="card">
             <div className="text-center">
-              <div className="text-3xl font-bold text-green-600 mb-2">
+              <div className="text-3xl font-bold text-green-400 mb-2">
                 ${totalRevenue.toFixed(2)}
               </div>
-              <div className="text-gray-600">Total Revenue</div>
+              <div className="text-gray-300">Total Revenue (Confirmed)</div>
             </div>
           </div>
           <div className="card">
             <div className="text-center">
-              <div className="text-3xl font-bold text-blue-600 mb-2">
-                ${bookings.length > 0 ? (totalRevenue / bookings.length).toFixed(2) : '0.00'}
+              <div className="text-3xl font-bold text-purple-400 mb-2">
+                {confirmedBookings.length}
               </div>
-              <div className="text-gray-600">Average Booking Value</div>
+              <div className="text-gray-300">Confirmed Bookings</div>
             </div>
           </div>
         </div>
 
-        {/* Filters */}
+        {/* Tabs */}
         <div className="card mb-8">
-          <div className="flex flex-wrap items-center gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Filter by Date
-              </label>
-              <input
-                type="date"
-                value={filterDate}
-                onChange={handleFilterChange}
-                className="input-field"
-              />
-            </div>
-            <div className="flex items-end space-x-2">
-              <button
-                onClick={applyFilter}
-                className="btn-primary"
-                disabled={loading}
-              >
-                Apply Filter
-              </button>
-              <button
-                onClick={clearFilter}
-                className="btn-secondary"
-                disabled={loading}
-              >
-                Clear Filter
-              </button>
-            </div>
+          <div className="flex space-x-1">
             <button
-              onClick={fetchBookings}
-              className="btn-secondary"
-              disabled={loading}
+              onClick={() => setActiveTab('pending')}
+              className={`flex-1 py-3 px-4 rounded-lg font-medium transition-colors ${
+                activeTab === 'pending'
+                  ? 'bg-blue-600 text-white'
+                  : 'text-gray-300 hover:text-white hover:bg-gray-700'
+              }`}
             >
-              {loading ? 'Loading...' : 'Refresh'}
+              Pending ({pendingBookings.length})
+            </button>
+            <button
+              onClick={() => setActiveTab('confirmed')}
+              className={`flex-1 py-3 px-4 rounded-lg font-medium transition-colors ${
+                activeTab === 'confirmed'
+                  ? 'bg-green-600 text-white'
+                  : 'text-gray-300 hover:text-white hover:bg-gray-700'
+              }`}
+            >
+              Confirmed ({confirmedBookings.length})
+            </button>
+            <button
+              onClick={() => setActiveTab('all')}
+              className={`flex-1 py-3 px-4 rounded-lg font-medium transition-colors ${
+                activeTab === 'all'
+                  ? 'bg-purple-600 text-white'
+                  : 'text-gray-300 hover:text-white hover:bg-gray-700'
+              }`}
+            >
+              All ({bookings.length})
             </button>
           </div>
+        </div>
+
+        {/* Refresh Button */}
+        <div className="mb-6">
+          <button
+            onClick={fetchBookings}
+            className="btn-secondary"
+            disabled={loading}
+          >
+            {loading ? 'Loading...' : 'Refresh'}
+          </button>
         </div>
 
         {/* Bookings Table */}
         <div className="card">
           <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
+            <table className="min-w-full divide-y divide-gray-700">
+              <thead className="bg-gray-800">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
                     Customer
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
                     Contact
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
                     Service
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
                     Vehicle
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
                     Add-ons
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
                     Date & Time
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
                     Total
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Status
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                    Actions
                   </th>
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                {bookings.map((booking) => (
-                  <tr key={booking.id} className="hover:bg-gray-50">
+              <tbody className="bg-gray-800 divide-y divide-gray-700">
+                {getFilteredBookings().map((booking) => (
+                  <tr key={booking.id} className="hover:bg-gray-700">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div>
-                        <div className="text-sm font-medium text-gray-900">
+                        <div className="text-sm font-medium text-white">
                           {booking.fullName}
                         </div>
-                        <div className="text-sm text-gray-500">
+                        <div className="text-sm text-gray-300">
                           {booking.address}
                         </div>
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div>
-                        <div className="text-sm text-gray-900">
+                        <div className="text-sm text-white">
                           {booking.phone}
                         </div>
                         {booking.email && (
-                          <div className="text-sm text-gray-500">
+                          <div className="text-sm text-gray-300">
                             {booking.email}
                           </div>
                         )}
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <span className="text-sm text-gray-900">
+                      <span className="text-sm text-white">
                         {formatServiceType(booking.serviceType)}
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <span className="text-sm text-gray-900">
+                      <span className="text-sm text-white">
                         {formatVehicleType(booking.vehicleType)}
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <span className="text-sm text-gray-900">
+                      <span className="text-sm text-white">
                         {formatAddOns(booking.addOns)}
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div>
-                        <div className="text-sm text-gray-900">
+                        <div className="text-sm text-white">
                           {booking.date}
                         </div>
-                        <div className="text-sm text-gray-500">
+                        <div className="text-sm text-gray-300">
                           {booking.time}
                         </div>
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <span className="text-sm font-semibold text-green-600">
+                      <span className="text-sm font-semibold text-green-400">
                         ${booking.totalPrice?.toFixed(2) || '0.00'}
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                        booking.status === 'completed' 
-                          ? 'bg-green-100 text-green-800'
-                          : booking.status === 'cancelled'
-                          ? 'bg-red-100 text-red-800'
-                          : 'bg-yellow-100 text-yellow-800'
-                      }`}>
-                        {booking.status || 'pending'}
-                      </span>
+                      <div className="flex space-x-2">
+                        {booking.status === 'pending' && (
+                          <button
+                            onClick={() => confirmBooking(booking.id)}
+                            className="text-green-400 hover:text-green-300 text-sm font-medium"
+                          >
+                            Confirm
+                          </button>
+                        )}
+                        <button
+                          onClick={() => deleteBooking(booking.id)}
+                          className="text-red-400 hover:text-red-300 text-sm font-medium"
+                        >
+                          Delete
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
-            {bookings.length === 0 && !loading && (
-              <div className="text-center py-8 text-gray-500">
-                No bookings found
+            {getFilteredBookings().length === 0 && !loading && (
+              <div className="text-center py-8 text-gray-400">
+                No {activeTab} bookings found
               </div>
             )}
           </div>

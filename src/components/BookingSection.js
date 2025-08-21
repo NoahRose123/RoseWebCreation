@@ -26,8 +26,8 @@ function BookingSection() {
   ];
 
   const addOnOptions = [
-    { value: 'clay-wax', label: 'Clay Bar + Wax', price: 25 },
-    { value: 'clay-ceramic', label: 'Clay Bar + Ceramic Sealant', price: 50 },
+    { value: 'clay-wax', label: 'Clay Bar + Wax', price: 40 },
+    { value: 'clay-ceramic', label: 'Clay Bar + Ceramic Sealant', price: 70 },
     { value: 'interior-ceramic', label: 'Interior Ceramic Seat Sealant', price: 30 },
     { value: 'pet-hair', label: 'Pet Hair Removal', price: 15 }
   ];
@@ -35,8 +35,7 @@ function BookingSection() {
   const vehicleTypes = [
     { value: 'sedan', label: 'Sedan', surcharge: 0 },
     { value: 'midsize', label: 'Midsize (+$25)', surcharge: 25 },
-    { value: 'suv', label: 'SUV (+$50)', surcharge: 50 },
-    { value: 'truck', label: 'Truck (+$50)', surcharge: 50 }
+    { value: 'suv-truck', label: 'SUV/Truck (+$50)', surcharge: 50 }
   ];
 
   const handleInputChange = (e) => {
@@ -113,25 +112,25 @@ function BookingSection() {
   };
 
   return (
-    <section id="booking-section" className="section-padding bg-gray-50">
+    <section id="booking-section" className="section-padding bg-gray-800">
       <div className="max-w-4xl mx-auto">
         {/* Section Header */}
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
             Book Your Appointment
           </h2>
-          <p className="text-xl text-gray-600">
+          <p className="text-xl text-gray-300">
             Schedule your professional auto detailing service today
           </p>
         </div>
 
         {/* Booking Form */}
         <div className="card">
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-8">
             {/* Personal Information */}
             <div className="grid md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-white mb-2">
                   Full Name *
                 </label>
                 <input
@@ -144,7 +143,7 @@ function BookingSection() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-white mb-2">
                   Phone Number *
                 </label>
                 <input
@@ -160,7 +159,7 @@ function BookingSection() {
 
             <div className="grid md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-white mb-2">
                   Email Address
                 </label>
                 <input
@@ -172,7 +171,7 @@ function BookingSection() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-white mb-2">
                   Service Address *
                 </label>
                 <input
@@ -190,7 +189,7 @@ function BookingSection() {
             {/* Service Selection */}
             <div className="grid md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-white mb-2">
                   Service Type *
                 </label>
                 <select
@@ -209,7 +208,7 @@ function BookingSection() {
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-white mb-2">
                   Vehicle Type *
                 </label>
                 <select
@@ -231,21 +230,21 @@ function BookingSection() {
 
             {/* Add-ons */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-3">
+              <label className="block text-sm font-medium text-white mb-4">
                 Add-on Services
               </label>
               <div className="grid md:grid-cols-2 gap-4">
                 {addOnOptions.map(addon => (
-                  <label key={addon.value} className="flex items-center space-x-3 cursor-pointer">
+                  <label key={addon.value} className="flex items-center space-x-3 cursor-pointer p-3 rounded-lg hover:bg-gray-700 transition-colors">
                     <input
                       type="checkbox"
                       name="addOns"
                       value={addon.value}
                       checked={formData.addOns.includes(addon.value)}
                       onChange={handleInputChange}
-                      className="w-4 h-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500"
+                      className="w-5 h-5 text-blue-600 border-gray-600 rounded focus:ring-blue-500 bg-gray-700"
                     />
-                    <span className="text-sm text-gray-700">
+                    <span className="text-gray-300">
                       {addon.label} ({addon.price > 0 ? `+$${addon.price}` : 'Free'})
                     </span>
                   </label>
@@ -256,7 +255,7 @@ function BookingSection() {
             {/* Date and Time */}
             <div className="grid md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-white mb-2">
                   Preferred Date *
                 </label>
                 <input
@@ -270,7 +269,7 @@ function BookingSection() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-white mb-2">
                   Preferred Time *
                 </label>
                 <input
@@ -286,7 +285,7 @@ function BookingSection() {
 
             {/* Message */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-white mb-2">
                 Additional Message
               </label>
               <textarea
@@ -301,10 +300,10 @@ function BookingSection() {
 
             {/* Total Price Display */}
             {formData.serviceType && (
-              <div className="bg-primary-50 p-4 rounded-lg">
+              <div className="bg-blue-900/50 p-6 rounded-xl border border-blue-700">
                 <div className="flex justify-between items-center">
-                  <span className="text-lg font-semibold text-gray-900">Estimated Total:</span>
-                  <span className="text-2xl font-bold text-primary-600">${calculateTotal()}</span>
+                  <span className="text-xl font-semibold text-white">Estimated Total:</span>
+                  <span className="text-3xl font-bold text-blue-400">${calculateTotal()}</span>
                 </div>
               </div>
             )}
@@ -313,8 +312,8 @@ function BookingSection() {
             {submitStatus && (
               <div className={`p-4 rounded-lg ${
                 submitStatus.type === 'success' 
-                  ? 'bg-green-50 text-green-800 border border-green-200' 
-                  : 'bg-red-50 text-red-800 border border-red-200'
+                  ? 'bg-green-900/50 text-green-300 border border-green-700' 
+                  : 'bg-red-900/50 text-red-300 border border-red-700'
               }`}>
                 {submitStatus.message}
               </div>
@@ -324,7 +323,7 @@ function BookingSection() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full btn-primary text-lg py-4 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full btn-primary text-lg py-5 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isSubmitting ? 'Submitting...' : 'Book Appointment'}
             </button>
