@@ -4,20 +4,20 @@ function Header() {
   return (
     <header className="bg-gray-900/95 backdrop-blur-md shadow-lg border-b border-gray-700 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center py-6">
+        <div className="flex justify-between items-center py-4 md:py-6">
           {/* Logo and Business Name */}
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-3 md:space-x-4">
             <img 
               src="/Gemini_Generated_Image_brne9hbrne9hbrne-removebg-preview.png" 
               alt="Mobile Mountain Detail Logo" 
-              className="h-20 w-20 object-contain rounded-lg shadow-lg"
+              className="h-12 w-12 md:h-16 md:w-16 lg:h-20 lg:w-20 object-contain rounded-lg shadow-lg"
             />
             <div>
-              <h1 className="text-2xl font-bold text-white">Mobile Mountain Detail</h1>
+              <h1 className="text-lg md:text-xl lg:text-2xl font-bold text-white">Mobile Mountain Detail</h1>
             </div>
           </div>
 
-          {/* Contact Information */}
+          {/* Contact Information - Hidden on mobile */}
           <div className="hidden md:flex items-center space-x-8 text-sm">
             <div className="flex items-center space-x-2">
               <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">

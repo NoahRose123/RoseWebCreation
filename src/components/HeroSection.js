@@ -11,7 +11,7 @@ function HeroSection() {
       <div className="absolute inset-0 bg-black/20"></div>
       
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 section-padding">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
+        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
           {/* Content */}
           <div className="text-center lg:text-left">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 bg-gradient-to-r from-white to-blue-300 bg-clip-text text-transparent">
@@ -28,23 +28,46 @@ function HeroSection() {
             </button>
           </div>
 
-          {/* Logo Images */}
-          <div className="flex flex-col items-center lg:items-end space-y-6 md:space-y-8">
-            <div className="relative group">
-              <img 
-                src="/mmd 1.jpg" 
-                alt="Mobile Mountain Detail Logo 1" 
-                className="w-64 h-64 md:w-80 md:h-80 object-cover rounded-2xl md:rounded-3xl shadow-2xl transform group-hover:scale-105 transition-transform duration-300"
-              />
-              <div className="absolute inset-0 bg-blue-600/20 rounded-2xl md:rounded-3xl group-hover:bg-blue-600/10 transition-colors duration-300"></div>
+          {/* Logo Images - Side by side on mobile, stacked on desktop */}
+          <div className="flex flex-col items-center">
+            {/* Mobile Layout - Images side by side */}
+            <div className="flex flex-row items-center justify-center space-x-4 md:hidden mb-6">
+              <div className="relative group">
+                <img 
+                  src="/mmd 1.jpg" 
+                  alt="Mobile Mountain Detail Logo 1" 
+                  className="w-32 h-32 object-cover rounded-2xl shadow-2xl transform group-hover:scale-105 transition-transform duration-300"
+                />
+                <div className="absolute inset-0 bg-blue-600/20 rounded-2xl group-hover:bg-blue-600/10 transition-colors duration-300"></div>
+              </div>
+              <div className="relative group">
+                <img 
+                  src="/mmd2.jpg" 
+                  alt="Mobile Mountain Detail Logo 2" 
+                  className="w-32 h-32 object-cover rounded-2xl shadow-2xl transform group-hover:scale-105 transition-transform duration-300"
+                />
+                <div className="absolute inset-0 bg-blue-600/20 rounded-2xl group-hover:bg-blue-600/10 transition-colors duration-300"></div>
+              </div>
             </div>
-            <div className="relative group">
-              <img 
-                src="/mmd2.jpg" 
-                alt="Mobile Mountain Detail Logo 2" 
-                className="w-48 h-48 md:w-64 md:h-64 object-cover rounded-2xl md:rounded-3xl shadow-2xl transform group-hover:scale-105 transition-transform duration-300"
-              />
-              <div className="absolute inset-0 bg-blue-600/20 rounded-2xl md:rounded-3xl group-hover:bg-blue-600/10 transition-colors duration-300"></div>
+
+            {/* Desktop Layout - Images stacked */}
+            <div className="hidden md:flex flex-col items-center lg:items-end space-y-6 lg:space-y-8">
+              <div className="relative group">
+                <img 
+                  src="/mmd 1.jpg" 
+                  alt="Mobile Mountain Detail Logo 1" 
+                  className="w-80 h-80 object-cover rounded-3xl shadow-2xl transform group-hover:scale-105 transition-transform duration-300"
+                />
+                <div className="absolute inset-0 bg-blue-600/20 rounded-3xl group-hover:bg-blue-600/10 transition-colors duration-300"></div>
+              </div>
+              <div className="relative group">
+                <img 
+                  src="/mmd2.jpg" 
+                  alt="Mobile Mountain Detail Logo 2" 
+                  className="w-64 h-64 object-cover rounded-3xl shadow-2xl transform group-hover:scale-105 transition-transform duration-300"
+                />
+                <div className="absolute inset-0 bg-blue-600/20 rounded-3xl group-hover:bg-blue-600/10 transition-colors duration-300"></div>
+              </div>
             </div>
           </div>
         </div>
