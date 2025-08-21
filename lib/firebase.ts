@@ -11,19 +11,35 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID || "1:123456789:web:demo"
 }
 
+// Check if we're using demo values
+const isDemoMode = !process.env.NEXT_PUBLIC_FIREBASE_API_KEY || process.env.NEXT_PUBLIC_FIREBASE_API_KEY === "demo-key"
+
 // Only initialize Firebase if we have proper config
 let app
 let db: Firestore
 
 try {
-  app = initializeApp(firebaseConfig)
-  db = getFirestore(app)
+  if (isDemoMode) {
+    console.warn('Firebase is running in demo mode. Please configure your Firebase environment variables.')
+    // Create a mock db object for development
+    db = {
+      collection: () => ({
+        add: async () => ({ id: 'demo-id-' + Date.now() }),
+        get: async () => ({ docs: [], empty: true }),
+        doc: () => ({ update: async () => {}, delete: async () => {} })
+      }),
+      doc: () => ({ get: async () => ({ exists: () => false, data: () => ({}) }) })
+    } as any as Firestore
+  } else {
+    app = initializeApp(firebaseConfig)
+    db = getFirestore(app)
+  }
 } catch (error) {
   console.warn('Firebase initialization failed:', error)
   // Create a mock db object for development
   db = {
     collection: () => ({
-      add: async () => ({ id: 'mock-id' }),
+      add: async () => ({ id: 'mock-id-' + Date.now() }),
       get: async () => ({ docs: [], empty: true }),
       doc: () => ({ update: async () => {}, delete: async () => {} })
     }),
@@ -72,6 +88,14 @@ export interface WebsiteContent {
 // Booking functions
 export const addBooking = async (bookingData: Omit<Booking, 'id'>, collectionName: string = 'bookings') => {
   try {
+    if (isDemoMode) {
+      console.log('Demo mode: Simulating booking submission')
+      console.log('Booking data:', bookingData)
+      // Simulate a delay
+      await new Promise(resolve => setTimeout(resolve, 1000))
+      return { id: 'demo-booking-' + Date.now() }
+    }
+
     console.log(`Adding booking to collection: ${collectionName}`)
     console.log('Booking data:', bookingData)
     
@@ -84,12 +108,21 @@ export const addBooking = async (bookingData: Omit<Booking, 'id'>, collectionNam
     return docRef
   } catch (error) {
     console.error('Error adding booking:', error)
+    if (isDemoMode) {
+      console.log('Demo mode: Returning mock success')
+      return { id: 'demo-booking-' + Date.now() }
+    }
     throw error
   }
 }
 
 export const getBookings = async (collectionName: string = 'bookings'): Promise<Booking[]> => {
   try {
+    if (isDemoMode) {
+      console.log('Demo mode: Returning empty bookings list')
+      return []
+    }
+
     const querySnapshot = await getDocs(collection(db, collectionName))
     const bookings: Booking[] = []
     
@@ -113,12 +146,20 @@ export const getBookings = async (collectionName: string = 'bookings'): Promise<
     return bookings.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
   } catch (error) {
     console.error('Error getting bookings:', error)
+    if (isDemoMode) {
+      return []
+    }
     throw error
   }
 }
 
 export const updateBooking = async (id: number, status: string, collectionName: string = 'bookings') => {
   try {
+    if (isDemoMode) {
+      console.log('Demo mode: Simulating booking update')
+      return
+    }
+
     const q = query(collection(db, collectionName), where('id', '==', id))
     const querySnapshot = await getDocs(q)
     
@@ -128,12 +169,20 @@ export const updateBooking = async (id: number, status: string, collectionName: 
     }
   } catch (error) {
     console.error('Error updating booking:', error)
+    if (isDemoMode) {
+      return
+    }
     throw error
   }
 }
 
 export const deleteBooking = async (id: number, collectionName: string = 'bookings') => {
   try {
+    if (isDemoMode) {
+      console.log('Demo mode: Simulating booking deletion')
+      return
+    }
+
     const q = query(collection(db, collectionName), where('id', '==', id))
     const querySnapshot = await getDocs(q)
     
@@ -143,6 +192,9 @@ export const deleteBooking = async (id: number, collectionName: string = 'bookin
     }
   } catch (error) {
     console.error('Error deleting booking:', error)
+    if (isDemoMode) {
+      return
+    }
     throw error
   }
 }
@@ -150,6 +202,11 @@ export const deleteBooking = async (id: number, collectionName: string = 'bookin
 // Availability functions
 export const saveAvailability = async (availability: Availability[]) => {
   try {
+    if (isDemoMode) {
+      console.log('Demo mode: Simulating availability save')
+      return
+    }
+
     // Clear existing availability
     const existingQuery = await getDocs(collection(db, 'availability'))
     const deletePromises = existingQuery.docs.map(doc => deleteDoc(doc.ref))
@@ -164,12 +221,20 @@ export const saveAvailability = async (availability: Availability[]) => {
     console.log('Availability saved successfully')
   } catch (error) {
     console.error('Error saving availability:', error)
+    if (isDemoMode) {
+      return
+    }
     throw error
   }
 }
 
 export const getAvailability = async (): Promise<Availability[]> => {
   try {
+    if (isDemoMode) {
+      console.log('Demo mode: Returning empty availability')
+      return []
+    }
+
     const querySnapshot = await getDocs(collection(db, 'availability'))
     const availability: Availability[] = []
     
@@ -185,6 +250,9 @@ export const getAvailability = async (): Promise<Availability[]> => {
     return availability.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
   } catch (error) {
     console.error('Error getting availability:', error)
+    if (isDemoMode) {
+      return []
+    }
     throw error
   }
 }
@@ -192,6 +260,11 @@ export const getAvailability = async (): Promise<Availability[]> => {
 // Website content functions
 export const saveWebsiteContent = async (content: WebsiteContent) => {
   try {
+    if (isDemoMode) {
+      console.log('Demo mode: Simulating website content save')
+      return
+    }
+
     // Clear existing content
     const existingQuery = await getDocs(collection(db, 'website-content'))
     const deletePromises = existingQuery.docs.map(doc => deleteDoc(doc.ref))
@@ -203,12 +276,20 @@ export const saveWebsiteContent = async (content: WebsiteContent) => {
     console.log('Website content saved successfully')
   } catch (error) {
     console.error('Error saving website content:', error)
+    if (isDemoMode) {
+      return
+    }
     throw error
   }
 }
 
 export const getWebsiteContent = async (): Promise<WebsiteContent | null> => {
   try {
+    if (isDemoMode) {
+      console.log('Demo mode: Returning null website content')
+      return null
+    }
+
     const querySnapshot = await getDocs(collection(db, 'website-content'))
     
     if (!querySnapshot.empty) {
@@ -233,6 +314,9 @@ export const getWebsiteContent = async (): Promise<WebsiteContent | null> => {
     return null
   } catch (error) {
     console.error('Error getting website content:', error)
+    if (isDemoMode) {
+      return null
+    }
     throw error
   }
 }

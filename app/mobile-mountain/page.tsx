@@ -1,11 +1,12 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
+import React, { useState, useEffect, useCallback } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Star, Check, Phone, Mail, MapPin, Clock, Shield, Award, Car, Sparkles, Zap, Calendar, Users, Truck } from 'lucide-react'
 import { addBooking } from '../../lib/firebase'
+import ErrorBoundary from '../components/ErrorBoundary'
 
 export default function MobileMountainPage() {
   const [isBookingModalOpen, setIsBookingModalOpen] = useState(false)
@@ -21,6 +22,7 @@ export default function MobileMountainPage() {
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitSuccess, setSubmitSuccess] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   const services = [
     {
@@ -81,9 +83,10 @@ export default function MobileMountainPage() {
     { number: '24/7', label: 'Customer Support', icon: Phone }
   ]
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = useCallback(async (e: React.FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
+    setError(null)
     
     try {
       await addBooking({
@@ -110,13 +113,29 @@ export default function MobileMountainPage() {
       }, 2000)
     } catch (error) {
       console.error('Error submitting booking:', error)
+      setError('Failed to submit booking. Please try again.')
     } finally {
       setIsSubmitting(false)
     }
-  }
+  }, [bookingForm])
+
+  const handleInputChange = useCallback((field: string, value: string) => {
+    setBookingForm(prev => ({ ...prev, [field]: value }))
+  }, [])
+
+  const openBookingModal = useCallback(() => {
+    setIsBookingModalOpen(true)
+  }, [])
+
+  const closeBookingModal = useCallback(() => {
+    setIsBookingModalOpen(false)
+    setSubmitSuccess(false)
+    setError(null)
+  }, [])
 
   return (
-    <div className="min-h-screen bg-gray-900">
+    <ErrorBoundary>
+      <div className="min-h-screen bg-gray-900">
       {/* Header */}
       <header className="fixed top-0 left-0 right-0 z-50 bg-gray-900/95 backdrop-blur-md border-b border-gray-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -149,7 +168,7 @@ export default function MobileMountainPage() {
                 Contact
               </Link>
               <button
-                onClick={() => setIsBookingModalOpen(true)}
+                onClick={openBookingModal}
                 className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors"
               >
                 Book Now
@@ -164,7 +183,7 @@ export default function MobileMountainPage() {
             </div>
 
             <button
-              onClick={() => setIsBookingModalOpen(true)}
+              onClick={openBookingModal}
               className="lg:hidden bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
             >
               Book
@@ -215,7 +234,7 @@ export default function MobileMountainPage() {
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  onClick={() => setIsBookingModalOpen(true)}
+                  onClick={openBookingModal}
                   className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-lg font-semibold text-lg transition-colors shadow-lg"
                 >
                   Book Your Detail
@@ -380,7 +399,7 @@ export default function MobileMountainPage() {
                 </ul>
                 
                 <button
-                  onClick={() => setIsBookingModalOpen(true)}
+                  onClick={openBookingModal}
                   className="w-full mt-6 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-semibold transition-colors"
                 >
                   Book This Service
@@ -572,7 +591,7 @@ export default function MobileMountainPage() {
                 Schedule your mobile detailing service today. We'll come to your location and give your vehicle the professional care it deserves.
               </p>
               <button
-                onClick={() => setIsBookingModalOpen(true)}
+                onClick={openBookingModal}
                 className="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-lg font-semibold text-lg transition-colors"
               >
                 Schedule Now
@@ -635,155 +654,172 @@ export default function MobileMountainPage() {
           </div>
           
           <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+            <div className="flex justify-center space-x-6 mb-4">
+              <Link href="/mobile-mountain/privacy" className="hover:text-white transition-colors">
+                Privacy Policy
+              </Link>
+              <Link href="/mobile-mountain/terms" className="hover:text-white transition-colors">
+                Terms of Service
+              </Link>
+            </div>
             <p>&copy; 2024 Mobile Mountain Detail. All rights reserved.</p>
           </div>
         </div>
       </footer>
 
       {/* Booking Modal */}
-      {isBookingModalOpen && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+      <AnimatePresence mode="wait">
+        {isBookingModalOpen && (
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.9 }}
-            className="bg-gray-800 rounded-2xl p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto"
+            className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
           >
-            <div className="flex justify-between items-center mb-6">
-              <h3 className="text-2xl font-bold text-white">Book Your Detail</h3>
-              <button
-                onClick={() => setIsBookingModalOpen(false)}
-                className="text-gray-400 hover:text-white"
-              >
-                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-            </div>
-
-            {submitSuccess ? (
-              <div className="text-center py-8">
-                <div className="w-16 h-16 bg-green-600/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Check className="h-8 w-8 text-green-400" />
-                </div>
-                <h4 className="text-xl font-semibold text-white mb-2">Booking Submitted!</h4>
-                <p className="text-gray-300">We'll contact you soon to confirm your appointment.</p>
-              </div>
-            ) : (
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-1">Name *</label>
-                    <input
-                      type="text"
-                      required
-                      value={bookingForm.name}
-                      onChange={(e) => setBookingForm({ ...bookingForm, name: e.target.value })}
-                      className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white"
-                      placeholder="Your full name"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-1">Phone *</label>
-                    <input
-                      type="tel"
-                      required
-                      value={bookingForm.phone}
-                      onChange={(e) => setBookingForm({ ...bookingForm, phone: e.target.value })}
-                      className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white"
-                      placeholder="(555) 123-4567"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-1">Email (Optional)</label>
-                    <input
-                      type="email"
-                      value={bookingForm.email}
-                      onChange={(e) => setBookingForm({ ...bookingForm, email: e.target.value })}
-                      className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white"
-                      placeholder="your@email.com"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-1">Service Address *</label>
-                    <input
-                      type="text"
-                      required
-                      value={bookingForm.address}
-                      onChange={(e) => setBookingForm({ ...bookingForm, address: e.target.value })}
-                      className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white"
-                      placeholder="Enter your address"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-1">Service</label>
-                  <select
-                    value={bookingForm.service}
-                    onChange={(e) => setBookingForm({ ...bookingForm, service: e.target.value })}
-                    className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white"
-                  >
-                    <option value="Basic Wash - $45">Basic Wash - $45</option>
-                    <option value="Premium Detail - $125">Premium Detail - $125</option>
-                    <option value="Ultimate Detail - $200">Ultimate Detail - $200</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-1">Preferred Date</label>
-                  <input
-                    type="date"
-                    value={bookingForm.selectedDate}
-                    onChange={(e) => setBookingForm({ ...bookingForm, selectedDate: e.target.value })}
-                    className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-1">Preferred Time</label>
-                  <select
-                    value={bookingForm.selectedTime}
-                    onChange={(e) => setBookingForm({ ...bookingForm, selectedTime: e.target.value })}
-                    className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white"
-                  >
-                    <option value="">Select a time</option>
-                    <option value="8:00 AM">8:00 AM</option>
-                    <option value="9:00 AM">9:00 AM</option>
-                    <option value="10:00 AM">10:00 AM</option>
-                    <option value="11:00 AM">11:00 AM</option>
-                    <option value="12:00 PM">12:00 PM</option>
-                    <option value="1:00 PM">1:00 PM</option>
-                    <option value="2:00 PM">2:00 PM</option>
-                    <option value="3:00 PM">3:00 PM</option>
-                    <option value="4:00 PM">4:00 PM</option>
-                    <option value="5:00 PM">5:00 PM</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-1">Additional Notes</label>
-                  <textarea
-                    rows={3}
-                    value={bookingForm.message}
-                    onChange={(e) => setBookingForm({ ...bookingForm, message: e.target.value })}
-                    className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white"
-                    placeholder="Any special requests or vehicle details..."
-                  />
-                </div>
-
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              className="bg-gray-800 rounded-2xl p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto"
+            >
+              <div className="flex justify-between items-center mb-6">
+                <h3 className="text-2xl font-bold text-white">Book Your Detail</h3>
                 <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 text-white py-3 rounded-lg font-semibold transition-colors"
+                  onClick={closeBookingModal}
+                  className="text-gray-400 hover:text-white"
                 >
-                  {isSubmitting ? 'Submitting...' : 'Book Appointment'}
+                  <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
                 </button>
-              </form>
-            )}
+              </div>
+
+              {submitSuccess ? (
+                <div className="text-center py-8">
+                  <div className="w-16 h-16 bg-green-600/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Check className="h-8 w-8 text-green-400" />
+                  </div>
+                  <h4 className="text-xl font-semibold text-white mb-2">Booking Submitted!</h4>
+                  <p className="text-gray-300">We'll contact you soon to confirm your appointment.</p>
+                </div>
+              ) : (
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-300 mb-1">Name *</label>
+                      <input
+                        type="text"
+                        required
+                        value={bookingForm.name}
+                        onChange={(e) => handleInputChange('name', e.target.value)}
+                        className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white"
+                        placeholder="Your full name"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-300 mb-1">Phone *</label>
+                      <input
+                        type="tel"
+                        required
+                        value={bookingForm.phone}
+                        onChange={(e) => handleInputChange('phone', e.target.value)}
+                        className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white"
+                        placeholder="(555) 123-4567"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-300 mb-1">Email (Optional)</label>
+                      <input
+                        type="email"
+                        value={bookingForm.email}
+                        onChange={(e) => handleInputChange('email', e.target.value)}
+                        className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white"
+                        placeholder="your@email.com"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-300 mb-1">Service Address *</label>
+                      <input
+                        type="text"
+                        required
+                        value={bookingForm.address}
+                        onChange={(e) => handleInputChange('address', e.target.value)}
+                        className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white"
+                        placeholder="Enter your address"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-1">Service</label>
+                    <select
+                      value={bookingForm.service}
+                      onChange={(e) => handleInputChange('service', e.target.value)}
+                      className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white"
+                    >
+                      <option value="Basic Wash - $45">Basic Wash - $45</option>
+                      <option value="Premium Detail - $125">Premium Detail - $125</option>
+                      <option value="Ultimate Detail - $200">Ultimate Detail - $200</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-1">Preferred Date</label>
+                    <input
+                      type="date"
+                      value={bookingForm.selectedDate}
+                      onChange={(e) => handleInputChange('selectedDate', e.target.value)}
+                      className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-1">Preferred Time</label>
+                    <select
+                      value={bookingForm.selectedTime}
+                      onChange={(e) => handleInputChange('selectedTime', e.target.value)}
+                      className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white"
+                    >
+                      <option value="">Select a time</option>
+                      <option value="8:00 AM">8:00 AM</option>
+                      <option value="9:00 AM">9:00 AM</option>
+                      <option value="10:00 AM">10:00 AM</option>
+                      <option value="11:00 AM">11:00 AM</option>
+                      <option value="12:00 PM">12:00 PM</option>
+                      <option value="1:00 PM">1:00 PM</option>
+                      <option value="2:00 PM">2:00 PM</option>
+                      <option value="3:00 PM">3:00 PM</option>
+                      <option value="4:00 PM">4:00 PM</option>
+                      <option value="5:00 PM">5:00 PM</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-1">Additional Notes</label>
+                    <textarea
+                      rows={3}
+                      value={bookingForm.message}
+                      onChange={(e) => handleInputChange('message', e.target.value)}
+                      className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white"
+                      placeholder="Any special requests or vehicle details..."
+                    />
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 text-white py-3 rounded-lg font-semibold transition-colors"
+                  >
+                    {isSubmitting ? 'Submitting...' : 'Book Appointment'}
+                  </button>
+                </form>
+              )}
+            </motion.div>
           </motion.div>
-        </div>
-      )}
-    </div>
-  )
-}
+                 )}
+       </AnimatePresence>
+       </div>
+     </ErrorBoundary>
+   )
+ }
+
