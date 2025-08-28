@@ -1,0 +1,71 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
+    color: #FFFFFF;
+    overflow-x: hidden;
+  }
+}
+
+@layer components {
+  .glass-effect {
+    @apply backdrop-blur-md bg-white/10 border border-white/20;
+  }
+  
+  .neon-glow {
+    @apply shadow-[0_0_10px_#32CD32,0_0_20px_#32CD32,0_0_30px_#32CD32];
+  }
+  
+  .neon-text {
+    @apply text-primary-lime drop-shadow-[0_0_10px_#32CD32];
+  }
+  
+  .gradient-text {
+    @apply bg-gradient-to-r from-primary-lime via-secondary-cyan to-accent-orange bg-clip-text text-transparent;
+  }
+  
+  .btn-primary {
+    @apply bg-gradient-to-r from-primary-lime to-secondary-cyan text-black font-bold py-4 px-8 rounded-lg 
+           hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl
+           hover:shadow-primary-lime/50 active:scale-95;
+  }
+  
+  .btn-secondary {
+    @apply bg-gradient-to-r from-accent-orange to-accent-red text-white font-bold py-4 px-8 rounded-lg 
+           hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl
+           hover:shadow-accent-orange/50 active:scale-95;
+  }
+  
+  .card-hover {
+    @apply hover:scale-105 hover:rotate-1 transition-all duration-300;
+  }
+  
+  .water-splash {
+    @apply relative overflow-hidden;
+  }
+  
+  .water-splash::before {
+    content: '';
+    @apply absolute inset-0 bg-gradient-to-b from-secondary-cyan/20 to-transparent 
+           animate-pulse opacity-50;
+  }
+}
+
+@layer utilities {
+  .text-shadow {
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  }
+  
+  .text-glow {
+    text-shadow: 0 0 10px currentColor;
+  }
+}

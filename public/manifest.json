@@ -1,25 +1,25 @@
 {
   "short_name": "Mobile Mountain Detail",
-  "name": "Mobile Mountain Detail - Professional Auto Detailing",
+  "name": "Mobile Mountain Detail - Professional Mobile Auto Detailing",
   "icons": [
     {
-      "src": "Gemini_Generated_Image_brne9hbrne9hbrne-removebg-preview.png",
+      "src": "noahsdubecardeatiling-removebg-preview.png",
       "sizes": "192x192 512x512",
       "type": "image/png"
     },
     {
-      "src": "Gemini_Generated_Image_brne9hbrne9hbrne-removebg-preview.png",
+      "src": "noahsdubecardeatiling-removebg-preview.png",
       "type": "image/png",
       "sizes": "512x512"
     },
     {
-      "src": "Gemini_Generated_Image_brne9hbrne9hbrne-removebg-preview.png",
+      "src": "noahsdubecardeatiling-removebg-preview.png",
       "type": "image/png",
       "sizes": "1024x1024"
     }
   ],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#0ea5e9",
+  "theme_color": "#0f172a",
   "background_color": "#0f172a"
 }
